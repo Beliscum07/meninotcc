@@ -1,0 +1,41 @@
+```
+lib/
+├── models/                     # Estrutura dos dados (O "M" do MVC)
+│   ├── student_model.dart      # Classes que definem o formato dos dados
+│   └── donation_model.dart     
+│
+├── views/                      # Telas e interface (O "V" do MVC)
+│   ├── admin/                  
+│   │   ├── admin_home_view.dart
+│   │   └── widgets/            # Pedaços da tela do Admin
+│   │       ├── admin_bottom_nav.dart
+│   │       └── admin_dashboard.dart
+│   │
+│   ├── donor/                  
+│   │   ├── donor_home_view.dart
+│   │   └── widgets/            
+│   │       └── donor_bottom_nav.dart
+│   │
+│   └── student/                
+│       ├── student_home_view.dart
+│       └── widgets/            
+│           ├── student_bottom_nav.dart
+│           ├── student_agenda.dart
+│           ├── student_my_area.dart
+│           ├── student_activities.dart
+│           └── student_scholarships.dart
+│
+├── controllers/                # Lógica e Estado (O "C" do MVC)
+│   ├── student_nav_controller.dart # Providers do Riverpod, regras de negócio
+│   └── auth_controller.dart    
+│
+├── services/                   # Comunicação externa
+│   ├── api_service.dart        # Conexão com a internet/APIs reais
+│   └── auth_service.dart       # Lógica de login/autenticação
+│
+├── database/                   # Armazenamento de dados
+│   ├── mock_database.dart      # Dados simulados
+│   └── local_storage.dart      # Banco local futuro (SQLite, SharedPreferences)
+│
+└── main.dart                   # Ponto de entrada do aplicativo com ProviderScope
+```

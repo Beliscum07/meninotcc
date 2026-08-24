@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'widgets/admin_bottom_nav.dart';
 import 'widgets/admin_dashboard.dart';
-import 'widgets/admin_alunos.dart';fgl
+import 'widgets/admin_alunos.dart';
 import 'widgets/admin_bolsas.dart';
 import 'widgets/admin_configuracoes.dart';
 

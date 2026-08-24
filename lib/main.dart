@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'views/admin/admin_home_view.dart';
 import 'views/donor/donor_home_view.dart';
-import 'views/student/student_home_view.dart';
+import 'views/student/aluno_home_view.dart';
 
 void main() {
   runApp(const MyApp());

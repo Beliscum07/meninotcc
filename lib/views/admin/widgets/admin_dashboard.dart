@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 
-class AdminDashboard extends StatelessWidget {
+class AdminDashboard extends StatefulWidget {
   const AdminDashboard({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return const Center(child: Text('Dashboard Admin'));
-  }
+  State<AdminDashboard> createState() => _AdminDashboardState();
 }
+

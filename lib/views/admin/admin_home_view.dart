@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'widgets/admin_bottom_nav.dart';
 import 'widgets/admin_dashboard.dart';
 import 'widgets/admin_alunos.dart';
+import 'widgets/admin_atividades.dart';
 import 'widgets/admin_bolsas.dart';
 import 'widgets/admin_configuracoes.dart';
 
@@ -36,9 +37,13 @@ class _AdminHomeViewState extends State<AdminHomeView> {
       case 0:
         return const AdminDashboard();
       case 1:
-        return const Center(child: Text('Alunos'));
-      case 2:
-        return const Center(child: Text('Configurações'));
+        return const AdminAlunos();
+        case 2:
+        return const AdminAtividades();
+      case 3:
+        return const AdminBolsas();
+      case 4:
+        return const AdminConfiguracoes();
       default:
         return const AdminDashboard();
     }

@@ -22,10 +22,21 @@ class AdminBottomNav extends StatelessWidget {
           activeIcon: Icon(Icons.dashboard),
           label: 'Dashboard',
         ),
+
         BottomNavigationBarItem(
           icon: Icon(Icons.people_outlined),
           activeIcon: Icon(Icons.people),
           label: 'Alunos',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.dashboard_outlined),
+          activeIcon: Icon(Icons.calendar_month),
+          label: 'Atividades',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.dashboard_outlined),
+          activeIcon: Icon(Icons.badge),
+          label: 'Bolsas',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.settings_outlined),

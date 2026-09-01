@@ -7,12 +7,16 @@ class AdminAlunosPage extends StatefulWidget {
   final List<Atividade>? atividades;
   final int initialPage;
   final ValueChanged<int>? onPageChanged;
+  final ValueChanged<Aluno>? onOpenAluno;
+  final ValueChanged<Atividade>? onOpenAtividade;
 
   const AdminAlunosPage({
     super.key,
     this.atividades,
     this.initialPage = 1,
     this.onPageChanged,
+    this.onOpenAluno,
+    this.onOpenAtividade,
   });
 
   @override
@@ -287,6 +291,8 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
   // ============================================================
 
   void _mostrarDetalhes(Aluno aluno) {
+    if (widget.onOpenAluno != null) widget.onOpenAluno!(aluno);
+
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.white,
@@ -370,6 +376,8 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
  
 
   void _mostrarAtividade(Atividade atividade) {
+    if (widget.onOpenAtividade != null) widget.onOpenAtividade!(atividade);
+
     showDialog(
       context: context,
 

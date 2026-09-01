@@ -37,13 +37,13 @@ class _AdminHomeViewState extends State<AdminHomeView> {
       case 0:
         return const AdminDashboard();
       case 1:
-        return const AdminAlunos();
-        case 2:
-        return const AdminAtividades();
+        return const AdminAlunosPage();
+      case 2:
+        return const AdminAtividadesPage();
       case 3:
         return const AdminBolsas();
       case 4:
-        return const AdminConfiguracoes();
+        return const ConfiguracoesPage();
       default:
         return const AdminDashboard();
     }

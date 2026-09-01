@@ -24,7 +24,6 @@ class AdminAlunosPage extends StatefulWidget {
 }
 
 class _AdminAlunosPageState extends State<AdminAlunosPage> {
-  int paginaSelecionada = 1;
   String pesquisa = '';
 
   late final List<Atividade> atividades;
@@ -68,44 +67,20 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            _cabecalho(),
-
-            Expanded(
-              child: paginaSelecionada == 1
-                  ? _telaAlunos()
-                  : paginaSelecionada == 2
-                      ? _telaAtividades()
-                      : _telaPlaceholder(),
-            ),
-          ],
-        ),
+    return SafeArea(
+      child: Column(
+        children: [
+          _cabecalho(),
+          Expanded(child: _telaAlunos()),
+        ],
       ),
-
-      bottomNavigationBar: _barraNavegacao(),
     );
   }
 
   // CABEÇALHO
 
   Widget _cabecalho() {
-    String titulo;
-
-    switch (paginaSelecionada) {
-      case 1:
-        titulo = 'Gestão de Alunos';
-        break;
-
-      case 2:
-        titulo = 'Atividades';
-        break;
-
-      default:
-        titulo = 'Dashboard';
-    }
+    const String titulo = 'Gestão de Alunos';
 
     return Container(
       height: 62,
@@ -168,101 +143,7 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
           child: ListView.builder(
             padding: const EdgeInsets.symmetric(horizontal: 11),
             itemCount: listaFiltrada.length,
-            itemBuilder: (context, index) {
-              final aluno = listaFiltrada[index];
-
-              return CardAluno(
-                aluno: aluno,
-
-                onDetalhes: () {
-                  _mostrarDetalhes(aluno);
-                },
-
-                onEditar: () {
-                  _editarAluno(aluno);
-                },
-              );
-            },
-          ),
-        ),
-      ],
-    );
-  }
-  
-  // TELA DE ATIVIDADES
-  Widget _telaAtividades() {
-    return ListView.builder(
-      padding: const EdgeInsets.fromLTRB(
-        8,
-        12,
-        8,
-        12,
-      ),
-      itemCount: atividades.length,
-      itemBuilder: (context, index) {
-        final atividade = atividades[index];
-
-        return CardAtividade(
-          atividade: atividade,
-
-          onTap: () {
-            _mostrarAtividade(atividade);
-          },
-        );
-      },
-    );
-  }
-
-  // ============================================================
-  // PLACEHOLDER
-  // ============================================================
-
-  Widget _telaPlaceholder() {
-    return const Center(
-      child: Text(
-        'Em desenvolvimento',
-        style: TextStyle(
-          fontSize: 22,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    );
-  }
-
-  // ============================================================
-  // BARRA INFERIOR
-  // ============================================================
-
-  Widget _barraNavegacao() {
-    return NavigationBar(
-      height: 72,
-
-      backgroundColor: Colors.white,
-
-      selectedIndex: paginaSelecionada,
-
-      indicatorColor: Colors.transparent,
-
-      onDestinationSelected: (index) {
-        setState(() {
-          paginaSelecionada = index;
-        });
-        if (widget.onPageChanged != null) {
-          widget.onPageChanged!(index);
-        }
-      },
-
-      destinations: const [
-        NavigationDestination(
-          icon: Icon(Icons.grid_view_outlined),
-          selectedIcon: Icon(Icons.grid_view),
-          label: 'Dashboard',
-        ),
-
-        NavigationDestination(
-          icon: Icon(Icons.people_outline),
-          selectedIcon: Icon(Icons.people),
-          label: 'Alunos',
+            // Nota: navegação global é controlada por AdminHomeView
         ),
 
         NavigationDestination(

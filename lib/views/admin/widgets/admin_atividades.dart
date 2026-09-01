@@ -200,3 +200,41 @@ class CardAtividade extends StatelessWidget {
     );
   }
 }
+
+
+// Página de Atividades (reutilizável)
+class AdminAtividadesPage extends StatelessWidget {
+  final List<Atividade>? atividades;
+
+  const AdminAtividadesPage({super.key, this.atividades});
+
+  @override
+  Widget build(BuildContext context) {
+    final list = atividades ?? atividadesMock;
+
+    return SafeArea(
+      child: ListView.builder(
+        padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
+        itemCount: list.length,
+        itemBuilder: (context, index) {
+          final atividade = list[index];
+          return CardAtividade(
+            atividade: atividade,
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (_) => AlertDialog(
+                  title: Text(atividade.nome),
+                  content: Text(
+                    '${atividade.descricao}\n\n${atividade.professor}\n\n${atividade.horario} • ${atividade.dias}\n\n${atividade.inscritos}/${atividade.vagas} vagas',
+                  ),
+                  actions: [TextButton(onPressed: () => Navigator.pop(context), child: const Text('Fechar'))],
+                ),
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+}

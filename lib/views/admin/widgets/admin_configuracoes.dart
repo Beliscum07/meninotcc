@@ -5,12 +5,9 @@ class ConfiguracoesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF4EADB),
-
-      body: SafeArea(
-        child: Column(
-          children: [
+    return SafeArea(
+      child: Column(
+        children: [
            
             // CABEÇALHO
            
@@ -77,12 +74,6 @@ class ConfiguracoesPage extends StatelessWidget {
           ],
         ),
       ),
-
-     =======
-      // BARRA INFERIOR
-     =======
-
-      bottomNavigationBar: _barraInferior(),
     );
   }
 

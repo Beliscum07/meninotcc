@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'widgets/donor_bottom_nav.dart';
+import 'widgets/doador_feed.dart';
+import 'widgets/doador_historico.dart';
+import 'widgets/doador_doar.dart';
 
 class DonorHomeView extends StatefulWidget {
   const DonorHomeView({super.key});
@@ -30,13 +33,13 @@ class _DonorHomeViewState extends State<DonorHomeView> {
   Widget _buildBody(int index) {
     switch (index) {
       case 0:
-        return const Center(child: Text('Início - Doador'));
+        return const DoadorFeed();
       case 1:
-        return const Center(child: Text('Minhas Doações'));
+        return const DoadorHistorico();
       case 2:
-        return const Center(child: Text('Perfil'));
+        return const DoadorDoar();
       default:
-        return const Center(child: Text('Início - Doador'));
+        return const DoadorFeed();
     }
   }
 }

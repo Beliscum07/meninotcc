@@ -73,7 +73,6 @@ class ConfiguracoesPage extends StatelessWidget {
             ),
           ],
         ),
-      ),
     );
   }
 
@@ -484,85 +483,4 @@ class ConfiguracoesPage extends StatelessWidget {
     );
   }
 
-  
-  // BARRA INFERIOR
-
-  Widget _barraInferior() {
-    return NavigationBar(
-      height: 56,
-
-      backgroundColor: Colors.white,
-
-      selectedIndex: 4,
-
-      indicatorColor: Colors.transparent,
-
-      onDestinationSelected: (index) {
-        // Aqui você vai colocar a navegação
-        // entre as páginas.
-      },
-
-      destinations: const [
-        NavigationDestination(
-          icon: Icon(
-            Icons.grid_view_outlined,
-          ),
-
-          selectedIcon: Icon(
-            Icons.grid_view,
-          ),
-
-          label: 'Dashboard',
-        ),
-
-        NavigationDestination(
-          icon: Icon(
-            Icons.people_outline,
-          ),
-
-          selectedIcon: Icon(
-            Icons.people,
-          ),
-
-          label: 'Alunos',
-        ),
-
-        NavigationDestination(
-          icon: Icon(
-            Icons.calendar_month_outlined,
-          ),
-
-          selectedIcon: Icon(
-            Icons.calendar_month,
-          ),
-
-          label: 'Atividades',
-        ),
-
-        NavigationDestination(
-          icon: Icon(
-            Icons.workspace_premium_outlined,
-          ),
-
-          selectedIcon: Icon(
-            Icons.workspace_premium,
-          ),
-
-          label: 'Bolsas',
-        ),
-
-        NavigationDestination(
-          icon: Icon(
-            Icons.settings_outlined,
-          ),
-
-          selectedIcon: Icon(
-            Icons.settings,
-          ),
-
-          label: 'Mais',
-        ),
-      ],
-    );
-  }
 }

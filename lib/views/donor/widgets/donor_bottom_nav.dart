@@ -28,9 +28,9 @@ class DonorBottomNav extends StatelessWidget {
           label: 'Minhas Doações',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.person_outline),
-          activeIcon: Icon(Icons.person),
-          label: 'Perfil',
+          icon: Icon(Icons.volunteer_activism_outlined),
+          activeIcon: Icon(Icons.volunteer_activism),
+          label: 'Doar',
         ),
       ],
     );

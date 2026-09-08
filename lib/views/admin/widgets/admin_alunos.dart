@@ -1,22 +1,13 @@
 import 'package:flutter/material.dart';
-import 'admin_atividades.dart';
 import 'card_aluno.dart';
 import '../../../models/student_model.dart';
 
 class AdminAlunosPage extends StatefulWidget {
-  final List<Atividade>? atividades;
-  final int initialPage;
-  final ValueChanged<int>? onPageChanged;
   final ValueChanged<Aluno>? onOpenAluno;
-  final ValueChanged<Atividade>? onOpenAtividade;
 
   const AdminAlunosPage({
     super.key,
-    this.atividades,
-    this.initialPage = 1,
-    this.onPageChanged,
     this.onOpenAluno,
-    this.onOpenAtividade,
   });
 
   @override
@@ -25,8 +16,6 @@ class AdminAlunosPage extends StatefulWidget {
 
 class _AdminAlunosPageState extends State<AdminAlunosPage> {
   String pesquisa = '';
-
-  late final List<Atividade> atividades;
 
   final List<Aluno> alunos = [
     Aluno(
@@ -57,13 +46,6 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
       telefone: '(11) 98765-5678',
     ),
   ];
-
-  @override
-  void initState() {
-    super.initState();
-    paginaSelecionada = widget.initialPage;
-    atividades = widget.atividades ?? atividadesMock;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -143,25 +125,16 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
           child: ListView.builder(
             padding: const EdgeInsets.symmetric(horizontal: 11),
             itemCount: listaFiltrada.length,
-            // Nota: navegação global é controlada por AdminHomeView
-        ),
+            itemBuilder: (context, index) {
+              final aluno = listaFiltrada[index];
 
-        NavigationDestination(
-          icon: Icon(Icons.calendar_month_outlined),
-          selectedIcon: Icon(Icons.calendar_month),
-          label: 'Atividades',
-        ),
-
-        NavigationDestination(
-          icon: Icon(Icons.workspace_premium_outlined),
-          selectedIcon: Icon(Icons.workspace_premium),
-          label: 'Bolsas',
-        ),
-
-        NavigationDestination(
-          icon: Icon(Icons.settings_outlined),
-          selectedIcon: Icon(Icons.settings),
-          label: 'Mais',
+              return CardAluno(
+                aluno: aluno,
+                onDetalhes: () => _mostrarDetalhes(aluno),
+                onEditar: () => _editarAluno(aluno),
+              );
+            },
+          ),
         ),
       ],
     );
@@ -252,40 +225,6 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
     );
   }
 
- 
-  // DETALHES DA ATIVIDADE
- 
-
-  void _mostrarAtividade(Atividade atividade) {
-    if (widget.onOpenAtividade != null) widget.onOpenAtividade!(atividade);
-
-    showDialog(
-      context: context,
-
-      builder: (context) {
-        return AlertDialog(
-          title: Text(atividade.nome),
-
-          content: Text(
-            '${atividade.descricao}\n\n'
-            '${atividade.professor}\n\n'
-            '${atividade.horario} • ${atividade.dias}\n\n'
-            '${atividade.inscritos}/${atividade.vagas} vagas',
-          ),
-
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-
-              child: const Text('Fechar'),
-            ),
-          ],
-        );
-      },
-    );
-  }
 }
 
 

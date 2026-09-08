@@ -27,6 +27,12 @@ class MyApp extends StatelessWidget {
 class HomeSelector extends StatelessWidget {
   const HomeSelector({super.key});
 
+  void _openScreen(BuildContext context, Widget screen) {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => screen),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,38 +42,17 @@ class HomeSelector extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const StudentHomeView(),
-                  ),
-                );
-              },
+              onPressed: () => _openScreen(context, const StudentHomeView()),
               child: const Text('Student'),
             ),
             const SizedBox(height: 16),
             ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const AdminHomeView(),
-                  ),
-                );
-              },
+              onPressed: () => _openScreen(context, const AdminHomeView()),
               child: const Text('Admin'),
             ),
             const SizedBox(height: 16),
             ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const DonorHomeView(),
-                  ),
-                );
-              },
+              onPressed: () => _openScreen(context, const DonorHomeView()),
               child: const Text('Donor'),
             ),
           ],

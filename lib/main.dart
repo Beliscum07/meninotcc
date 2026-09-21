@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'views/admin/admin_home_view.dart';
 import 'views/donor/donor_home_view.dart';
 import 'views/student/aluno_home_view.dart';
 
 void main() {
-  runApp(const OngApp());
+  runApp(
+    const ProviderScope(
+      child: OngApp(),
+    ),
+  );
 }
 
 class OngApp extends StatelessWidget {
@@ -15,6 +20,7 @@ class OngApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+
       title: 'ONG Apoio à Infância',
 
       theme: ThemeData(
@@ -45,7 +51,6 @@ class TelaInicial extends StatelessWidget {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-
             colors: [
               Color(0xFFB9A9D9),
               Color(0xFFEFE3DC),
@@ -75,7 +80,6 @@ class TelaInicial extends StatelessWidget {
 
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-
                       color: const Color(0xFFD969E8),
 
                       boxShadow: [
@@ -136,12 +140,11 @@ class TelaInicial extends StatelessWidget {
                   // ESTATÍSTICAS
                   // ==================================================
 
-                  Row(
+                  const Row(
                     mainAxisAlignment:
                         MainAxisAlignment.spaceBetween,
 
-                    children: const [
-
+                    children: [
                       Estatistica(
                         icone: Icons.people_outline,
                         numero: '150+',
@@ -165,7 +168,7 @@ class TelaInicial extends StatelessWidget {
                   const SizedBox(height: 80),
 
                   // ==================================================
-                  // BOTÃO ADMINISTRADOR
+                  // ACESSO ADMINISTRADOR
                   // ==================================================
 
                   BotaoAcesso(
@@ -178,15 +181,20 @@ class TelaInicial extends StatelessWidget {
                     preenchido: true,
 
                     onPressed: () {
-                      // Futuramente:
-                      // abrir tela de login do administrador
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              const AdminHomeView(),
+                        ),
+                      );
                     },
                   ),
 
                   const SizedBox(height: 25),
 
                   // ==================================================
-                  // BOTÃO ALUNO
+                  // ACESSO ALUNO
                   // ==================================================
 
                   BotaoAcesso(
@@ -199,15 +207,20 @@ class TelaInicial extends StatelessWidget {
                     preenchido: true,
 
                     onPressed: () {
-                      // Futuramente:
-                      // abrir tela de login do aluno
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              const AlunoHomeView(),
+                        ),
+                      );
                     },
                   ),
 
                   const SizedBox(height: 25),
 
                   // ==================================================
-                  // BOTÃO DOADOR
+                  // ACESSO DOADOR
                   // ==================================================
 
                   BotaoAcesso(
@@ -220,8 +233,13 @@ class TelaInicial extends StatelessWidget {
                     preenchido: false,
 
                     onPressed: () {
-                      // Futuramente:
-                      // abrir tela de login do doador
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              const DonorHomeView(),
+                        ),
+                      );
                     },
                   ),
 
@@ -244,12 +262,11 @@ class TelaInicial extends StatelessWidget {
 
                   const SizedBox(height: 14),
 
-                  Row(
+                  const Row(
                     mainAxisAlignment:
                         MainAxisAlignment.center,
 
-                    children: const [
-
+                    children: [
                       Text(
                         'Feito com ',
                         style: TextStyle(
@@ -307,7 +324,6 @@ class Estatistica extends StatelessWidget {
       child: Column(
         children: [
 
-          // Círculo do ícone
           Container(
             width: 100,
             height: 100,
@@ -319,16 +335,13 @@ class Estatistica extends StatelessWidget {
 
             child: Icon(
               icone,
-
-              color: Color(0xFF5558AD),
-
+              color: const Color(0xFF5558AD),
               size: 50,
             ),
           ),
 
           const SizedBox(height: 25),
 
-          // Número
           Text(
             numero,
 
@@ -343,7 +356,6 @@ class Estatistica extends StatelessWidget {
 
           const SizedBox(height: 5),
 
-          // Descrição
           Text(
             texto,
 
@@ -387,11 +399,6 @@ class BotaoAcesso extends StatelessWidget {
       height: 82,
 
       child: preenchido
-
-          // ========================================================
-          // BOTÃO PREENCHIDO
-          // ========================================================
-
           ? ElevatedButton(
               onPressed: onPressed,
 
@@ -419,11 +426,6 @@ class BotaoAcesso extends StatelessWidget {
                 ),
               ),
             )
-
-          // ========================================================
-          // BOTÃO COM BORDA
-          // ========================================================
-
           : OutlinedButton(
               onPressed: onPressed,
 
@@ -453,29 +455,6 @@ class BotaoAcesso extends StatelessWidget {
                 ),
               ),
             ),
-    );
-  }
-}
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              onPressed: () => _openScreen(context, const StudentHomeView()),
-              child: const Text('Student'),
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () => _openScreen(context, const AdminHomeView()),
-              child: const Text('Admin'),
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () => _openScreen(context, const DonorHomeView()),
-              child: const Text('Donor'),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

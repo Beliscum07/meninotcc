@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../admin/admin_home_view.dart';
 
+// Tela de login do administrador — apenas view (sem tocar em controllers)
 class AdminLoginPage extends StatefulWidget {
   const AdminLoginPage({super.key});
 
@@ -9,120 +10,166 @@ class AdminLoginPage extends StatefulWidget {
 }
 
 class _AdminLoginPageState extends State<AdminLoginPage> {
-  final _emailController = TextEditingController(text: 'admin@ong.com');
-  final _passwordController = TextEditingController(text: 'admin123');
+  // Variáveis locais que guardam o que o usuário digita
+  String email = 'admin@ong.com'; // pré-preenchido como credencial de teste
+  String senha = 'admin123'; // pré-preenchido como credencial de teste
 
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
-  }
+  // Mensagem de feedback exibida na tela após tentativa de login
+  String mensagem = '';
 
-  void _login() {
-    // Validação simples na view: se o e-mail corresponder ao credencial
-    // de teste, navegar para a tela do administrador. Caso contrário,
-    // exibir uma mensagem de erro (SnackBar).
-    // Observação: a autenticação real deve ser feita em camada de
-    // serviços/controllers — aqui fazemos apenas um exemplo na view.
-    final email = _emailController.text.trim();
-    if (email == 'admin@ong.com') {
+  // Faz o login localmente na view: compara com credenciais de teste.
+  // Se válidas, navega para `AdminHomeView`. Caso contrário, atualiza
+  // `mensagem` para informar o usuário.
+  void fazerLogin() {
+    if (email == 'admin@ong.com' && senha == 'admin123') {
+      setState(() {
+        mensagem = 'Login realizado com sucesso! Redirecionando...';
+      });
+
+      // Navega para a tela do administrador e substitui a rota atual.
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (_) => const AdminHomeView()),
       );
     } else {
-      // Mostra erro curto ao usuário sem alterar controllers/outros
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Credenciais inválidas. Use admin@ong.com')),
-      );
+      setState(() {
+        mensagem = 'E-mail ou senha incorretos.';
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFFB9A9D9),
-              Color(0xFFEFE3DC),
-            ],
-          ),
-        ),
-        child: SafeArea(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const SizedBox(height: 18),
-                  Container(
-                    width: 140,
-                    height: 140,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: const Color(0xFFD969E8),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.15),
-                          blurRadius: 10,
-                          offset: Offset(0, 5),
+      // Fundo suave para destacar o cartão branco
+      backgroundColor: const Color(0xFFE5DDF2),
+
+      body: Center(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+
+                // BOTÃO VOLTAR alinhado à esquerda
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: TextButton.icon(
+                    onPressed: () => Navigator.pop(context),
+                    icon: const Icon(Icons.arrow_back, color: Color(0xFF4656A3)),
+                    label: const Text('Voltar', style: TextStyle(color: Color(0xFF4656A3), fontSize: 16)),
+                  ),
+                ),
+
+                const SizedBox(height: 15),
+
+                // CAIXA BRANCA que contém o formulário
+                Container(
+                  width: 450,
+                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 30),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(25),
+                    boxShadow: [
+                      BoxShadow(color: Colors.black.withOpacity(0.15), blurRadius: 20, offset: const Offset(0, 10)),
+                    ],
+                  ),
+
+                  child: Column(
+                    children: [
+
+                      // ÍCONE DO CORAÇÃO
+                      Container(
+                        width: 64,
+                        height: 64,
+                        decoration: const BoxDecoration(color: Color(0xFFE276F0), shape: BoxShape.circle),
+                        child: const Icon(Icons.favorite, color: Colors.white, size: 34),
+                      ),
+
+                      const SizedBox(height: 18),
+
+                      // TÍTULO
+                      const Text('Bem-vindo!', style: TextStyle(color: Color(0xFF4656A3), fontSize: 25, fontWeight: FontWeight.bold)),
+                      const SizedBox(height: 4),
+                      const Text('Login - Administrador', style: TextStyle(color: Color(0xFF444444), fontSize: 14)),
+                      const SizedBox(height: 35),
+
+                      // LABEL EMAIL
+                      const Align(alignment: Alignment.centerLeft, child: Text('Email', style: TextStyle(color: Color(0xFF4656A3), fontSize: 14, fontWeight: FontWeight.w500))),
+                      const SizedBox(height: 8),
+
+                      // CAMPO EMAIL — atualiza a variável `email` local
+                      TextField(
+                        onChanged: (valor) => email = valor,
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: InputDecoration(
+                          hintText: 'seu@email.com',
+                          prefixIcon: const Icon(Icons.email_outlined, color: Colors.grey),
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: Color(0xFFD9DCEB))),
+                          enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: Color(0xFFD9DCEB))),
+                          focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: Color(0xFFE276F0), width: 2)),
                         ),
+                      ),
+
+                      const SizedBox(height: 18),
+
+                      // LABEL SENHA
+                      const Align(alignment: Alignment.centerLeft, child: Text('Senha', style: TextStyle(color: Color(0xFF4656A3), fontSize: 14, fontWeight: FontWeight.w500))),
+                      const SizedBox(height: 8),
+
+                      // CAMPO SENHA — atualiza a variável `senha` local
+                      TextField(
+                        onChanged: (valor) => senha = valor,
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          hintText: '••••••••',
+                          prefixIcon: const Icon(Icons.lock_outline, color: Colors.grey),
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: Color(0xFFD9DCEB))),
+                          enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: Color(0xFFD9DCEB))),
+                          focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: Color(0xFFE276F0), width: 2)),
+                        ),
+                      ),
+
+                      const SizedBox(height: 18),
+
+                      // BOTÃO ENTRAR
+                      SizedBox(
+                        width: double.infinity,
+                        height: 52,
+                        child: ElevatedButton(
+                          onPressed: fazerLogin,
+                          style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFFE276F0), foregroundColor: Colors.white, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)), elevation: 2),
+                          child: const Text('Entrar', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                        ),
+                      ),
+
+                      // MENSAGEM DE FEEDBACK (exibe erro ou sucesso)
+                      if (mensagem.isNotEmpty) ...[
+                        const SizedBox(height: 15),
+                        Text(mensagem, textAlign: TextAlign.center, style: const TextStyle(fontWeight: FontWeight.w500)),
                       ],
-                    ),
-                    child: const Icon(
-                      Icons.favorite,
-                      color: Colors.white,
-                      size: 72,
-                    ),
-                  ),
-                  const SizedBox(height: 36),
-                  Text(
-                    'Login Administrador',
-                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                          fontWeight: FontWeight.bold,
+
+                      const SizedBox(height: 24),
+
+                      // CAIXA COM CREDENCIAIS DE TESTE (apenas informativa)
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(color: const Color(0xFFE9E6F5), borderRadius: BorderRadius.circular(15)),
+                        child: const Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Credenciais de teste:', style: TextStyle(color: Color(0xFF333333), fontWeight: FontWeight.w500)),
+                            SizedBox(height: 8),
+                            Text('📧 admin@ong.com | 🔑 admin123', style: TextStyle(color: Color(0xFF555555))),
+                          ],
                         ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 24),
-                  TextField(
-                    controller: _emailController,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: const InputDecoration(
-                      labelText: 'E-mail',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  TextField(
-                    controller: _passwordController,
-                    obscureText: true,
-                    decoration: const InputDecoration(
-                      labelText: 'Senha',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 48,
-                    child: ElevatedButton(
-                      onPressed: _login,
-                      child: const Text('Entrar'),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  TextButton(
-                    onPressed: () {},
-                    child: const Text('Esqueci minha senha'),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),

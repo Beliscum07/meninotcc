@@ -9,8 +9,8 @@ class LoginDoadorPage extends StatefulWidget {
 }
 
 class _LoginDoadorPageState extends State<LoginDoadorPage> {
-  final _emailController = TextEditingController(text: 'admin@ong.com');
-  final _passwordController = TextEditingController(text: 'admin123');
+  final _emailController = TextEditingController(text: 'doador@ong.com');
+  final _passwordController = TextEditingController(text: 'doador123');
 
   @override
   void dispose() {
@@ -53,7 +53,7 @@ class _LoginDoadorPageState extends State<LoginDoadorPage> {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: const Color(0xFF5153AA),
-                      boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.15), blurRadius: 10, offset: Offset(0, 5)))],
+                      boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.15), blurRadius: 10, offset: Offset(0, 5))],
                     ),
                     child: const Icon(Icons.volunteer_activism, color: Colors.white, size: 72),
                   ),
@@ -66,7 +66,25 @@ class _LoginDoadorPageState extends State<LoginDoadorPage> {
                   const SizedBox(height: 24),
                   SizedBox(width: double.infinity, height: 48, child: ElevatedButton(onPressed: _login, child: const Text('Entrar'))),
                   const SizedBox(height: 12),
-                  TextButton(onPressed: () {}, child: const Text('Esqueci minha senha')),
+                  // MENSAGEM DE FEEDBACK (exibe erro ou sucesso)
+                      if (mensagem.isNotEmpty) ...[
+                        const SizedBox(height: 15),
+                        Text(mensagem, textAlign: TextAlign.center, style: const TextStyle(fontWeight: FontWeight.w500)),
+                      ],
+
+                      const SizedBox(height: 24),
+
+                      // CAIXA COM CREDENCIAIS DE TESTE (apenas informativa)
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(color: const Color(0xFFE9E6F5), borderRadius: BorderRadius.circular(15)),
+                        child: const Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Credenciais de teste:', style: TextStyle(color: Color(0xFF333333), fontWeight: FontWeight.w500)),
+                            SizedBox(height: 8),
+                            Text('📧 doador@ong.com | 🔑 doador123', style: TextStyle(color: Color(0xFF555555))),
                 ],
               ),
             ),

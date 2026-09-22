@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import 'views/admin/admin_home_view.dart';
-import 'views/donor/donor_home_view.dart';
-import 'views/student/aluno_home_view.dart';
+import 'views/auth/login_admin.dart';
+import 'views/auth/login_doador.dart';
+import 'views/auth/login_estudante.dart';
 
 void main() {
   runApp(
@@ -172,7 +171,7 @@ class TelaInicial extends StatelessWidget {
                   // ==================================================
 
                   BotaoAcesso(
-                    texto: 'Acesso Administrador',
+                    texto: 'Acessar como Administrador',
 
                     cor: const Color(0xFFD969E8),
 
@@ -185,7 +184,7 @@ class TelaInicial extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
-                              const AdminHomeView(),
+                              const AdminLoginPage(),
                         ),
                       );
                     },
@@ -198,7 +197,7 @@ class TelaInicial extends StatelessWidget {
                   // ==================================================
 
                   BotaoAcesso(
-                    texto: 'Acesso Aluno',
+                    texto: 'Acessar como Aluno',
 
                     cor: const Color(0xFF5153AA),
 
@@ -210,8 +209,8 @@ class TelaInicial extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              const AlunoHomeView(),
+                            builder: (context) =>
+                              const LoginEstudantePage(),
                         ),
                       );
                     },
@@ -224,7 +223,7 @@ class TelaInicial extends StatelessWidget {
                   // ==================================================
 
                   BotaoAcesso(
-                    texto: 'Acesso Doador',
+                    texto: 'Acessar como Doador',
 
                     cor: const Color(0xFF5153AA),
 
@@ -236,8 +235,8 @@ class TelaInicial extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              const DonorHomeView(),
+                            builder: (context) =>
+                              const LoginDoadorPage(),
                         ),
                       );
                     },

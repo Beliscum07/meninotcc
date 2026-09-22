@@ -9,8 +9,8 @@ class AdminLoginPage extends StatefulWidget {
 }
 
 class _AdminLoginPageState extends State<AdminLoginPage> {
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
+  final _emailController = TextEditingController(text: 'admin@ong.com');
+  final _passwordController = TextEditingController(text: 'admin123');
 
   @override
   void dispose() {
@@ -20,10 +20,22 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
   }
 
   void _login() {
-    // TODO: substituir por validação/autenticação real
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (_) => const AdminHomeView()),
-    );
+    // Validação simples na view: se o e-mail corresponder ao credencial
+    // de teste, navegar para a tela do administrador. Caso contrário,
+    // exibir uma mensagem de erro (SnackBar).
+    // Observação: a autenticação real deve ser feita em camada de
+    // serviços/controllers — aqui fazemos apenas um exemplo na view.
+    final email = _emailController.text.trim();
+    if (email == 'admin@ong.com') {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (_) => const AdminHomeView()),
+      );
+    } else {
+      // Mostra erro curto ao usuário sem alterar controllers/outros
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Credenciais inválidas. Use admin@ong.com')),
+      );
+    }
   }
 
   @override

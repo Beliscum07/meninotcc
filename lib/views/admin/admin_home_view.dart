@@ -31,8 +31,15 @@ class _AdminHomeViewState extends State<AdminHomeView> {
   void _selectPage(int index) {
     if (index == _selectedIndex) return;
 
-    setState(() {
-      _selectedIndex = index;
+    // Adia a alteração de estado para o próximo frame para evitar
+    // erros de "Cannot hit test a render box that has never been laid out"
+    // que podem ocorrer se a árvore de widgets mudar enquanto um gesto
+    // (ripple/hit test) ainda está em andamento.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      setState(() {
+        _selectedIndex = index;
+      });
     });
   }
 

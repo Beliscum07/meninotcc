@@ -37,7 +37,7 @@ class _AdminHomeViewState extends State<AdminHomeView> {
   }
 
   Widget _buildBody() {
-    switch (int index) {
+    switch (_selectedIndex) {
       case 0:
         return const AdminDashboard();
       case 1:

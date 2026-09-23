@@ -74,10 +74,7 @@ class AdminBolsas extends StatelessWidget {
   Widget _buildHeader() {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(
-        horizontal: 20,
-        vertical: 18,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
       color: primaryColor,
       child: Row(
         children: [
@@ -96,11 +93,7 @@ class AdminBolsas extends StatelessWidget {
             onPressed: () {
               // Futuramente: cadastrar nova bolsa
             },
-            icon: const Icon(
-              Icons.add,
-              color: Colors.white,
-              size: 28,
-            ),
+            icon: const Icon(Icons.add, color: Colors.white, size: 28),
           ),
         ],
       ),
@@ -152,21 +145,14 @@ class AdminBolsas extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(
-                icon,
-                color: iconColor,
-                size: 22,
-              ),
+              Icon(icon, color: iconColor, size: 22),
 
               const SizedBox(width: 8),
 
               Expanded(
                 child: Text(
                   title,
-                  style: TextStyle(
-                    color: Colors.grey.shade700,
-                    fontSize: 14,
-                  ),
+                  style: TextStyle(color: Colors.grey.shade700, fontSize: 14),
                 ),
               ),
             ],
@@ -212,10 +198,7 @@ class AdminBolsas extends StatelessWidget {
                 height: 50,
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
-                    colors: [
-                      Color(0xFFB96DD9),
-                      Color(0xFF565A9A),
-                    ],
+                    colors: [Color(0xFFB96DD9), Color(0xFF565A9A)],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
@@ -313,9 +296,7 @@ class AdminBolsas extends StatelessWidget {
 
           const SizedBox(height: 14),
 
-          Divider(
-            color: Colors.grey.shade300,
-          ),
+          Divider(color: Colors.grey.shade300),
 
           const SizedBox(height: 6),
 
@@ -323,10 +304,7 @@ class AdminBolsas extends StatelessWidget {
             children: [
               const Text(
                 'Investimento mensal:',
-                style: TextStyle(
-                  fontSize: 15,
-                  color: Color(0xFF555D6D),
-                ),
+                style: TextStyle(fontSize: 15, color: Color(0xFF555D6D)),
               ),
 
               const SizedBox(width: 5),
@@ -366,10 +344,7 @@ class AdminBolsas extends StatelessWidget {
         children: [
           Text(
             title,
-            style: TextStyle(
-              fontSize: 13,
-              color: Colors.grey.shade700,
-            ),
+            style: TextStyle(fontSize: 13, color: Colors.grey.shade700),
           ),
 
           const SizedBox(height: 6),
@@ -395,12 +370,10 @@ class AdminBolsas extends StatelessWidget {
     return BoxDecoration(
       color: const Color(0xFFFDFDFD),
       borderRadius: BorderRadius.circular(18),
-      border: Border.all(
-        color: const Color(0xFFD9D9D9),
-      ),
+      border: Border.all(color: const Color(0xFFD9D9D9)),
       boxShadow: [
         BoxShadow(
-          color: Colors.black.withValues(alpha: 0.08),
+          color: Colors.black.withOpacity(0.08),
           blurRadius: 8,
           offset: const Offset(0, 3),
         ),

@@ -8,83 +8,67 @@ class ConfiguracoesPage extends StatelessWidget {
     return SafeArea(
       child: Column(
         children: [
-           
-            // CABEÇALHO
-           
+          // CABEÇALHO
+          Container(
+            height: 51,
+            width: double.infinity,
+            color: const Color(0xFF5558AD),
 
-            Container(
-              height: 51,
-              width: double.infinity,
-              color: const Color(0xFF5558AD),
+            alignment: Alignment.centerLeft,
 
-              alignment: Alignment.centerLeft,
+            padding: const EdgeInsets.symmetric(horizontal: 10),
 
-              padding: const EdgeInsets.symmetric(
-                horizontal: 10,
-              ),
+            child: const Text(
+              'Configurações',
 
-              child: const Text(
-                'Configurações',
-
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
               ),
             ),
+          ),
 
-           
-            // CONTEÚDO
-           
+          // CONTEÚDO
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  const SizedBox(height: 14),
 
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    const SizedBox(height: 14),
+                  // CARTÃO DO USUÁRIO
+                  _cartaoUsuario(),
 
-                    // CARTÃO DO USUÁRIO
+                  const SizedBox(height: 22),
 
-                    _cartaoUsuario(),
+                  // OPÇÕES
+                  _opcoesConfiguracao(),
 
-                    const SizedBox(height: 22),
+                  const SizedBox(height: 22),
 
-                    // OPÇÕES
+                  // SOBRE O APP
+                  _sobreApp(),
 
-                    _opcoesConfiguracao(),
+                  const SizedBox(height: 21),
 
-                    const SizedBox(height: 22),
+                  // SAIR DA CONTA
+                  _botaoSair(),
 
-                    // SOBRE O APP
-
-                    _sobreApp(),
-
-                    const SizedBox(height: 21),
-
-                    // SAIR DA CONTA
-
-                    _botaoSair(),
-
-                    const SizedBox(height: 80),
-                  ],
-                ),
+                  const SizedBox(height: 80),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
+      ),
     );
   }
 
-
   // CARTÃO DO USUÁRIO
-
 
   Widget _cartaoUsuario() {
     return Container(
-      margin: const EdgeInsets.symmetric(
-        horizontal: 0,
-      ),
+      margin: const EdgeInsets.symmetric(horizontal: 0),
 
       width: double.infinity,
 
@@ -100,10 +84,7 @@ class ConfiguracoesPage extends StatelessWidget {
           begin: Alignment.centerLeft,
           end: Alignment.centerRight,
 
-          colors: [
-            Color(0xFFD778E8),
-            Color(0xFF5558AD),
-          ],
+          colors: [Color(0xFFD778E8), Color(0xFF5558AD)],
         ),
 
         boxShadow: [
@@ -116,11 +97,7 @@ class ConfiguracoesPage extends StatelessWidget {
       ),
 
       child: Padding(
-        padding: const EdgeInsets.only(
-          left: 19,
-          top: 22,
-          right: 19,
-        ),
+        padding: const EdgeInsets.only(left: 19, top: 22, right: 19),
 
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -156,8 +133,7 @@ class ConfiguracoesPage extends StatelessWidget {
 
                 // Nome e email
                 const Column(
-                  crossAxisAlignment:
-                      CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
 
                   children: [
                     Text(
@@ -190,16 +166,12 @@ class ConfiguracoesPage extends StatelessWidget {
 
             // Administrador
             Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 12,
-                vertical: 8,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
 
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.12),
+                color: Colors.white.withOpacity(0.12),
 
-                borderRadius:
-                    BorderRadius.circular(11),
+                borderRadius: BorderRadius.circular(11),
               ),
 
               child: const Text(
@@ -218,9 +190,7 @@ class ConfiguracoesPage extends StatelessWidget {
     );
   }
 
-
   // OPÇÕES DE CONFIGURAÇÃO
-
 
   Widget _opcoesConfiguracao() {
     return Container(
@@ -278,7 +248,6 @@ class ConfiguracoesPage extends StatelessWidget {
 
   // ITEM DE CONFIGURAÇÃO
 
-
   Widget _itemConfiguracao({
     required IconData icone,
     required String titulo,
@@ -291,19 +260,11 @@ class ConfiguracoesPage extends StatelessWidget {
         height: 54,
 
         child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 17,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 17),
 
           child: Row(
             children: [
-              Icon(
-                icone,
-
-                size: 21,
-
-                color: const Color(0xFF5558AD),
-              ),
+              Icon(icone, size: 21, color: const Color(0xFF5558AD)),
 
               const SizedBox(width: 13),
 
@@ -321,10 +282,7 @@ class ConfiguracoesPage extends StatelessWidget {
               const Text(
                 '›',
 
-                style: TextStyle(
-                  fontSize: 24,
-                  color: Color(0xFF555555),
-                ),
+                style: TextStyle(fontSize: 24, color: Color(0xFF555555)),
               ),
             ],
           ),
@@ -333,32 +291,19 @@ class ConfiguracoesPage extends StatelessWidget {
     );
   }
 
-
   // DIVISOR
 
-
   Widget _divisor() {
-    return const Divider(
-      height: 1,
-      thickness: 1,
-      color: Color(0xFFE2E0EA),
-    );
+    return const Divider(height: 1, thickness: 1, color: Color(0xFFE2E0EA));
   }
 
-
   // SOBRE O APP
-
 
   Widget _sobreApp() {
     return Container(
       width: double.infinity,
 
-      padding: const EdgeInsets.fromLTRB(
-        16,
-        19,
-        16,
-        18,
-      ),
+      padding: const EdgeInsets.fromLTRB(16, 19, 16, 18),
 
       decoration: BoxDecoration(
         color: Colors.white,
@@ -375,8 +320,7 @@ class ConfiguracoesPage extends StatelessWidget {
       ),
 
       child: Column(
-        crossAxisAlignment:
-            CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
 
         children: [
           const Text(
@@ -394,10 +338,7 @@ class ConfiguracoesPage extends StatelessWidget {
           const Text(
             'Versão: 1.0.0',
 
-            style: TextStyle(
-              fontSize: 13,
-              color: Color(0xFF444444),
-            ),
+            style: TextStyle(fontSize: 13, color: Color(0xFF444444)),
           ),
 
           const SizedBox(height: 10),
@@ -405,28 +346,19 @@ class ConfiguracoesPage extends StatelessWidget {
           const Text(
             'Desenvolvido para: ONG Apoio à Infância',
 
-            style: TextStyle(
-              fontSize: 13,
-              color: Color(0xFF444444),
-            ),
+            style: TextStyle(fontSize: 13, color: Color(0xFF444444)),
           ),
 
           const SizedBox(height: 10),
 
-          const Divider(
-            height: 1,
-            color: Color(0xFFE0DDE8),
-          ),
+          const Divider(height: 1, color: Color(0xFFE0DDE8)),
 
           const SizedBox(height: 10),
 
           const Text(
             '© 2026 Todos os direitos reservados',
 
-            style: TextStyle(
-              fontSize: 13,
-              color: Color(0xFF444444),
-            ),
+            style: TextStyle(fontSize: 13, color: Color(0xFF444444)),
           ),
         ],
       ),
@@ -434,13 +366,10 @@ class ConfiguracoesPage extends StatelessWidget {
   }
 
   // BOTÃO SAIR
- 
 
   Widget _botaoSair() {
     return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 0,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 0),
 
       child: SizedBox(
         width: double.infinity,
@@ -452,35 +381,23 @@ class ConfiguracoesPage extends StatelessWidget {
             // Navigator.pushReplacement(...)
           },
 
-          icon: const Icon(
-            Icons.logout,
-            color: Colors.red,
-            size: 20,
-          ),
+          icon: const Icon(Icons.logout, color: Colors.red, size: 20),
 
           label: const Text(
             'Sair da Conta',
 
-            style: TextStyle(
-              color: Colors.red,
-              fontSize: 14,
-            ),
+            style: TextStyle(color: Colors.red, fontSize: 14),
           ),
 
           style: OutlinedButton.styleFrom(
-            side: const BorderSide(
-              color: Colors.red,
-              width: 1.5,
-            ),
+            side: const BorderSide(color: Colors.red, width: 1.5),
 
             shape: RoundedRectangleBorder(
-              borderRadius:
-                  BorderRadius.circular(15),
+              borderRadius: BorderRadius.circular(15),
             ),
           ),
         ),
       ),
     );
   }
-
 }

@@ -39,10 +39,7 @@ class AdminDashboard extends StatelessWidget {
   Widget _buildHeader() {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(
-        horizontal: 20,
-        vertical: 16,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
       color: primaryColor,
       child: const Text(
         'Dashboard',
@@ -92,9 +89,7 @@ class AdminDashboard extends StatelessWidget {
     required Color iconColor,
   }) {
     return Container(
-      constraints: const BoxConstraints(
-        minHeight: 145,
-      ),
+      constraints: const BoxConstraints(minHeight: 145),
       padding: const EdgeInsets.all(16),
       decoration: _cardDecoration(),
       child: Column(
@@ -106,17 +101,10 @@ class AdminDashboard extends StatelessWidget {
               Expanded(
                 child: Text(
                   title,
-                  style: TextStyle(
-                    color: Colors.grey.shade600,
-                    fontSize: 13,
-                  ),
+                  style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
                 ),
               ),
-              Icon(
-                icon,
-                color: iconColor,
-                size: 24,
-              ),
+              Icon(icon, color: iconColor, size: 24),
             ],
           ),
           const SizedBox(height: 8),
@@ -132,10 +120,7 @@ class AdminDashboard extends StatelessWidget {
             const Spacer(),
             Text(
               subtitle,
-              style: TextStyle(
-                color: Colors.grey.shade700,
-                fontSize: 11,
-              ),
+              style: TextStyle(color: Colors.grey.shade700, fontSize: 11),
             ),
           ],
         ],
@@ -185,13 +170,10 @@ class AdminDashboard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: primaryColor.withValues(alpha: 0.15),
+                  color: primaryColor.withOpacity(0.15),
                   borderRadius: BorderRadius.circular(15),
                 ),
-                child: Icon(
-                  Icons.radio_button_checked,
-                  color: primaryColor,
-                ),
+                child: Icon(Icons.radio_button_checked, color: primaryColor),
               ),
             ],
           ),
@@ -208,10 +190,7 @@ class AdminDashboard extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             '83.3% da meta alcançada',
-            style: TextStyle(
-              color: Colors.grey.shade700,
-              fontSize: 12,
-            ),
+            style: TextStyle(color: Colors.grey.shade700, fontSize: 12),
           ),
         ],
       ),
@@ -241,11 +220,7 @@ class AdminDashboard extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(
-                Icons.show_chart,
-                color: primaryColor,
-                size: 20,
-              ),
+              Icon(Icons.show_chart, color: primaryColor, size: 20),
               const SizedBox(width: 8),
               Text(
                 'Doações nos últimos 6 meses',
@@ -264,10 +239,7 @@ class AdminDashboard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: months.map((data) {
-                return _buildChartBar(
-                  data['month'],
-                  data['value'],
-                );
+                return _buildChartBar(data['month'], data['value']);
               }).toList(),
             ),
           ),
@@ -285,18 +257,13 @@ class AdminDashboard extends StatelessWidget {
           height: 120 * value,
           decoration: BoxDecoration(
             color: accentColor,
-            borderRadius: const BorderRadius.vertical(
-              top: Radius.circular(6),
-            ),
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(6)),
           ),
         ),
         const SizedBox(height: 8),
         Text(
           month,
-          style: TextStyle(
-            color: Colors.grey.shade600,
-            fontSize: 11,
-          ),
+          style: TextStyle(color: Colors.grey.shade600, fontSize: 11),
         ),
       ],
     );
@@ -372,10 +339,7 @@ class AdminDashboard extends StatelessWidget {
                 const SizedBox(height: 3),
                 Text(
                   date,
-                  style: TextStyle(
-                    color: Colors.grey.shade600,
-                    fontSize: 12,
-                  ),
+                  style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
                 ),
               ],
             ),
@@ -393,10 +357,7 @@ class AdminDashboard extends StatelessWidget {
               const SizedBox(height: 3),
               Text(
                 method,
-                style: TextStyle(
-                  color: Colors.grey.shade600,
-                  fontSize: 11,
-                ),
+                style: TextStyle(color: Colors.grey.shade600, fontSize: 11),
               ),
             ],
           ),
@@ -413,12 +374,10 @@ class AdminDashboard extends StatelessWidget {
     return BoxDecoration(
       color: const Color(0xFFFDFDFD),
       borderRadius: BorderRadius.circular(16),
-      border: Border.all(
-        color: Colors.grey.shade300,
-      ),
+      border: Border.all(color: Colors.grey.shade300),
       boxShadow: [
         BoxShadow(
-          color: Colors.black.withValues(alpha: 0.08),
+          color: Colors.black.withOpacity(0.08),
           blurRadius: 8,
           offset: const Offset(0, 3),
         ),
@@ -426,4 +385,3 @@ class AdminDashboard extends StatelessWidget {
     );
   }
 }
-

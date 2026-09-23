@@ -14,7 +14,12 @@ class AdminBottomNav extends StatelessWidget {
   Widget build(BuildContext context) {
     return BottomNavigationBar(
       currentIndex: currentIndex,
-      onTap: onTap,
+      onTap: (index) {
+        // debug: confirmar que o callback é disparado
+        // (permaneça leve — usa debugPrint para não poluir em release)
+        debugPrint('AdminBottomNav tapped: $index');
+        onTap(index);
+      },
       type: BottomNavigationBarType.fixed,
 
       backgroundColor: Colors.white,

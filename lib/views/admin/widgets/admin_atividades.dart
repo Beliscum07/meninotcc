@@ -127,7 +127,7 @@ class CardAtividade extends StatelessWidget {
                           width: 48,
                           height: 48,
                           decoration: BoxDecoration(
-                            color: atividade.cor.withValues(alpha: 0.10),
+                            color: atividade.cor.withOpacity(0.10),
                             borderRadius: BorderRadius.circular(15),
                           ),
                           child: Icon(

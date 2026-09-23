@@ -17,25 +17,17 @@ class AdminHomeView extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: const Color(0xFFF5F1EA),
-      body: _buildBody(selectedIndex),
+      body: IndexedStack(
+        index: selectedIndex,
+        children: const [
+          AdminDashboard(),
+          AdminAlunosPage(),
+          AdminAtividadesPage(),
+          AdminBolsas(),
+          ConfiguracoesPage(),
+        ],
+      ),
       bottomNavigationBar: const AdminBottomNav(),
     );
-  }
-
-  Widget _buildBody(int index) {
-    switch (index) {
-      case 0:
-        return const AdminDashboard();
-      case 1:
-        return const AdminAlunosPage();
-      case 2:
-        return const AdminAtividadesPage();
-      case 3:
-        return const AdminBolsas();
-      case 4:
-        return const ConfiguracoesPage();
-      default:
-        return const AdminDashboard();
-    }
   }
 }

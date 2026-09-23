@@ -89,7 +89,7 @@ class AdminDashboard extends StatelessWidget {
     required Color iconColor,
   }) {
     return Container(
-      constraints: const BoxConstraints(minHeight: 145),
+      height: 145,
       padding: const EdgeInsets.all(16),
       decoration: _cardDecoration(),
       child: Column(
@@ -117,7 +117,7 @@ class AdminDashboard extends StatelessWidget {
             ),
           ),
           if (subtitle != null) ...[
-            const Spacer(),
+            const SizedBox(height: 12),
             Text(
               subtitle,
               style: TextStyle(color: Colors.grey.shade700, fontSize: 11),
@@ -170,7 +170,7 @@ class AdminDashboard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: primaryColor.withOpacity(0.15),
+                  color: primaryColor.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(15),
                 ),
                 child: Icon(Icons.radio_button_checked, color: primaryColor),
@@ -377,7 +377,7 @@ class AdminDashboard extends StatelessWidget {
       border: Border.all(color: Colors.grey.shade300),
       boxShadow: [
         BoxShadow(
-          color: Colors.black.withOpacity(0.08),
+          color: Colors.black.withValues(alpha: 0.08),
           blurRadius: 8,
           offset: const Offset(0, 3),
         ),

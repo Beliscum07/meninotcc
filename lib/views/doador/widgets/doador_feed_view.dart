@@ -7,6 +7,9 @@ class DoadorFeed extends StatelessWidget {
 	Widget build(BuildContext context) {
 		return const SafeArea(
 			child: Center(child: Text('Início - Doador')),
+    
+
+
 		);
 	}
 }

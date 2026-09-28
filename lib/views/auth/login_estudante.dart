@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../student/aluno_home_view.dart';
+import '../estudante/aluno_home_view.dart';
 
 class LoginEstudantePage extends StatefulWidget {
   const LoginEstudantePage({super.key});

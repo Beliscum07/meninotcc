@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'widgets/donor_bottom_nav.dart';
-import 'widgets/doador_feed.dart';
-import 'widgets/doador_historico.dart';
-import 'widgets/doador_doar.dart';
+import 'widgets/doador_feed_view.dart';
+import 'widgets/doador_historico_view.dart';
+import 'widgets/doador_doar_view.dart';
 
 class DonorHomeView extends StatefulWidget {
   const DonorHomeView({super.key});

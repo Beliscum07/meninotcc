@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../controllers/student_nav_controller.dart';
+import '../../../controllers/controller_navs/student_nav_controller.dart';
 
 class StudentBottomNav extends ConsumerWidget {
   const StudentBottomNav({super.key});

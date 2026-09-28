@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../controllers/admin_nav_controller.dart';
+import '../../../controllers/controller_navs/admin_nav_controller.dart';
 
 class AdminBottomNav extends ConsumerWidget {
   const AdminBottomNav({super.key});

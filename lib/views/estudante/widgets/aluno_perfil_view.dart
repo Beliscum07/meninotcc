@@ -23,6 +23,7 @@ class AlunoPerfilView extends StatelessWidget {
         padding: const EdgeInsets.all(18),
         child: Column(
           children: [
+            // Topo do Perfil
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(24),
@@ -79,6 +80,8 @@ class AlunoPerfilView extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 22),
+
+            // Estatísticas
             Row(
               children: [
                 Expanded(
@@ -99,6 +102,8 @@ class AlunoPerfilView extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 22),
+
+            // Dados da Conta
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(20),
@@ -145,6 +150,8 @@ class AlunoPerfilView extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 22),
+
+            // Ações Rápidas
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(20),

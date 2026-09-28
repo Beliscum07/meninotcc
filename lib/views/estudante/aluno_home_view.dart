@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'widgets/aluno_agenda.dart';
-import 'widgets/aluno_notificacoes.dart';
+import 'widgets/aluno_agenda_view.dart';
+import 'widgets/aluno_notificacoes_view.dart';
 import 'widgets/aluno_perfil_view.dart';
 
 class AlunoHomeView extends StatefulWidget {

@@ -9,125 +9,164 @@ class LoginEstudantePage extends StatefulWidget {
 }
 
 class _LoginEstudantePageState extends State<LoginEstudantePage> {
-  final _emailController = TextEditingController(text: 'aluno@ong.com');
-  final _passwordController = TextEditingController(text: 'aluno123');
-  String mensagem = '';
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController senhaController = TextEditingController();
+
+  bool mostrarSenha = false;
+
+  void entrar() {
+    final email = emailController.text.trim();
+    final senha = senhaController.text.trim();
+
+    if (email == 'aluno@ong.com' && senha == 'aluno123') {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const StudentHomeView(),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Email ou senha incorretos.'),
+        ),
+      );
+    }
+  }
 
   @override
   void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
+    emailController.dispose();
+    senhaController.dispose();
     super.dispose();
-  }
-
-  void _login() {
-    if (_emailController.text == 'aluno@ong.com' &&
-        _passwordController.text == 'aluno123') {
-      setState(() {
-        mensagem = 'Login realizado com sucesso!';
-      });
-
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const StudentHomeView()),
-      );
-    } else {
-      setState(() {
-        mensagem = 'E-mail ou senha incorretos.';
-      });
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Color(0xFFB9A9D9), Color(0xFFEFE3DC)],
-          ),
-        ),
-        child: SafeArea(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
+      backgroundColor: const Color(0xFFE9E0F4),
+      body: Center(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(24),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(
+              maxWidth: 670,
+            ),
+            child: Container(
+              padding: const EdgeInsets.fromLTRB(48, 36, 48, 40),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(30),
+              ),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const SizedBox(height: 18),
                   Container(
-                    width: 140,
-                    height: 140,
+                    width: 96,
+                    height: 96,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: const Color(0xFF5153AA),
+                      color: const Color(0xFFE17BEA),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.15),
-                          blurRadius: 10,
-                          offset: Offset(0, 5),
+                          color: Colors.black.withOpacity(0.12),
+                          blurRadius: 15,
+                          offset: const Offset(0, 8),
                         ),
                       ],
                     ),
                     child: const Icon(
-                      Icons.school,
+                      Icons.favorite,
                       color: Colors.white,
-                      size: 72,
+                      size: 52,
                     ),
                   ),
-                  const SizedBox(height: 36),
-                  Text(
-                    'Login Estudante',
-                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+
+                  const SizedBox(height: 28),
+
+                  const Text(
+                    'Bem-vindo!',
+                    style: TextStyle(
+                      fontSize: 38,
                       fontWeight: FontWeight.bold,
+                      color: Color(0xFF5056AC),
                     ),
                   ),
+
+                  const SizedBox(height: 6),
+
+                  const Text(
+                    'Login - Aluno',
+                    style: TextStyle(
+                      fontSize: 22,
+                      color: Color(0xFF333333),
+                    ),
+                  ),
+
+                  const SizedBox(height: 50),
+
+                  _campo(
+                    titulo: 'Email',
+                    hint: 'seu@email.com',
+                    icone: Icons.email_outlined,
+                    controller: emailController,
+                  ),
+
                   const SizedBox(height: 24),
-                  TextField(
-                    controller: _emailController,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: const InputDecoration(
-                      labelText: 'E-mail',
-                      border: OutlineInputBorder(),
+
+                  _campo(
+                    titulo: 'Senha',
+                    hint: '••••••••',
+                    icone: Icons.lock_outline,
+                    controller: senhaController,
+                    obscureText: !mostrarSenha,
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        mostrarSenha
+                            ? Icons.visibility_off_outlined
+                            : Icons.visibility_outlined,
+                        color: Colors.grey,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          mostrarSenha = !mostrarSenha;
+                        });
+                      },
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  TextField(
-                    controller: _passwordController,
-                    obscureText: true,
-                    decoration: const InputDecoration(
-                      labelText: 'Senha',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 24),
+
+                  const SizedBox(height: 25),
+
                   SizedBox(
                     width: double.infinity,
-                    height: 48,
+                    height: 78,
                     child: ElevatedButton(
-                      onPressed: _login,
-                      child: const Text('Entrar'),
+                      onPressed: entrar,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFFE17BEA),
+                        foregroundColor: Colors.white,
+                        elevation: 3,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                      ),
+                      child: const Text(
+                        'Entrar',
+                        style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 12),
-                  if (mensagem.isNotEmpty) ...[
-                    const SizedBox(height: 15),
-                    Text(
-                      mensagem,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(fontWeight: FontWeight.w500),
-                    ),
-                  ],
-                  const SizedBox(height: 24),
+
+                  const SizedBox(height: 35),
+
                   Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(24),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFE9E6F5),
-                      borderRadius: BorderRadius.circular(15),
+                      color: const Color(0xFFE8E3F3),
+                      borderRadius: BorderRadius.circular(22),
                     ),
                     child: const Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -135,14 +174,18 @@ class _LoginEstudantePageState extends State<LoginEstudantePage> {
                         Text(
                           'Credenciais de teste:',
                           style: TextStyle(
-                            color: Color(0xFF333333),
-                            fontWeight: FontWeight.w500,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF4A4A4A),
                           ),
                         ),
-                        SizedBox(height: 8),
+                        SizedBox(height: 14),
                         Text(
-                          '📧 aluno@ong.com | 🔑 aluno123',
-                          style: TextStyle(color: Color(0xFF555555)),
+                          '📧  aluno@ong.com   |   🔑  aluno123',
+                          style: TextStyle(
+                            fontSize: 17,
+                            color: Color(0xFF555555),
+                          ),
                         ),
                       ],
                     ),
@@ -153,6 +196,75 @@ class _LoginEstudantePageState extends State<LoginEstudantePage> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _campo({
+    required String titulo,
+    required String hint,
+    required IconData icone,
+    required TextEditingController controller,
+    bool obscureText = false,
+    Widget? suffixIcon,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          titulo,
+          style: const TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.w500,
+            color: Color(0xFF5056AC),
+          ),
+        ),
+
+        const SizedBox(height: 10),
+
+        TextField(
+          controller: controller,
+          obscureText: obscureText,
+          style: const TextStyle(
+            fontSize: 21,
+          ),
+          decoration: InputDecoration(
+            hintText: hint,
+            hintStyle: const TextStyle(
+              color: Color(0xFF999999),
+              fontSize: 21,
+            ),
+            prefixIcon: Icon(
+              icone,
+              size: 30,
+              color: Colors.grey,
+            ),
+            suffixIcon: suffixIcon,
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 22,
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(24),
+              borderSide: const BorderSide(
+                color: Color(0xFFDAD9E9),
+              ),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(24),
+              borderSide: const BorderSide(
+                color: Color(0xFFDAD9E9),
+              ),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(24),
+              borderSide: const BorderSide(
+                color: Color(0xFFE17BEA),
+                width: 2,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

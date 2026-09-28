@@ -1,34 +1,63 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../controllers/student_nav_controller.dart';
-import 'widgets/aluno_bottom_nav.dart';
-import 'widgets/aluno_my_area.dart';
-import 'widgets/aluno_agenda.dart';
-import 'widgets/aluno_atividades.dart';
-import 'widgets/aluno_notificacoes.dart';
 
-class StudentHomeView extends ConsumerWidget {
-  const StudentHomeView({super.key});
+import 'widgets/aluno_agenda.dart';
+import 'widgets/aluno_notificacoes.dart';
+import 'widgets/aluno_perfil_view.dart';
+
+class AlunoHomeView extends StatefulWidget {
+  const AlunoHomeView({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    // A View "escuta" o Controller
-    final selectedIndex = ref.watch(studentNavController);
+  State<AlunoHomeView> createState() => _AlunoHomeViewState();
+}
 
+class _AlunoHomeViewState extends State<AlunoHomeView> {
+  int selectedIndex = 0;
+
+  final List<Widget> telas = const [
+    AlunoAgendaView(),
+    AlunoNotificacoesView(),
+    AlunoPerfilView(),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F5), // Cor de fundo 
-      body: _buildBody(selectedIndex),
-      bottomNavigationBar: const StudentBottomNav(),
+      body: telas[selectedIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: selectedIndex,
+        onTap: (index) {
+          setState(() {
+            selectedIndex = index;
+          });
+        },
+        type: BottomNavigationBarType.fixed,
+        selectedItemColor: const Color(0xFFE17BEA),
+        unselectedItemColor: const Color(0xFF555555),
+        selectedFontSize: 16,
+        unselectedFontSize: 16,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_month_outlined),
+            activeIcon: Icon(Icons.calendar_month),
+            label: 'Agenda',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.notifications_none),
+            activeIcon: Icon(Icons.notifications),
+            label: 'Notificações',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_outline),
+            activeIcon: Icon(Icons.person),
+            label: 'Perfil',
+          ),
+        ],
+      ),
     );
   }
+}
 
-  Widget _buildBody(int index) {
-    switch (index) {
-      case 0: return const StudentMyArea();
-      case 1: return const StudentAgenda();
-      case 2: return const StudentActivities();
-      case 3: return const StudentScholarships();
-      default: return const StudentMyArea();
-    }
-  }
+class StudentHomeView extends AlunoHomeView {
+  const StudentHomeView({super.key});
 }

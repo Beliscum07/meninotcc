@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../auth/login_admin.dart';
+import '../../auth/login_admin.dart';
 
 class ConfiguracoesPage extends StatelessWidget {
   const ConfiguracoesPage({super.key});
@@ -33,30 +33,33 @@ class ConfiguracoesPage extends StatelessWidget {
           // CONTEÚDO
           Expanded(
             child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  const SizedBox(height: 14),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 14, 16, 24),
+                child: Column(
+                  children: [
+                    const SizedBox(height: 14),
 
-                  // CARTÃO DO USUÁRIO
-                  _cartaoUsuario(),
+                    // CARTÃO DO USUÁRIO
+                    _cartaoUsuario(),
 
-                  const SizedBox(height: 22),
+                    const SizedBox(height: 22),
 
-                  // OPÇÕES
-                  _opcoesConfiguracao(),
+                    // OPÇÕES
+                    _opcoesConfiguracao(),
 
-                  const SizedBox(height: 22),
+                    const SizedBox(height: 22),
 
-                  // SOBRE O APP
-                  _sobreApp(),
+                    // SOBRE O APP
+                    _sobreApp(),
 
-                  const SizedBox(height: 21),
+                    const SizedBox(height: 22),
 
-                  // SAIR DA CONTA
-                  _botaoSair(),
+                    // SAIR DA CONTA
+                    _botaoSair(context),
 
-                  const SizedBox(height: 80),
-                ],
+                    const SizedBox(height: 80),
+                  ],
+                ),
               ),
             ),
           ),
@@ -69,8 +72,6 @@ class ConfiguracoesPage extends StatelessWidget {
 
   Widget _cartaoUsuario() {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 0),
-
       width: double.infinity,
 
       height: 159,
@@ -367,38 +368,32 @@ class ConfiguracoesPage extends StatelessWidget {
   }
 
   //Lógica do botão de sair da conta
-  Widget _botaoSair() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 0),
+  Widget _botaoSair(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
 
-      child: SizedBox(
-        width: double.infinity,
-        height: 47,
-
-        child: OutlinedButton.icon(
-          onPressed: () {
-            Navigator.pushReplacement()
-              context,
-              MaterialPageRoute(
-                builder: (context) => const AdminLoginView(),
-              ),
-            );
-          },
-
-          icon: const Icon(Icons.logout, color: Colors.red, size: 20),
-
-          label: const Text(
-            'Sair da Conta',
-
-            style: TextStyle(color: Colors.red, fontSize: 14),
-          ),
-
-          style: OutlinedButton.styleFrom(
-            side: const BorderSide(color: Colors.red, width: 1.5),
-
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15),
+      child: OutlinedButton.icon(
+        onPressed: () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const AdminLoginPage(),
             ),
+          );
+        },
+
+        icon: const Icon(Icons.logout, color: Colors.red, size: 20),
+
+        label: const Text(
+          'Sair da Conta',
+
+          style: TextStyle(color: Colors.red, fontSize: 14),
+        ),
+
+        style: OutlinedButton.styleFrom(
+          side: const BorderSide(color: Colors.red, width: 1.5),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
           ),
         ),
       ),

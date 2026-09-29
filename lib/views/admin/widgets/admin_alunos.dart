@@ -384,7 +384,6 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
                   ),
                 ],
               ),
-            ),
           ),
         );
       },

@@ -44,7 +44,7 @@ class AdminBottomNav extends ConsumerWidget {
         BottomNavigationBarItem(
           icon: Icon(Icons.settings_outlined),
           activeIcon: Icon(Icons.settings),
-          label: 'Mais',
+          label: 'Configurações',
         ),
       ],
     );

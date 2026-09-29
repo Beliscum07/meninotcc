@@ -52,6 +52,17 @@ class _LoginDoadorPageState extends State<LoginDoadorPage> {
             constraints: const BoxConstraints(
               maxWidth: 670,
             ),
+            // BOTÃO VOLTAR alinhado à esquerda
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: TextButton.icon(
+                    onPressed: () => Navigator.pop(context),
+                    icon: const Icon(Icons.arrow_back, color: Color(0xFF4656A3)),
+                    label: const Text('Voltar', style: TextStyle(color: Color(0xFF4656A3), fontSize: 16)),
+                  ),
+                ),
+
+             // Card branco com bordas arredondadas e sombra   
             child: Container(
               padding: const EdgeInsets.fromLTRB(48, 36, 48, 40),
               decoration: BoxDecoration(

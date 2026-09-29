@@ -18,19 +18,19 @@ class DonorBottomNav extends StatelessWidget {
       type: BottomNavigationBarType.fixed,
       items: const [
         BottomNavigationBarItem(
-          icon: Icon(Icons.home_outlined),
-          activeIcon: Icon(Icons.home),
-          label: 'Início',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.favorite_outline),
-          activeIcon: Icon(Icons.favorite),
-          label: 'Minhas Doações',
+          icon: Icon(Icons.heart_outline),
+          activeIcon: Icon(Icons.heart),
+          label: 'Feed',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.volunteer_activism_outlined),
           activeIcon: Icon(Icons.volunteer_activism),
           label: 'Doar',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.settings_outlined),
+          activeIcon: Icon(Icons.settings),
+          label: 'Configurações',
         ),
       ],
     );

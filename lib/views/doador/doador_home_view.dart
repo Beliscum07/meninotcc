@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'widgets/donor_bottom_nav.dart';
 import 'widgets/doador_feed_view.dart';
-import 'widgets/doador_historico_view.dart';
 import 'widgets/doador_doar_view.dart';
+import 'widgets/doador_configuracoes_view.dart';
 
 class DonorHomeView extends StatefulWidget {
   const DonorHomeView({super.key});
@@ -35,9 +35,9 @@ class _DonorHomeViewState extends State<DonorHomeView> {
       case 0:
         return const DoadorFeed();
       case 1:
-        return const DoadorHistorico();
-      case 2:
         return const DoadorDoar();
+        case 2:
+        return const DoadorConfigucoes(); // Placeholder for the Configurações view
       default:
         return const DoadorFeed();
     }

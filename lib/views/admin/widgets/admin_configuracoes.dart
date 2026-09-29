@@ -366,8 +366,7 @@ class ConfiguracoesPage extends StatelessWidget {
     );
   }
 
-  // BOTÃO SAIR
-
+  //Lógica do botão de sair da conta
   Widget _botaoSair() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 0),

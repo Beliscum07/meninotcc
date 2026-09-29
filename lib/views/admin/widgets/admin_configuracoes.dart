@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../auth/login_admin.dart';
 
 class ConfiguracoesPage extends StatelessWidget {
   const ConfiguracoesPage({super.key});
@@ -377,8 +378,12 @@ class ConfiguracoesPage extends StatelessWidget {
 
         child: OutlinedButton.icon(
           onPressed: () {
-            // Futuramente:
-            // Navigator.pushReplacement(...)
+            Navigator.pushReplacement()
+              context,
+              MaterialPageRoute(
+                builder: (context) => const AdminLoginView(),
+              ),
+            );
           },
 
           icon: const Icon(Icons.logout, color: Colors.red, size: 20),

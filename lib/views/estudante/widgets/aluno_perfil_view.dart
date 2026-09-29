@@ -172,14 +172,6 @@ class AlunoPerfilView extends StatelessWidget {
                   ),
                   const SizedBox(height: 14),
                   _acao(
-                    icone: Icons.edit_note_outlined,
-                    texto: 'Editar dados pessoais',
-                  ),
-                  _acao(
-                    icone: Icons.settings_outlined,
-                    texto: 'Configurações',
-                  ),
-                  _acao(
                     icone: Icons.logout,
                     texto: 'Sair da conta',
                   ),

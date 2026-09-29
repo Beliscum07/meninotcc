@@ -1,12 +1,13 @@
 class Aluno {
   String nome;
-
-  final int idade;
-  final String id;
-  final int atividades;
-  final int presenca;
-  final String responsavel;
-  final String telefone;
+  int idade;
+  String id;
+  int atividades;
+  int presenca;
+  String responsavel;
+  String telefone;
+  String email;
+  String senha;
 
   Aluno({
     required this.nome,
@@ -16,5 +17,7 @@ class Aluno {
     required this.presenca,
     required this.responsavel,
     required this.telefone,
+    required this.email,
+    required this.senha,
   });
 }

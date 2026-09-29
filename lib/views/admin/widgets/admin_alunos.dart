@@ -168,6 +168,7 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
               Text('Atividades: ${aluno.atividades}'),
               Text('Presença: ${aluno.presenca}%'),
               const SizedBox(height: 12),
+              Text('email: ${aluno.email}'),
               Text('Responsável: ${aluno.responsavel}'),
               Text('Telefone: ${aluno.telefone}'),
             ],

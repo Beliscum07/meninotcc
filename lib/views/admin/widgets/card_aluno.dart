@@ -118,6 +118,10 @@ class CardAluno extends StatelessWidget {
                                   '${aluno.presenca}% presença',
                                   style: const TextStyle(fontSize: 13),
                                 ),
+                                Text(
+                                  '${aluno.email} email',
+                                  style: const TextStyle(fontSize: 13),
+                                ),
                               ],
                             ),
                           ],

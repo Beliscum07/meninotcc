@@ -1,52 +1,89 @@
 import 'package:flutter/material.dart';
+import 'login_doador.dart';
 
-import '../doador/doador_home_view.dart';
-import 'cadastro_doador.dart';
-
-class LoginDoadorPage extends StatefulWidget {
-  const LoginDoadorPage({super.key});
+class DoadorCadastroPage extends StatefulWidget {
+  const DoadorCadastroPage({super.key});
 
   @override
-  State<LoginDoadorPage> createState() => _LoginDoadorPageState();
+  State<DoadorCadastroPage> createState() => _DoadorCadastroPageState();
 }
 
-class _LoginDoadorPageState extends State<LoginDoadorPage> {
+class _DoadorCadastroPageState extends State<DoadorCadastroPage> {
   // Controllers dos campos
+  final TextEditingController nomeController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
+  final TextEditingController telefoneController = TextEditingController();
   final TextEditingController senhaController = TextEditingController();
+  final TextEditingController confirmarSenhaController =
+      TextEditingController();
 
   bool mostrarSenha = false;
+  bool mostrarConfirmarSenha = false;
 
   @override
   void dispose() {
+    nomeController.dispose();
     emailController.dispose();
+    telefoneController.dispose();
     senhaController.dispose();
+    confirmarSenhaController.dispose();
 
     super.dispose();
   }
 
-  // FUNÇÃO DE LOGIN
-  void entrar() {
+  // Função responsável pelo cadastro
+  void cadastrar() {
+    final nome = nomeController.text.trim();
     final email = emailController.text.trim();
+    final telefone = telefoneController.text.trim();
     final senha = senhaController.text.trim();
+    final confirmarSenha = confirmarSenhaController.text.trim();
 
-    // Credenciais temporárias
-    if (email == 'doador@ong.com' && senha == 'doador123') {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const DonorHomeView(),
-        ),
-      );
-    } else {
+    // Verifica se algum campo está vazio
+    if (nome.isEmpty ||
+        email.isEmpty ||
+        telefone.isEmpty ||
+        senha.isEmpty ||
+        confirmarSenha.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text(
-            'Email ou senha incorretos.',
-          ),
+          content: Text('Preencha todos os campos.'),
         ),
       );
+
+      return;
     }
+
+    // Verifica se as senhas são iguais
+    if (senha != confirmarSenha) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('As senhas não são iguais.'),
+        ),
+      );
+
+      return;
+    }
+
+    // Por enquanto, como estamos trabalhando somente a View,
+    // não vamos salvar os dados em banco.
+    //
+    // Futuramente:
+    // View → Controller → Model → Banco de dados
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Cadastro realizado com sucesso!'),
+      ),
+    );
+
+    // Volta para a tela de login
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const LoginDoadorPage(),
+      ),
+    );
   }
 
   @override
@@ -65,13 +102,11 @@ class _LoginDoadorPageState extends State<LoginDoadorPage> {
 
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-
               children: [
 
                 // BOTÃO VOLTAR
                 Align(
                   alignment: Alignment.centerLeft,
-
                   child: TextButton.icon(
                     onPressed: () => Navigator.pop(context),
 
@@ -82,7 +117,6 @@ class _LoginDoadorPageState extends State<LoginDoadorPage> {
 
                     label: const Text(
                       'Voltar',
-
                       style: TextStyle(
                         color: Color(0xFF4656A3),
                         fontSize: 16,
@@ -140,7 +174,6 @@ class _LoginDoadorPageState extends State<LoginDoadorPage> {
                       // TÍTULO
                       const Text(
                         'Bem-vindo!',
-
                         style: TextStyle(
                           fontSize: 38,
                           fontWeight: FontWeight.bold,
@@ -151,15 +184,24 @@ class _LoginDoadorPageState extends State<LoginDoadorPage> {
                       const SizedBox(height: 6),
 
                       const Text(
-                        'Login - Doador',
-
+                        'Cadastro - Doador',
                         style: TextStyle(
                           fontSize: 22,
                           color: Color(0xFF333333),
                         ),
                       ),
 
-                      const SizedBox(height: 50),
+                      const SizedBox(height: 40),
+
+                      // NOME
+                      _campo(
+                        titulo: 'Nome',
+                        hint: 'Seu nome completo',
+                        icone: Icons.person_outline,
+                        controller: nomeController,
+                      ),
+
+                      const SizedBox(height: 24),
 
                       // EMAIL
                       _campo(
@@ -167,6 +209,16 @@ class _LoginDoadorPageState extends State<LoginDoadorPage> {
                         hint: 'seu@email.com',
                         icone: Icons.email_outlined,
                         controller: emailController,
+                      ),
+
+                      const SizedBox(height: 24),
+
+                      // TELEFONE
+                      _campo(
+                        titulo: 'Telefone',
+                        hint: '(00) 00000-0000',
+                        icone: Icons.phone_outlined,
+                        controller: telefoneController,
                       ),
 
                       const SizedBox(height: 24),
@@ -195,15 +247,42 @@ class _LoginDoadorPageState extends State<LoginDoadorPage> {
                         ),
                       ),
 
-                      const SizedBox(height: 25),
+                      const SizedBox(height: 24),
 
-                      // BOTÃO ENTRAR
+                      // CONFIRMAR SENHA
+                      _campo(
+                        titulo: 'Confirmar senha',
+                        hint: '••••••••',
+                        icone: Icons.lock_outline,
+                        controller: confirmarSenhaController,
+                        obscureText: !mostrarConfirmarSenha,
+
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            mostrarConfirmarSenha
+                                ? Icons.visibility_off_outlined
+                                : Icons.visibility_outlined,
+                            color: Colors.grey,
+                          ),
+
+                          onPressed: () {
+                            setState(() {
+                              mostrarConfirmarSenha =
+                                  !mostrarConfirmarSenha;
+                            });
+                          },
+                        ),
+                      ),
+
+                      const SizedBox(height: 30),
+
+                      // BOTÃO CADASTRAR
                       SizedBox(
                         width: double.infinity,
                         height: 78,
 
                         child: ElevatedButton(
-                          onPressed: entrar,
+                          onPressed: cadastrar,
 
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFFE17BEA),
@@ -216,23 +295,22 @@ class _LoginDoadorPageState extends State<LoginDoadorPage> {
                           ),
 
                           child: const Text(
-                            'Entrar',
-
+                            'Criar cadastro',
                             style: TextStyle(
-                              fontSize: 28,
+                              fontSize: 26,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
                       ),
 
-                      const SizedBox(height: 35),
+                      const SizedBox(height: 30),
 
-                      // CREDENCIAIS DE TESTE
+                      // IR PARA LOGIN
                       Container(
                         width: double.infinity,
 
-                        padding: const EdgeInsets.all(24),
+                        padding: const EdgeInsets.all(20),
 
                         decoration: BoxDecoration(
                           color: const Color(0xFFE8E3F3),
@@ -240,69 +318,36 @@ class _LoginDoadorPageState extends State<LoginDoadorPage> {
                         ),
 
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-
                           children: [
 
                             const Text(
-                              'Credenciais de teste:',
-
+                              'Já possui cadastro?',
                               style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
                                 color: Color(0xFF4A4A4A),
                               ),
                             ),
 
-                            const SizedBox(height: 14),
+                            const SizedBox(height: 8),
 
-                            const Text(
-                              '📧 doador@ong.com   |   🔑 doador123',
-
-                              style: TextStyle(
-                                fontSize: 17,
-                                color: Color(0xFF555555),
-                              ),
-                            ),
-
-                            const SizedBox(height: 18),
-
-                            // CADASTRO
-                            Center(
-                              child: Column(
-                                children: [
-
-                                  const Text(
-                                    'Não tem cadastro?',
-
-                                    style: TextStyle(
-                                      fontSize: 17,
-                                      color: Color(0xFF555555),
-                                    ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const LoginDoadorPage(),
                                   ),
+                                );
+                              },
 
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              const DoadorCadastroPage(),
-                                        ),
-                                      );
-                                    },
-
-                                    child: const Text(
-                                      'Cadastre-se aqui',
-
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xFF5056AC),
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                              child: const Text(
+                                'Entrar na minha conta',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF5056AC),
+                                ),
                               ),
                             ),
                           ],

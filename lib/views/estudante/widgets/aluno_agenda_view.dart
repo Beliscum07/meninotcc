@@ -1,22 +1,20 @@
 import 'package:flutter/material.dart';
 
-class StudentAgenda extends StatelessWidget {
-  const StudentAgenda({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(child: Text('Agenda'));
-  }
-}
-
 class AlunoAgendaView extends StatefulWidget {
-  const AlunoAgendaView({super.key});
+  final List<Map<String, String>> atividades;
+
+  const AlunoAgendaView({
+    super.key,
+    this.atividades = const [],
+  });
 
   @override
-  State<AlunoAgendaView> createState() => _AlunoAgendaViewState();
+  State<AlunoAgendaView> createState() =>
+      _AlunoAgendaViewState();
 }
 
-class _AlunoAgendaViewState extends State<AlunoAgendaView> {
+class _AlunoAgendaViewState
+    extends State<AlunoAgendaView> {
   int diaSelecionado = 1;
 
   final List<String> dias = [
@@ -29,337 +27,326 @@ class _AlunoAgendaViewState extends State<AlunoAgendaView> {
     'Sáb',
   ];
 
-  final Map<int, String> nomesDias = {
-    0: 'Domingo',
-    1: 'Segunda',
-    2: 'Terça',
-    3: 'Quarta',
-    4: 'Quinta',
-    5: 'Sexta',
-    6: 'Sábado',
-  };
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5EADB),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF5056AC),
-        foregroundColor: Colors.white,
-        elevation: 0,
-        title: const Text(
-          'Minha Agenda',
-          style: TextStyle(
-            fontSize: 28,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 18),
-            child: Stack(
-              clipBehavior: Clip.none,
-              children: [
-                const Icon(
-                  Icons.notifications_none,
-                  size: 32,
-                ),
-                Positioned(
-                  right: -8,
-                  top: -8,
-                  child: Container(
-                    width: 27,
-                    height: 27,
-                    decoration: const BoxDecoration(
-                      color: Colors.red,
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Center(
-                      child: Text(
-                        '2',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-      body: SingleChildScrollView(
+      backgroundColor:
+          const Color(0xFFF5EBDD),
+      body: SafeArea(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              margin: const EdgeInsets.all(10),
-              width: double.infinity,
-              padding: const EdgeInsets.all(35),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [
-                    Color(0xFFD277E2),
-                    Color(0xFF5557AC),
-                  ],
-                ),
-                borderRadius: BorderRadius.circular(24),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.15),
-                    blurRadius: 10,
-                    offset: const Offset(0, 6),
-                  ),
-                ],
-              ),
-              child: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Olá, João Pedro! 👋',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(height: 14),
-                  Text(
-                    'Você tem 4 atividades esta semana',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 21,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 20),
-            SizedBox(
-              height: 105,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                itemCount: dias.length,
-                itemBuilder: (context, index) {
-                  final selecionado = diaSelecionado == index;
+            _buildHeader(),
 
-                  return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        diaSelecionado = index;
-                      });
-                    },
-                    child: Container(
-                      width: 85,
-                      margin: const EdgeInsets.only(right: 9),
-                      decoration: BoxDecoration(
-                        color: selecionado
-                            ? const Color(0xFFE17BEA)
-                            : Colors.white,
-                        borderRadius: BorderRadius.circular(22),
-                        border: Border.all(
-                          color: selecionado
-                              ? const Color(0xFFE17BEA)
-                              : const Color(0xFF5056AC),
-                          width: selecionado ? 1 : 2,
-                        ),
-                        boxShadow: selecionado
-                            ? [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.12),
-                                  blurRadius: 8,
-                                  offset: const Offset(0, 4),
-                                ),
-                              ]
-                            : [],
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            dias[index],
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: selecionado
-                                  ? FontWeight.bold
-                                  : FontWeight.normal,
-                              color: selecionado
-                                  ? Colors.white
-                                  : const Color(0xFF444444),
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          if (selecionado)
-                            const Icon(
-                              Icons.circle,
-                              color: Colors.white,
-                              size: 10,
-                            )
-                          else if (index == 3 || index == 5)
-                            const Icon(
-                              Icons.circle,
-                              color: Color(0xFFE17BEA),
-                              size: 10,
-                            ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
+            _buildBoasVindas(),
+
+            _buildDias(),
+
+            Expanded(
+              child: _buildAgenda(),
             ),
-            const SizedBox(height: 30),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Text(
-                nomesDias[diaSelecionado]!,
-                style: const TextStyle(
-                  color: Color(0xFF5056AC),
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
-            if (diaSelecionado == 1)
-              _atividade(
-                titulo: 'Música e Coral',
-                horario: '14:00 - 16:00',
-                local: 'Sala de Música',
-                professor: 'Prof. Carlos Mendes',
-              )
-            else
-              _semAtividades(),
           ],
         ),
       ),
     );
   }
 
-  Widget _atividade({
-    required String titulo,
-    required String horario,
-    required String local,
-    required String professor,
-  }) {
+  Widget _buildHeader() {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 10),
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(
+        horizontal: 10,
+        vertical: 18,
+      ),
+      color: const Color(0xFF565A9A),
+      child: const Text(
+        'Minha Agenda',
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 22,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBoasVindas() {
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.all(10),
       padding: const EdgeInsets.all(25),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(
-          color: const Color(0xFFE1E1E1),
+        gradient: const LinearGradient(
+          colors: [
+            Color(0xFFC66CE0),
+            Color(0xFF565A9A),
+          ],
         ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.08),
-            blurRadius: 7,
-            offset: const Offset(0, 3),
+        borderRadius:
+            BorderRadius.circular(22),
+      ),
+      child: const Column(
+        crossAxisAlignment:
+            CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Olá, João Pedro! 👋',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 27,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+
+          SizedBox(height: 10),
+
+          Text(
+            'Você tem 4 atividades esta semana',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+            ),
           ),
         ],
       ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 72,
-            height: 72,
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [
-                  Color(0xFFD277E2),
-                  Color(0xFF6657B7),
+    );
+  }
+
+  Widget _buildDias() {
+    return SizedBox(
+      height: 100,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        padding:
+            const EdgeInsets.symmetric(
+          horizontal: 10,
+        ),
+        itemCount: dias.length,
+        itemBuilder: (context, index) {
+          final selecionado =
+              index == diaSelecionado;
+
+          return GestureDetector(
+            onTap: () {
+              setState(() {
+                diaSelecionado = index;
+              });
+            },
+            child: Container(
+              width: 82,
+              margin:
+                  const EdgeInsets.only(
+                right: 8,
+              ),
+              decoration: BoxDecoration(
+                color: selecionado
+                    ? const Color(
+                        0xFFD878E8,
+                      )
+                    : Colors.white,
+                borderRadius:
+                    BorderRadius.circular(
+                  20,
+                ),
+                border: Border.all(
+                  color: const Color(
+                    0xFF565A9A,
+                  ),
+                  width:
+                      selecionado ? 0 : 2,
+                ),
+              ),
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisAlignment:
+                    MainAxisAlignment.center,
+                children: [
+                  Text(
+                    dias[index],
+                    style: TextStyle(
+                      color: selecionado
+                          ? Colors.white
+                          : const Color(
+                              0xFF333333,
+                            ),
+                      fontSize: 16,
+                    ),
+                  ),
+
+                  const SizedBox(height: 8),
+
+                  if (selecionado)
+                    const Icon(
+                      Icons.circle,
+                      size: 8,
+                      color: Colors.white,
+                    ),
                 ],
               ),
-              borderRadius: BorderRadius.circular(22),
             ),
-            child: const Icon(
-              Icons.calendar_month,
-              color: Colors.white,
-              size: 38,
-            ),
-          ),
-          const SizedBox(width: 18),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  titulo,
-                  style: const TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                _informacao(
-                  Icons.access_time,
-                  horario,
-                ),
-                _informacao(
-                  Icons.location_on_outlined,
-                  local,
-                ),
-                _informacao(
-                  Icons.person_outline,
-                  professor,
-                ),
-              ],
-            ),
-          ),
-        ],
+          );
+        },
       ),
     );
   }
 
-  Widget _informacao(
-    IconData icone,
-    String texto,
-  ) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Row(
-        children: [
-          Icon(
-            icone,
-            color: const Color(0xFF5056AC),
-            size: 24,
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Text(
-              texto,
-              style: const TextStyle(
-                fontSize: 18,
-                color: Color(0xFF555555),
+  Widget _buildAgenda() {
+    if (widget.atividades.isEmpty) {
+      return const Center(
+        child: Column(
+          mainAxisAlignment:
+              MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.calendar_month_outlined,
+              size: 60,
+              color: Color(0xFF565A9A),
+            ),
+
+            SizedBox(height: 15),
+
+            Text(
+              'Nenhuma atividade neste dia.',
+              style: TextStyle(
+                fontSize: 17,
+                color: Colors.grey,
               ),
             ),
-          ),
-        ],
-      ),
+          ],
+        ),
+      );
+    }
+
+    return ListView.builder(
+      padding: const EdgeInsets.all(10),
+      itemCount: widget.atividades.length,
+      itemBuilder: (context, index) {
+        final atividade =
+            widget.atividades[index];
+
+        return _buildAtividade(
+          atividade,
+        );
+      },
     );
   }
 
-  Widget _semAtividades() {
+  Widget _buildAtividade(
+    Map<String, String> atividade,
+  ) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 10),
-      padding: const EdgeInsets.all(30),
+      margin:
+          const EdgeInsets.only(bottom: 14),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
-      ),
-      child: const Center(
-        child: Text(
-          'Nenhuma atividade neste dia.',
-          style: TextStyle(
-            fontSize: 19,
-            color: Colors.grey,
+        borderRadius:
+            BorderRadius.circular(20),
+        border: Border.all(
+          color: const Color(
+            0xFFD9D9E5,
           ),
         ),
+      ),
+      child: Column(
+        crossAxisAlignment:
+            CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 58,
+                height: 58,
+                decoration: BoxDecoration(
+                  gradient:
+                      const LinearGradient(
+                    colors: [
+                      Color(0xFFC56BE0),
+                      Color(0xFF565A9A),
+                    ],
+                  ),
+                  borderRadius:
+                      BorderRadius.circular(
+                    16,
+                  ),
+                ),
+                child: const Icon(
+                  Icons.calendar_month,
+                  color: Colors.white,
+                  size: 30,
+                ),
+              ),
+
+              const SizedBox(width: 15),
+
+              Expanded(
+                child: Text(
+                  atividade['nome'] ??
+                      'Atividade',
+                  style:
+                      const TextStyle(
+                    fontSize: 20,
+                    fontWeight:
+                        FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 18),
+
+          Row(
+            children: [
+              const Icon(
+                Icons.access_time,
+                color: Color(0xFF565A9A),
+              ),
+
+              const SizedBox(width: 8),
+
+              Text(
+                atividade['horario'] ??
+                    '',
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 10),
+
+          Row(
+            children: [
+              const Icon(
+                Icons.location_on_outlined,
+                color: Color(0xFF565A9A),
+              ),
+
+              const SizedBox(width: 8),
+
+              Text(
+                atividade['local'] ??
+                    '',
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 10),
+
+          Row(
+            children: [
+              const Icon(
+                Icons.person_outline,
+                color: Color(0xFF565A9A),
+              ),
+
+              const SizedBox(width: 8),
+
+              Text(
+                atividade['professor'] ??
+                    '',
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

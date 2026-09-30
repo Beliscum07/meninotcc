@@ -18,11 +18,6 @@ class DonorBottomNav extends StatelessWidget {
       type: BottomNavigationBarType.fixed,
       items: const [
         BottomNavigationBarItem(
-          icon: Icon(Icons.favorite_border),
-          activeIcon: Icon(Icons.favorite),
-          label: 'Feed',
-        ),
-        BottomNavigationBarItem(
           icon: Icon(Icons.volunteer_activism_outlined),
           activeIcon: Icon(Icons.volunteer_activism),
           label: 'Doar',

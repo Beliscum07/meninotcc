@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class Notificacao {
   final String id;
   final String titulo;
@@ -18,12 +16,10 @@ class Notificacao {
     this.lida = false,
   });
 
-  // Marca a notificação como lida
   void marcarComoLida() {
     lida = true;
   }
 
-  // Cria uma cópia da notificação
   Notificacao copyWith({
     String? id,
     String? titulo,

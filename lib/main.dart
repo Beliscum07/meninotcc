@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'views/auth/login_admin.dart';
 import 'views/auth/login_doador.dart';
 import 'views/auth/login_estudante.dart';
 
 void main() {
   runApp(
-    const ProviderScope(
-      child: OngApp(),
-    ),
+    const OngApp(),
   );
 }
 

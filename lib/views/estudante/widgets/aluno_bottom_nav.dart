@@ -1,38 +1,46 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../controllers/controller_navs/student_nav_controller.dart';
 
-class StudentBottomNav extends ConsumerWidget {
-  const StudentBottomNav({super.key});
+class StudentBottomNav extends StatelessWidget {
+  final int currentIndex;
+  final ValueChanged<int> onTap;
+
+  const StudentBottomNav({
+    super.key,
+    required this.currentIndex,
+    required this.onTap,
+  });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    // Escuta o Controller para saber qual ícone destacar
-    final currentIndex = ref.watch(studentNavController);
-
+  Widget build(BuildContext context) {
     return BottomNavigationBar(
       currentIndex: currentIndex,
-      onTap: (index) {
-        // Envia a ação do usuário para o Controller atualizar o estado
-        ref.read(studentNavController.notifier).state = index;
-      },
+
+      onTap: onTap,
+
       type: BottomNavigationBarType.fixed,
+
+      selectedItemColor: const Color(0xFFE17BEA),
+      unselectedItemColor: Colors.grey,
+
       items: const [
         BottomNavigationBarItem(
           icon: Icon(Icons.home_outlined),
           activeIcon: Icon(Icons.home),
           label: 'Início',
         ),
+
         BottomNavigationBarItem(
           icon: Icon(Icons.calendar_month_outlined),
           activeIcon: Icon(Icons.calendar_month),
           label: 'Agenda',
         ),
+
         BottomNavigationBarItem(
           icon: Icon(Icons.local_activity_outlined),
           activeIcon: Icon(Icons.local_activity),
           label: 'Atividades',
         ),
+
         BottomNavigationBarItem(
           icon: Icon(Icons.school_outlined),
           activeIcon: Icon(Icons.school),

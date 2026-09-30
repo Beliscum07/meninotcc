@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../controllers/controller_navs/admin_nav_controller.dart';
+
+import '../../controllers/controller/admin_controller.dart';
+
 import 'widgets/admin_alunos.dart';
 import 'widgets/admin_atividades.dart';
 import 'widgets/admin_bolsas.dart';
@@ -8,26 +9,64 @@ import 'widgets/admin_bottom_nav.dart';
 import 'widgets/admin_configuracoes.dart';
 import 'widgets/admin_dashboard.dart';
 
-class AdminHomeView extends ConsumerWidget {
+class AdminHomeView extends StatefulWidget {
   const AdminHomeView({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final selectedIndex = ref.watch(adminNavController);
+  State<AdminHomeView> createState() => _AdminHomeViewState();
+}
 
+class _AdminHomeViewState extends State<AdminHomeView> {
+  late final AdminController adminController;
+
+  int selectedIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    adminController = AdminController();
+  }
+
+  @override
+  void dispose() {
+    adminController.dispose();
+
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F1EA),
+
       body: IndexedStack(
         index: selectedIndex,
-        children: const [
-          AdminDashboard(),
-          AdminAlunosPage(),
-          AdminAtividadesPage(),
-          AdminBolsas(),
-          ConfiguracoesPage(),
+
+        children: [
+          const AdminDashboard(),
+
+          const AdminAlunosPage(),
+
+          const AdminAtividadesPage(),
+
+          const AdminBolsas(),
+
+          ConfiguracoesPage(
+            adminController: adminController,
+          ),
         ],
       ),
-      bottomNavigationBar: const AdminBottomNav(),
+
+      bottomNavigationBar: AdminBottomNav(
+        currentIndex: selectedIndex,
+
+        onTap: (index) {
+          setState(() {
+            selectedIndex = index;
+          });
+        },
+      ),
     );
   }
 }

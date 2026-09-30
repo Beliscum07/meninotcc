@@ -1,70 +1,70 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
-final List<Notificacao> _notificacoes = [
-  Notificacao(
-    id: '1',
-    titulo: 'Nova atividade disponível',
-    descricao: 'A atividade de Música e Coral está disponível.',
-    tempo: 'Hoje',
-    tipo: 'atividade',
-  ),
+import '../../models/notificacao_model.dart';
 
-  Notificacao(
-    id: '2',
-    titulo: 'Atividade atualizada',
-    descricao: 'O horário da atividade de Arte e Pintura foi alterado.',
-    tempo: 'Ontem',
-    tipo: 'atividade',
-  ),
+class AlunoController extends ChangeNotifier {
+  final List<Notificacao> _notificacoes = [
+    Notificacao(
+      id: 'aluno_1',
+      titulo: 'Nova atividade disponível',
+      descricao: 'A atividade de Música e Coral está disponível.',
+      tempo: 'Hoje',
+      tipo: 'atividade',
+    ),
+    Notificacao(
+      id: 'aluno_2',
+      titulo: 'Atividade atualizada',
+      descricao: 'O horário da atividade de Arte e Pintura foi alterado.',
+      tempo: 'Ontem',
+      tipo: 'atividade',
+    ),
+    Notificacao(
+      id: 'aluno_3',
+      titulo: 'Aviso da ONG',
+      descricao: 'Não se esqueça da atividade desta semana.',
+      tempo: '2 dias atrás',
+      tipo: 'aviso',
+    ),
+  ];
 
-  Notificacao(
-    id: '3',
-    titulo: 'Aviso da ONG',
-    descricao: 'Não se esqueça da atividade desta semana.',
-    tempo: '2 dias atrás',
-    tipo: 'aviso',
-  ),
-];
-List<Notificacao> get notificacoes => List.unmodifiable(_notificacoes);
+  // Retorna todas as notificações.
+  List<Notificacao> get notificacoes {
+    return List.unmodifiable(_notificacoes);
+  }
 
-// Quantidade de notificações que ainda não foram lidas
-int get quantidadeNotificacoesNaoLidas {
-  return _notificacoes.where((notificacao) => !notificacao.lida).length;
-}
+  // Retorna a quantidade de notificações ainda não lidas.
+  int get quantidadeNotificacoesNaoLidas {
+    return _notificacoes.where((notificacao) => !notificacao.lida).length;
+  }
 
-// Marca uma notificação específica como lida
-void marcarNotificacaoComoLida(String id) {
-  final notificacao = _notificacoes.cast<Notificacao?>().firstWhere(
-        (item) => item?.id == id,
-        orElse: () => null,
-      );
+  // Marca uma notificação específica como lida.
+  void marcarNotificacaoComoLida(String id) {
+    final index = _notificacoes.indexWhere(
+      (notificacao) => notificacao.id == id,
+    );
 
-  if (notificacao != null) {
-    notificacao.marcarComoLida();
+    if (index == -1) {
+      return;
+    }
+
+    _notificacoes[index].marcarComoLida();
+
+    notifyListeners();
+  }
+
+  // Marca todas as notificações como lidas.
+  void marcarTodasNotificacoesComoLidas() {
+    for (final notificacao in _notificacoes) {
+      notificacao.marcarComoLida();
+    }
+
+    notifyListeners();
+  }
+
+  // Adiciona uma nova notificação.
+  void adicionarNotificacao(Notificacao notificacao) {
+    _notificacoes.insert(0, notificacao);
+
     notifyListeners();
   }
 }
-
-// Marca todas como lidas
-void marcarTodasNotificacoesComoLidas() {
-  for (final notificacao in _notificacoes) {
-    notificacao.marcarComoLida();
-  }
-
-  notifyListeners();
-}
-
-// Adiciona uma nova notificação
-void adicionarNotificacao(Notificacao notificacao) {
-  _notificacoes.insert(0, notificacao);
-  notifyListeners();
-}
-alunoController.adicionarNotificacao(
-  Notificacao(
-    id: '4',
-    titulo: 'Novo aviso',
-    descricao: 'A ONG publicou um novo comunicado.',
-    tempo: 'Agora',
-    tipo: 'aviso',
-  ),
-);

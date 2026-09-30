@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
+
+import '../../../controllers/controller/admin_controller.dart';
+import 'admin_notificacoes_view.dart';
 import '../../auth/login_admin.dart';
 
 class ConfiguracoesPage extends StatelessWidget {
-  const ConfiguracoesPage({super.key});
+  final AdminController adminController;
+
+  const ConfiguracoesPage({
+    super.key,
+    required this.adminController,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +53,7 @@ class ConfiguracoesPage extends StatelessWidget {
                     const SizedBox(height: 22),
 
                     // OPÇÕES
-                    _opcoesConfiguracao(),
+                   _opcoesConfiguracao(context),
 
                     const SizedBox(height: 22),
 
@@ -195,7 +203,7 @@ class ConfiguracoesPage extends StatelessWidget {
 
   // OPÇÕES DE CONFIGURAÇÃO
 
-  Widget _opcoesConfiguracao() {
+  Widget _opcoesConfiguracao(BuildContext context) {
     return Container(
       width: double.infinity,
 
@@ -223,11 +231,20 @@ class ConfiguracoesPage extends StatelessWidget {
 
           _divisor(),
 
-          _itemConfiguracao(
-            icone: Icons.notifications_none,
-            titulo: 'Notificações',
-            onTap: () {},
-          ),
+      _itemConfiguracao(
+        icone: Icons.notifications_none,
+        titulo: 'Notificações',
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AdminNotificacoesView(
+                adminController: adminController,
+              ),
+            ),
+          );
+        },
+      ),
 
           _divisor(),
 

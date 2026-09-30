@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../models/student_model.dart';
+import '../../../models/aluno_model.dart';
 
 class CardAluno extends StatelessWidget {
   final Aluno aluno;

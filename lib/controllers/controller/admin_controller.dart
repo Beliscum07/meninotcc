@@ -1,50 +1,58 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+
 import '../../models/notificacao_model.dart';
 
-final List<Notificacao> _notificacoes = [
-  Notificacao(
-    id: 'admin_1',
-    titulo: 'Novo aluno cadastrado',
-    descricao: 'Um novo aluno foi cadastrado no sistema.',
-    tempo: 'Hoje',
-    tipo: 'aluno',
-  ),
+class AdminController extends ChangeNotifier {
+  final List<Notificacao> _notificacoes = [
+    Notificacao(
+      id: 'admin_1',
+      titulo: 'Novo aluno cadastrado',
+      descricao: 'Um novo aluno foi cadastrado no sistema.',
+      tempo: 'Hoje',
+      tipo: 'aluno',
+    ),
+    Notificacao(
+      id: 'admin_2',
+      titulo: 'Nova atividade',
+      descricao: 'Uma nova atividade foi adicionada ao sistema.',
+      tempo: 'Ontem',
+      tipo: 'atividade',
+    ),
+  ];
 
-  Notificacao(
-    id: 'admin_2',
-    titulo: 'Nova atividade',
-    descricao: 'Uma nova atividade foi adicionada.',
-    tempo: 'Ontem',
-    tipo: 'atividade',
-  ),
-];
-List<Notificacao> get notificacoes => List.unmodifiable(_notificacoes);
+  List<Notificacao> get notificacoes {
+    return List.unmodifiable(_notificacoes);
+  }
 
-int get quantidadeNotificacoesNaoLidas {
-  return _notificacoes.where((notificacao) => !notificacao.lida).length;
-}
+  int get quantidadeNotificacoesNaoLidas {
+    return _notificacoes.where((notificacao) => !notificacao.lida).length;
+  }
 
-void marcarNotificacaoComoLida(String id) {
-  final notificacao = _notificacoes.cast<Notificacao?>().firstWhere(
-        (item) => item?.id == id,
-        orElse: () => null,
-      );
+  void marcarNotificacaoComoLida(String id) {
+    final index = _notificacoes.indexWhere(
+      (notificacao) => notificacao.id == id,
+    );
 
-  if (notificacao != null) {
-    notificacao.marcarComoLida();
+    if (index == -1) {
+      return;
+    }
+
+    _notificacoes[index].marcarComoLida();
+
     notifyListeners();
   }
-}
 
-void marcarTodasNotificacoesComoLidas() {
-  for (final notificacao in _notificacoes) {
-    notificacao.marcarComoLida();
+  void marcarTodasNotificacoesComoLidas() {
+    for (final notificacao in _notificacoes) {
+      notificacao.marcarComoLida();
+    }
+
+    notifyListeners();
   }
 
-  notifyListeners();
-}
+  void adicionarNotificacao(Notificacao notificacao) {
+    _notificacoes.insert(0, notificacao);
 
-void adicionarNotificacao(Notificacao notificacao) {
-  _notificacoes.insert(0, notificacao);
-  notifyListeners();
+    notifyListeners();
+  }
 }

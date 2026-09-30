@@ -170,11 +170,38 @@ class AlunoPerfilView extends StatelessWidget {
                       color: Color(0xFF4047A5),
                     ),
                   ),
-                  const SizedBox(height: 14),
-                  _acao(
-                    icone: Icons.logout,
-                    texto: 'Sair da conta',
-                  ),
+                  Widget _botaoSair(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+
+      child: OutlinedButton.icon(
+        onPressed: () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const AdminLoginPage(),
+            ),
+          );
+        },
+
+        icon: const Icon(Icons.logout, color: Colors.red, size: 20),
+
+        label: const Text(
+          'Sair da Conta',
+
+          style: TextStyle(color: Colors.red, fontSize: 14),
+        ),
+
+        style: OutlinedButton.styleFrom(
+          side: const BorderSide(color: Colors.red, width: 1.5),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+        ),
+      ),
+    );
+  }
+}
                 ],
               ),
             ),

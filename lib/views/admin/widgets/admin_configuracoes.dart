@@ -107,6 +107,7 @@ class ConfiguracoesPage extends StatelessWidget {
           children: [
             Row(
               children: [
+
                 // Avatar
                 Container(
                   width: 61,
@@ -248,8 +249,7 @@ class ConfiguracoesPage extends StatelessWidget {
     );
   }
 
-  // ITEM DE CONFIGURAÇÃO
-
+  // Itens de configurações
   Widget _itemConfiguracao({
     required IconData icone,
     required String titulo,

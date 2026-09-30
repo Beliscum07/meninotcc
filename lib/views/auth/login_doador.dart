@@ -193,6 +193,23 @@ class _LoginDoadorPageState extends State<LoginDoadorPage> {
                                 color: Color(0xFF555555),
                               ),
                             ),
+
+                            //Vai pro cadastro
+                            Text(
+                              'Não tem cadastro? Clique aqui para se cadastrar.',
+                              style: TextStyle(
+                                fontSize: 17,
+                                color: Color(0xFFE0FFFF),
+                                onPressed() {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => const DoadorCadastroPage(),
+                                      ),
+                                    );
+                                },
+                              ),
+                            ),
                           ],
                         ),
                       ),

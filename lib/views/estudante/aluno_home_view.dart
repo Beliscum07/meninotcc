@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'widgets/aluno_agenda_view.dart';
 import 'widgets/aluno_notificacoes_view.dart';
 import 'widgets/aluno_perfil_view.dart';

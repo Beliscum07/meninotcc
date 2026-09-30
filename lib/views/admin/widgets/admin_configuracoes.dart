@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../controllers/controller/admin_controller.dart';
-import 'admin_notificacoes_view.dart';
+import 'admin_notificacoes.dart';
 import '../../auth/login_admin.dart';
 
 class ConfiguracoesPage extends StatelessWidget {

@@ -34,8 +34,6 @@ class _DonorHomeViewState extends State<DonorHomeView> {
       case 0:
         return const DoadorDoar();
       case 1:
-        return const DoadorDoar();
-      case 2:
         return const DoadorPerfil();
       default:
         return const DoadorDoar();

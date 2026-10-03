@@ -16,38 +16,35 @@ class GmailService {
     required String corpoTexto,
   }) async {
     try {
-      // 1. Solicita o login do usuário com a conta do Google
       final account = await _googleSignIn.signIn();
       if (account == null) {
-        print('Login cancelado pelo usuário.');
-        return;
+        throw Exception('Login cancelado pelo usuário.');
       }
 
-      // 2. Obtém o cliente HTTP autenticado
       final httpClient = await _googleSignIn.authenticatedClient();
       if (httpClient == null) {
-        print('Falha ao obter cliente autenticado.');
-        return;
+        throw Exception('Falha ao obter cliente autenticado.');
       }
 
-      // 3. Inicializa a API do Gmail
       final gmailApi = gmail.GmailApi(httpClient);
 
-      // 4. Monta a mensagem no padrão RFC 2822
       final rawEmail = 'To: $destinatario\r\n'
           'Subject: $assunto\r\n'
+          'MIME-Version: 1.0\r\n'
           'Content-Type: text/plain; charset=utf-8\r\n\r\n'
           '$corpoTexto';
 
-      // 5. Codifica o e-mail em Base64 URL-Safe
-      final base64Email = base64UrlEncode(utf8.encode(rawEmail));
+      final base64Email = base64Url.encode(utf8.encode(rawEmail)).replaceAll('=', '');
       final message = gmail.Message()..raw = base64Email;
 
-      // 6. Envia o e-mail
       await gmailApi.users.messages.send(message, 'me');
       print('E-mail enviado com sucesso!');
-    } catch (e) {
+    } on Exception catch (e) {
       print('Erro ao enviar e-mail via Gmail API: $e');
+      rethrow;
+    } catch (e) {
+      print('Erro inesperado ao enviar e-mail: $e');
+      rethrow;
     }
   }
 }

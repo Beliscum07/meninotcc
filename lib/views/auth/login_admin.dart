@@ -13,6 +13,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
   // Variáveis locais que guardam o que o usuário digita
   String email = 'admin@ong.com'; // pré-preenchido como credencial de teste
   String senha = 'admin123'; // pré-preenchido como credencial de teste
+  bool _senhaVisivel = false;
 
   // Mensagem de feedback exibida na tela após tentativa de login
   String mensagem = '';
@@ -121,10 +122,21 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                       // CAMPO SENHA — atualiza a variável `senha` local
                       TextField(
                         onChanged: (valor) => senha = valor,
-                        obscureText: true,
+                        obscureText: !_senhaVisivel,
                         decoration: InputDecoration(
                           hintText: '••••••••',
                           prefixIcon: const Icon(Icons.lock_outline, color: Colors.grey),
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                _senhaVisivel = !_senhaVisivel;
+                              });
+                            },
+                            icon: Icon(
+                              _senhaVisivel ? Icons.visibility_off : Icons.visibility,
+                              color: Colors.grey,
+                            ),
+                          ),
                           border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: Color(0xFFD9DCEB))),
                           enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: Color(0xFFD9DCEB))),
                           focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: Color(0xFFE276F0), width: 2)),

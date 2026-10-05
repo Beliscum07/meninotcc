@@ -285,7 +285,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
           const SizedBox(height: 8),
 
           Text(
-            porcentagem + ' da meta alcançada',
+            '$porcentagem da meta alcançada',
             style: TextStyle(
               color: Colors.grey.shade700,
               fontSize: 12,

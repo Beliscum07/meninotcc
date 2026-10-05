@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+
+import '../../controllers/controller/auth_controller.dart';
+import '../../services/api_service.dart';
 import 'login_doador.dart';
 
 class DoadorCadastroPage extends StatefulWidget {
@@ -9,6 +12,9 @@ class DoadorCadastroPage extends StatefulWidget {
 }
 
 class _DoadorCadastroPageState extends State<DoadorCadastroPage> {
+  final AuthController authController = AuthController();
+  final GmailService gmailService = GmailService();
+
   // Controllers dos campos
   final TextEditingController nomeController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
@@ -32,7 +38,7 @@ class _DoadorCadastroPageState extends State<DoadorCadastroPage> {
   }
 
   // Função responsável pelo cadastro
-  void cadastrar() {
+  void cadastrar() async {
     final nome = nomeController.text.trim();
     final email = emailController.text.trim();
     final telefone = telefoneController.text.trim();
@@ -65,25 +71,41 @@ class _DoadorCadastroPageState extends State<DoadorCadastroPage> {
       return;
     }
 
-    // Por enquanto, como estamos trabalhando somente a View,
-    // não vamos salvar os dados em banco.
-    //
-    // Futuramente:
-    // View → Controller → Model → Banco de dados
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Cadastro realizado com sucesso!'),
-      ),
+    final cadastroValido = authController.cadastrarDoador(
+      nome: nome,
+      email: email,
+      telefone: telefone,
+      senha: senha,
     );
 
-    // Volta para a tela de login
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const LoginDoadorPage(),
-      ),
+    if (!cadastroValido) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Este e-mail já foi cadastrado.'),
+        ),
+      );
+      return;
+    }
+
+    await gmailService.enviarBoasVindas(
+      destinatario: email,
+      nome: nome,
+      tipo: 'doador',
     );
+
+    // Volta para a tela de login sem empilhar telas extras.
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Cadastro realizado com sucesso!'),
+        ),
+      );
+
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (_) => const LoginDoadorPage()),
+        (route) => false,
+      );
+    }
   }
 
   @override

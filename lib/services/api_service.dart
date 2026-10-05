@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:googleapis/gmail/v1.dart' as gmail;
 import 'package:extension_google_sign_in_as_googleapis_auth/extension_google_sign_in_as_googleapis_auth.dart';
+import 'package:flutter/foundation.dart';
 
 class GmailService {
   final GoogleSignIn _googleSignIn = GoogleSignIn(
@@ -10,7 +11,7 @@ class GmailService {
     ],
   );
 
-  Future<void> enviarEmail({
+  Future<bool> enviarEmail({
     required String destinatario,
     required String assunto,
     required String corpoTexto,
@@ -34,17 +35,39 @@ class GmailService {
           'Content-Type: text/plain; charset=utf-8\r\n\r\n'
           '$corpoTexto';
 
-      final base64Email = base64Url.encode(utf8.encode(rawEmail)).replaceAll('=', '');
+      final base64Email = base64Url
+          .encode(utf8.encode(rawEmail))
+          .replaceAll('=', '');
       final message = gmail.Message()..raw = base64Email;
 
       await gmailApi.users.messages.send(message, 'me');
-      print('E-mail enviado com sucesso!');
+      debugPrint('E-mail enviado com sucesso!');
+      return true;
     } on Exception catch (e) {
-      print('Erro ao enviar e-mail via Gmail API: $e');
-      rethrow;
+      debugPrint('Erro ao enviar e-mail via Gmail API: $e');
+      return false;
     } catch (e) {
-      print('Erro inesperado ao enviar e-mail: $e');
-      rethrow;
+      debugPrint('Erro inesperado ao enviar e-mail: $e');
+      return false;
     }
+  }
+
+  Future<bool> enviarBoasVindas({
+    required String destinatario,
+    required String nome,
+    required String tipo,
+  }) async {
+    final assunto = 'Bem-vindo(a) à ONG Apoio à Infância';
+    final corpo = 'Olá, $nome!\n\n'
+        'Seu cadastro como $tipo foi realizado com sucesso.\n'
+        'Agradecemos muito por fazer parte da nossa comunidade.\n\n'
+        'Atenciosamente,\n'
+        'ONG Apoio à Infância';
+
+    return enviarEmail(
+      destinatario: destinatario,
+      assunto: assunto,
+      corpoTexto: corpo,
+    );
   }
 }

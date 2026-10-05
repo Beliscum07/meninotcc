@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../controllers/controller/auth_controller.dart';
+import '../../models/usuario_model.dart';
 import '../estudante/aluno_home_view.dart';
 
 class LoginEstudantePage extends StatefulWidget {
@@ -11,6 +13,7 @@ class LoginEstudantePage extends StatefulWidget {
 class _LoginEstudantePageState extends State<LoginEstudantePage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController senhaController = TextEditingController();
+  final AuthController authController = AuthController();
 
   bool mostrarSenha = false;
 
@@ -18,13 +21,21 @@ class _LoginEstudantePageState extends State<LoginEstudantePage> {
     final email = emailController.text.trim();
     final senha = senhaController.text.trim();
 
-    if (email == 'aluno@ong.com' && senha == 'aluno123') {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const StudentHomeView(),
-        ),
-      );
+    final loginValido = authController.login(
+      email: email,
+      senha: senha,
+      tipo: TipoUsuario.aluno,
+    );
+
+    if (loginValido) {
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const StudentHomeView(),
+          ),
+        );
+      }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -86,7 +97,7 @@ class _LoginEstudantePageState extends State<LoginEstudantePage> {
                           color: const Color(0xFFE17BEA),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.12),
+                              color: Colors.black.withValues(alpha: 0.12),
                               blurRadius: 15,
                               offset: const Offset(0, 8),
                             ),

@@ -378,7 +378,7 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
               ),
 
               content: DropdownButtonFormField<String>(
-                value: atividadeSelecionada,
+                initialValue: atividadeSelecionada,
                 decoration: const InputDecoration(
                   labelText: 'Atividade',
                   border: OutlineInputBorder(),

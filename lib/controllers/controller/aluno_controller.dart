@@ -1,31 +1,25 @@
 import 'package:flutter/foundation.dart';
 
+import '../../database/mock_database.dart';
 import '../../models/notificacao_model.dart';
 
 class AlunoController extends ChangeNotifier {
-  final List<Notificacao> _notificacoes = [
-    Notificacao(
-      id: 'aluno_1',
-      titulo: 'Nova atividade disponível',
-      descricao: 'A atividade de Música e Coral está disponível.',
-      tempo: 'Hoje',
-      tipo: 'atividade',
-    ),
-    Notificacao(
-      id: 'aluno_2',
-      titulo: 'Atividade atualizada',
-      descricao: 'O horário da atividade de Arte e Pintura foi alterado.',
-      tempo: 'Ontem',
-      tipo: 'atividade',
-    ),
-    Notificacao(
-      id: 'aluno_3',
-      titulo: 'Aviso da ONG',
-      descricao: 'Não se esqueça da atividade desta semana.',
-      tempo: '2 dias atrás',
-      tipo: 'aviso',
-    ),
-  ];
+  final List<Notificacao> _notificacoes;
+
+  AlunoController()
+      : _notificacoes = MockDatabase.notificacoes
+            .where((item) => item['tipo'] != 'aluno')
+            .map(
+              (item) => Notificacao(
+                id: item['id'] as String,
+                titulo: item['titulo'] as String,
+                descricao: item['descricao'] as String,
+                tempo: item['tempo'] as String,
+                tipo: item['tipo'] as String,
+                lida: item['lida'] as bool? ?? false,
+              ),
+            )
+            .toList();
 
   // Retorna todas as notificações.
   List<Notificacao> get notificacoes {

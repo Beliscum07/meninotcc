@@ -157,6 +157,11 @@ class _AlunoHomeViewState extends State<AlunoHomeView> {
   }
 }
 
-class StudentHomeView extends AlunoHomeView {
+class StudentHomeView extends StatelessWidget {
   const StudentHomeView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const AlunoHomeView();
+  }
 }

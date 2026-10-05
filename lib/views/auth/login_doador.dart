@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../controllers/controller/auth_controller.dart';
+import '../../models/usuario_model.dart';
 import '../doador/doador_home_view.dart';
 import 'cadastro_doador.dart';
 
@@ -14,6 +16,7 @@ class _LoginDoadorPageState extends State<LoginDoadorPage> {
   // Controllers dos campos
   final TextEditingController emailController = TextEditingController();
   final TextEditingController senhaController = TextEditingController();
+  final AuthController authController = AuthController();
 
   bool mostrarSenha = false;
 
@@ -30,14 +33,21 @@ class _LoginDoadorPageState extends State<LoginDoadorPage> {
     final email = emailController.text.trim();
     final senha = senhaController.text.trim();
 
-    // Credenciais temporárias
-    if (email == 'doador@ong.com' && senha == 'doador123') {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const DonorHomeView(),
-        ),
-      );
+    final loginValido = authController.login(
+      email: email,
+      senha: senha,
+      tipo: TipoUsuario.doador,
+    );
+
+    if (loginValido) {
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const DonorHomeView(),
+          ),
+        );
+      }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -121,7 +131,7 @@ class _LoginDoadorPageState extends State<LoginDoadorPage> {
 
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.12),
+                              color: Colors.black.withValues(alpha: 0.12),
                               blurRadius: 15,
                               offset: const Offset(0, 8),
                             ),
@@ -283,7 +293,7 @@ class _LoginDoadorPageState extends State<LoginDoadorPage> {
 
                                   TextButton(
                                     onPressed: () {
-                                      Navigator.push(
+                                      Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) =>

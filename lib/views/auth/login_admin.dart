@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../controllers/controller/auth_controller.dart';
+import '../../models/usuario_model.dart';
 import '../admin/admin_home_view.dart';
 
 // Tela de login do administrador — apenas view (sem tocar em controllers)
@@ -10,9 +12,11 @@ class AdminLoginPage extends StatefulWidget {
 }
 
 class _AdminLoginPageState extends State<AdminLoginPage> {
+  final AuthController authController = AuthController();
+
   // Variáveis locais que guardam o que o usuário digita
-  String email = 'admin@ong.com'; // pré-preenchido como credencial de teste
-  String senha = 'admin123'; // pré-preenchido como credencial de teste
+  String email = '';
+  String senha = '';
   bool _senhaVisivel = false;
 
   // Mensagem de feedback exibida na tela após tentativa de login
@@ -22,15 +26,22 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
   // Se válidas, navega para `AdminHomeView`. Caso contrário, atualiza
   // `mensagem` para informar o usuário.
   void fazerLogin() {
-    if (email == 'admin@ong.com' && senha == 'admin123') {
+    final loginValido = authController.login(
+      email: email,
+      senha: senha,
+      tipo: TipoUsuario.admin,
+    );
+
+    if (loginValido) {
       setState(() {
         mensagem = 'Login realizado com sucesso! Redirecionando...';
       });
 
-      // Navega para a tela do administrador e substitui a rota atual.
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const AdminHomeView()),
-      );
+      if (mounted) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => const AdminHomeView()),
+        );
+      }
     } else {
       setState(() {
         mensagem = 'E-mail ou senha incorretos.';
@@ -73,7 +84,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(25),
                     boxShadow: [
-                      BoxShadow(color: Colors.black.withOpacity(0.15), blurRadius: 20, offset: const Offset(0, 10)),
+                      BoxShadow(color: Colors.black.withValues(alpha: 0.15), blurRadius: 20, offset: const Offset(0, 10)),
                     ],
                   ),
 

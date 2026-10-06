@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "396751203581",
+    "project_id": "menino-barsanulfo",
+    "storage_bucket": "menino-barsanulfo.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:396751203581:android:9411681936ac16fcf36294",
+        "android_client_info": {
+          "package_name": "com.etec.MeninoBarsanulfo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAlwun2vGdh8rOow0Xzg5LvZdrJuG7YI9Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

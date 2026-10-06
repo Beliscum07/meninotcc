@@ -1,16 +1,16 @@
-import 'package:flutter/material.dart';
-
 class Atividade {
-  String nome;
-  String professor;
-  String descricao;
-  String horario;
-  String dias;
-  int inscritos;
-  int vagas;
-  Color cor;
+  final String id;
+  final String nome;
+  final String professor;
+  final String descricao;
+  final String horario;
+  final String dias;
+  final int inscritos;
+  final int vagas;
+  final String categoria;
 
-  Atividade({
+  const Atividade({
+    required this.id,
     required this.nome,
     required this.professor,
     required this.descricao,
@@ -18,52 +18,42 @@ class Atividade {
     required this.dias,
     required this.inscritos,
     required this.vagas,
-    required this.cor,
+    required this.categoria,
   });
 }
 
 final List<Atividade> atividadesMock = [
-  Atividade(
-    nome: 'Música e Coral',
-    professor: 'Prof. Carlos Mendes',
-    descricao:
-        'Aulas de canto e prática coral para desenvolvimento musical.',
-    horario: '14:00 - 16:00',
-    dias: 'Seg, Qua',
-    inscritos: 15,
-    vagas: 20,
-    cor: const Color(0xFFE778E8),
-  ),
-  Atividade(
-    nome: 'Arte e Pintura',
-    professor: 'Prof. Beatriz Costa',
-    descricao:
-        'Expressão artística através de diferentes técnicas de pintura.',
-    horario: '15:00 - 17:00',
-    dias: 'Ter, Qui',
-    inscritos: 12,
-    vagas: 15,
-    cor: const Color(0xFFF25A0A),
-  ),
-  Atividade(
-    nome: 'Dança e Movimento',
-    professor: 'Prof. Amanda Rodrigues',
-    descricao:
-        'Aulas de dança para desenvolvimento motor e expressão corporal.',
-    horario: '16:00 - 18:00',
-    dias: 'Seg, Sex',
-    inscritos: 20,
-    vagas: 25,
-    cor: const Color(0xFFF25A0A),
-  ),
-  Atividade(
-    nome: 'Esportes e Jogos',
-    professor: 'Prof. Rafael Santos',
-    descricao: 'Atividades esportivas e jogos recreativos.',
-    horario: '14:00 - 16:00',
-    dias: 'Qua, Sex',
+  const Atividade(
+    id: 'atv-1',
+    nome: 'Arte e Criatividade',
+    professor: 'Prof. Ana',
+    descricao: 'Atividade lúdica com pintura e criatividade.',
+    horario: 'Segunda, 15:30',
+    dias: 'Segunda',
     inscritos: 18,
     vagas: 25,
-    cor: const Color(0xFFF0A06D),
+    categoria: 'Cultura',
+  ),
+  const Atividade(
+    id: 'atv-2',
+    nome: 'Futebol Comunitário',
+    professor: 'Prof. Bruno',
+    descricao: 'Aula de esporte em grupo com foco em cooperação.',
+    horario: 'Quarta, 16:00',
+    dias: 'Quarta',
+    inscritos: 22,
+    vagas: 30,
+    categoria: 'Esporte',
+  ),
+  const Atividade(
+    id: 'atv-3',
+    nome: 'Leitura em Grupo',
+    professor: 'Prof. Carla',
+    descricao: 'Momento de leitura compartilhada e desenvolvimento literacy.',
+    horario: 'Quinta, 14:00',
+    dias: 'Quinta',
+    inscritos: 14,
+    vagas: 20,
+    categoria: 'Educação',
   ),
 ];

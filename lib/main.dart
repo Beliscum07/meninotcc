@@ -1,9 +1,14 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'services/firebase_service.dart';
 import 'views/auth/login_admin.dart';
 import 'views/auth/login_doador.dart';
 import 'views/auth/login_estudante.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await FirebaseService.instance.initialize();
+
   runApp(
     const OngApp(),
   );
@@ -80,7 +85,7 @@ class TelaInicial extends StatelessWidget {
 
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.15),
+                          color: Colors.black.withOpacity(0.15),
                           blurRadius: 10,
                           offset: const Offset(0, 5),
                         ),
@@ -405,7 +410,7 @@ class BotaoAcesso extends StatelessWidget {
                 elevation: 4,
 
                 shadowColor:
-                    Colors.black.withValues(alpha: 0.25),
+                    Colors.black.withOpacity(0.25),
 
                 shape: RoundedRectangleBorder(
                   borderRadius:

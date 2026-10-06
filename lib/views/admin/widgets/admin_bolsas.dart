@@ -396,15 +396,9 @@ class _AdminBolsasState
 
         boxShadow: [
           BoxShadow(
-            color:
-                Colors.black.withOpacity(
-              0.06,
-            ),
-
+            color: Colors.black.withOpacity(0.08),
             blurRadius: 8,
-
-            offset:
-                const Offset(0, 3),
+            offset: const Offset(0, 3),
           ),
         ],
       ),

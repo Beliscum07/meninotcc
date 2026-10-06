@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 
+import '../../../services/aluno_data_service.dart';
+
 class AlunoPerfilView extends StatefulWidget {
-  const AlunoPerfilView({super.key});
+  final String alunoId;
+
+  const AlunoPerfilView({
+    super.key,
+    this.alunoId = '001',
+  });
 
   @override
   State<AlunoPerfilView> createState() =>
@@ -30,6 +37,13 @@ class _AlunoPerfilViewState extends State<AlunoPerfilView> {
 
   int atividades = 12;
   int presenca = 96;
+
+  @override
+  void initState() {
+    super.initState();
+    final aluno = AlunoDataService.instance.alunoPorId(widget.alunoId);
+    nome = aluno?['nome']?.toString() ?? nome;
+  }
 
   // ==========================================================
   // BUILD
@@ -73,6 +87,23 @@ class _AlunoPerfilViewState extends State<AlunoPerfilView> {
             // ------------------------------------------------
 
             _buildEstatisticas(),
+
+            const SizedBox(height: 22),
+
+            ListenableBuilder(
+              listenable: AlunoDataService.instance,
+              builder: (context, child) {
+                final aluno = AlunoDataService.instance.alunoPorId(
+                  widget.alunoId,
+                );
+                final bolsas = (aluno?['bolsas'] as List?)
+                        ?.whereType<String>()
+                        .toList() ??
+                    <String>[];
+
+                return _buildBolsa(bolsas);
+              },
+            ),
 
             const SizedBox(height: 22),
 
@@ -208,6 +239,68 @@ class _AlunoPerfilViewState extends State<AlunoPerfilView> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildBolsa(List<String> bolsas) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(color: const Color(0xFFE9E0F4)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.04),
+            blurRadius: 8,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(
+                Icons.workspace_premium_outlined,
+                color: roxo,
+              ),
+              const SizedBox(width: 10),
+              const Text(
+                'Minhas bolsas',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: roxo,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+          if (bolsas.isEmpty)
+            const Text(
+              'Nenhuma bolsa atribuída.',
+              style: TextStyle(color: Colors.black54),
+            )
+          else
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: bolsas.map((bolsa) {
+                return Chip(
+                  avatar: const Icon(
+                    Icons.workspace_premium_outlined,
+                    size: 18,
+                  ),
+                  label: Text(bolsa),
+                  backgroundColor: const Color(0xFFF0EAF7),
+                );
+              }).toList(),
+            ),
+        ],
+      ),
     );
   }
 

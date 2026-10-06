@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
 
 import '../../controllers/controller/aluno_controller.dart';
+import '../../models/atividade_model.dart';
+import '../../services/aluno_data_service.dart';
 import 'widgets/aluno_agenda_view.dart';
 import 'widgets/aluno_notificacoes_view.dart';
 import 'widgets/aluno_perfil_view.dart';
 
 class AlunoHomeView extends StatefulWidget {
-  const AlunoHomeView({super.key});
+  final String alunoId;
+
+  const AlunoHomeView({
+    super.key,
+    this.alunoId = '001',
+  });
 
   @override
   State<AlunoHomeView> createState() => _AlunoHomeViewState();
@@ -34,7 +41,10 @@ class _AlunoHomeViewState extends State<AlunoHomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _buildTela(),
+      body: ListenableBuilder(
+        listenable: AlunoDataService.instance,
+        builder: (context, child) => _buildTela(),
+      ),
 
       bottomNavigationBar: ListenableBuilder(
         listenable: alunoController,
@@ -94,9 +104,14 @@ class _AlunoHomeViewState extends State<AlunoHomeView> {
   }
 
   Widget _buildTela() {
+    final aluno = AlunoDataService.instance.alunoPorId(widget.alunoId);
+
     switch (selectedIndex) {
       case 0:
-        return const AlunoAgendaView();
+        return AlunoAgendaView(
+          alunoNome: aluno?['nome']?.toString() ?? 'Aluno',
+          atividades: _atividadesAgendadas(aluno),
+        );
 
       case 1:
         return AlunoNotificacoesView(
@@ -104,11 +119,36 @@ class _AlunoHomeViewState extends State<AlunoHomeView> {
         );
 
       case 2:
-        return const AlunoPerfilView();
+        return AlunoPerfilView(alunoId: widget.alunoId);
 
       default:
-        return const AlunoAgendaView();
+        return AlunoAgendaView(
+          alunoNome: aluno?['nome']?.toString() ?? 'Aluno',
+          atividades: _atividadesAgendadas(aluno),
+        );
     }
+  }
+
+  List<Map<String, String>> _atividadesAgendadas(
+    Map<String, dynamic>? aluno,
+  ) {
+    final nomesAtribuidos = (aluno?['atividades'] as List?)
+            ?.whereType<String>()
+            .toSet() ??
+        <String>{};
+
+    return atividadesMock
+        .where((atividade) => nomesAtribuidos.contains(atividade.nome))
+        .map(
+          (atividade) => {
+            'nome': atividade.nome,
+            'horario': atividade.horario,
+            'dias': atividade.dias,
+            'professor': atividade.professor,
+            'local': 'ONG Apoio à Infância',
+          },
+        )
+        .toList();
   }
 
   Widget _iconeNotificacao(
@@ -158,10 +198,15 @@ class _AlunoHomeViewState extends State<AlunoHomeView> {
 }
 
 class StudentHomeView extends StatelessWidget {
-  const StudentHomeView({super.key});
+  final String alunoId;
+
+  const StudentHomeView({
+    super.key,
+    this.alunoId = '001',
+  });
 
   @override
   Widget build(BuildContext context) {
-    return const AlunoHomeView();
+    return AlunoHomeView(alunoId: alunoId);
   }
 }

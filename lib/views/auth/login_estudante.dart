@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../controllers/controller/auth_controller.dart';
 import '../../models/usuario_model.dart';
+import '../../services/aluno_data_service.dart';
 import '../estudante/aluno_home_view.dart';
 
 class LoginEstudantePage extends StatefulWidget {
@@ -29,10 +30,16 @@ class _LoginEstudantePageState extends State<LoginEstudantePage> {
 
     if (loginValido) {
       if (mounted) {
+        final usuario = authController.usuarioLogado;
+        final alunoId = AlunoDataService.instance.idDoAlunoSelecionado(
+          id: usuario?.id,
+          nome: usuario?.nome,
+        );
+
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => const StudentHomeView(),
+            builder: (context) => StudentHomeView(alunoId: alunoId),
           ),
         );
       }

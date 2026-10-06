@@ -8,120 +8,139 @@ class AdminDashboard extends StatefulWidget {
 }
 
 class _AdminDashboardState extends State<AdminDashboard> {
-  final Color primaryColor = const Color(0xFF565A9A);
-  final Color accentColor = const Color(0xFFC56BE0);
+  static const Color primaryColor = Color(0xFF565A9A);
+  static const Color accentColor = Color(0xFFC56BE0);
+  static const Color backgroundColor = Color(0xFFF5F1EA);
 
-  // ==========================================================
-  // VALOR TOTAL DO PIX
-  // ==========================================================
+  // ==============================
+  // DADOS EDITÁVEIS DO DASHBOARD
+  // ==============================
 
-  double totalPix = 12500.00;
+  String totalMes = 'R\$ 12.500';
+  String doadoresAtivos = '48';
 
-  // ==========================================================
-  // VALORES DO GRÁFICO
-  // ==========================================================
-  //
-  // Cada mês possui um valor que pode ser editado.
-  //
+  String metaAtual = '12.500';
+  String metaTotal = '15.000';
 
-  final List<Map<String, dynamic>> months = [
+  String porcentagem = '83.3%';
+  final List<Map<String, String>> doacoes = [
     {
-      'month': 'Dez',
-      'value': 600.0,
+      'nome': 'Ana Costa',
+      'data': '17 de maio',
+      'valor': 'R\$ 100',
+      'metodo': 'PIX',
     },
     {
-      'month': 'Jan',
-      'value': 720.0,
+      'nome': 'Carlos Silva',
+      'data': '15 de maio',
+      'valor': 'R\$ 250',
+      'metodo': 'Cartão',
     },
     {
-      'month': 'Fev',
-      'value': 650.0,
-    },
-    {
-      'month': 'Mar',
-      'value': 820.0,
-    },
-    {
-      'month': 'Abr',
-      'value': 1000.0,
-    },
-    {
-      'month': 'Mai',
-      'value': 880.0,
+      'nome': 'Mariana Souza',
+      'data': '12 de maio',
+      'valor': 'R\$ 80',
+      'metodo': 'PIX',
     },
   ];
 
+  final List<Map<String, dynamic>> meses = [
+    {'mes': 'Dez', 'valor': 0.60},
+    {'mes': 'Jan', 'valor': 0.72},
+    {'mes': 'Fev', 'valor': 0.65},
+    {'mes': 'Mar', 'valor': 0.82},
+    {'mes': 'Abr', 'valor': 1.0},
+    {'mes': 'Mai', 'valor': 0.88},
+  ];
+  // ==============================
+  // BUILD
+  // ==============================
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        _buildHeader(),
+    return Container(
+      color: backgroundColor,
+      child: SafeArea(
+        child: Column(
+          children: [
+            _buildHeader(),
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    _buildSummaryCards(),
 
-        Expanded(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
-                _buildSummaryCards(),
+                    const SizedBox(height: 20),
 
-                const SizedBox(height: 20),
+                    _buildMonthlyGoal(),
 
-                _buildMonthlyGoal(),
+                    const SizedBox(height: 20),
 
-                const SizedBox(height: 20),
+                    _buildDonationChart(),
 
-                _buildDonationChart(),
+                    const SizedBox(height: 20),
 
-                const SizedBox(height: 20),
+                    _buildRecentDonations(),
 
-                _buildRecentDonations(),
-
-                const SizedBox(height: 20),
-              ],
+                    const SizedBox(height: 30),
+                  ],
+                ),
+              ),
             ),
-          ),
+          ],
         ),
-      ],
+      ),
     );
   }
 
-  // ==========================================================
+  // ==============================
   // CABEÇALHO
-  // ==========================================================
+  // ==============================
 
   Widget _buildHeader() {
     return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(
-        horizontal: 20,
+@@ -109,67 +97,58 @@
         vertical: 16,
       ),
       color: primaryColor,
-      child: const Text(
-        'Dashboard',
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-        ),
+      child: Row(
+        children: [
+          const Expanded(
+            child: Text(
+              'Dashboard',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          IconButton(
+            onPressed: _abrirEdicaoDashboard,
+            icon: const Icon(
+              Icons.edit,
+              color: Colors.white,
+            ),
+            tooltip: 'Editar Dashboard',
+          ),
+        ],
       ),
     );
   }
 
-  // ==========================================================
+  // ==============================
   // CARDS SUPERIORES
-  // ==========================================================
+  // ==============================
 
   Widget _buildSummaryCards() {
     return Row(
       children: [
         Expanded(
           child: _buildInfoCard(
-            title: 'Total do Mês',
-            value: _formatarReais(totalPix),
-            icon: Icons.attach_money,
-            subtitle: 'Valor atualizado pelo administrador',
-            iconColor: accentColor,
+            titulo: 'Total do Mês',
+            valor: totalMes,
+            icone: Icons.attach_money,
+            corIcone: accentColor,
           ),
         ),
 
@@ -129,194 +148,129 @@ class _AdminDashboardState extends State<AdminDashboard> {
 
         Expanded(
           child: _buildInfoCard(
-            title: 'Doadores\nAtivos',
-            value: '48',
-            icon: Icons.person_outline,
-            iconColor: primaryColor,
+            titulo: 'Doadores Ativos',
+            valor: doadoresAtivos,
+            icone: Icons.person_outline,
+            corIcone: primaryColor,
           ),
         ),
       ],
     );
   }
 
-  // ==========================================================
-  // CARD
-  // ==========================================================
-
   Widget _buildInfoCard({
-    required String title,
-    required String value,
-    required IconData icon,
-    String? subtitle,
-    required Color iconColor,
+    required String titulo,
+    required String valor,
+    required IconData icone,
+    required Color corIcone,
   }) {
     return Container(
       constraints: const BoxConstraints(
-        minHeight: 145,
-      ),
-      padding: const EdgeInsets.all(16),
-      decoration: _cardDecoration(),
-      child: Column(
+@@ -181,10 +160,11 @@
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
                 child: Text(
-                  title,
+                  titulo,
                   style: TextStyle(
                     color: Colors.grey.shade600,
                     fontSize: 13,
-                  ),
-                ),
+@@ -193,41 +173,56 @@
               ),
 
               Icon(
-                icon,
-                color: iconColor,
-                size: 24,
+                icone,
+                color: corIcone,
               ),
             ],
           ),
 
-          const SizedBox(height: 8),
+          const SizedBox(height: 10),
 
           Text(
-            value,
-            style: TextStyle(
+            valor,
+            style: const TextStyle(
               color: accentColor,
               fontSize: 22,
               fontWeight: FontWeight.bold,
             ),
           ),
-
-          if (subtitle != null) ...[
-            const Spacer(),
-
-            Text(
-              subtitle,
-              style: TextStyle(
-                color: Colors.grey.shade700,
-                fontSize: 11,
-              ),
-            ),
-          ],
         ],
       ),
     );
   }
 
-  // ==========================================================
+  // ==============================
   // META MENSAL
-  // ==========================================================
+  // ==============================
 
   Widget _buildMonthlyGoal() {
-    const double meta = 15000;
+    double atual =
+        double.tryParse(metaAtual.replaceAll('.', '').replaceAll(',', '.')) ??
+            0;
 
-    double progresso = totalPix / meta;
+    double total =
+        double.tryParse(metaTotal.replaceAll('.', '').replaceAll(',', '.')) ??
+            1;
 
-    if (progresso < 0) {
-      progresso = 0;
-    }
-
-    if (progresso > 1) {
-      progresso = 1;
-    }
+    double progresso = (atual / total).clamp(0.0, 1.0);
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(18),
-      decoration: _cardDecoration(),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+@@ -238,36 +233,46 @@
         children: [
           Row(
             children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Meta Mensal',
-                      style: TextStyle(
-                        color: Colors.grey.shade600,
-                        fontSize: 14,
-                      ),
-                    ),
-
-                    const SizedBox(height: 5),
-
-                    Text(
-                      '${_formatarReais(totalPix)} / ${_formatarReais(meta)}',
-                      style: TextStyle(
-                        color: primaryColor,
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
+              const Expanded(
+                child: Text(
+                  'Meta Mensal',
+                  style: TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
+                    color: primaryColor,
+                  ),
                 ),
               ),
 
-              Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: primaryColor.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Icon(
-                  Icons.radio_button_checked,
+              IconButton(
+                onPressed: _editarMeta,
+                icon: const Icon(
+                  Icons.edit,
                   color: primaryColor,
                 ),
               ),
             ],
           ),
 
+          Text(
+            'R\$ $metaAtual / $metaTotal',
+            style: const TextStyle(
+              fontSize: 17,
+              fontWeight: FontWeight.bold,
+              color: primaryColor,
+            ),
+          ),
           const SizedBox(height: 15),
 
           ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: LinearProgressIndicator(
+@@ -276,7 +281,7 @@
               value: progresso,
               minHeight: 10,
               backgroundColor: Colors.grey.shade300,
-              valueColor: AlwaysStoppedAnimation(
+              valueColor: const AlwaysStoppedAnimation<Color>(
                 accentColor,
               ),
             ),
-          ),
-
+@@ -285,288 +290,369 @@
           const SizedBox(height: 8),
 
           Text(
-            '${(progresso * 100).toStringAsFixed(1)}% da meta alcançada',
+            '$porcentagem da meta alcançada',
             style: TextStyle(
               color: Colors.grey.shade700,
               fontSize: 12,
-            ),
-          ),
-
-          const SizedBox(height: 15),
-
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton.icon(
-              onPressed: _abrirLancamentoPix,
-              icon: const Icon(Icons.edit),
-              label: const Text(
-                'Atualizar valor do PIX',
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: primaryColor,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(
-                  vertical: 13,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
             ),
           ),
         ],
@@ -324,155 +278,11 @@ class _AdminDashboardState extends State<AdminDashboard> {
     );
   }
 
-  // ==========================================================
-  // EDITAR PIX
-  // ==========================================================
-
-  void _abrirLancamentoPix() {
-    final TextEditingController valorController =
-        TextEditingController();
-
-    final TextEditingController descricaoController =
-        TextEditingController();
-
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text(
-            'Atualizar valor do PIX',
-          ),
-
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text(
-                'Digite um valor positivo para adicionar dinheiro '
-                'ou negativo para registrar um gasto.',
-              ),
-
-              const SizedBox(height: 15),
-
-              TextField(
-                controller: valorController,
-                keyboardType: const TextInputType.numberWithOptions(
-                  decimal: true,
-                  signed: true,
-                ),
-                decoration: const InputDecoration(
-                  labelText: 'Valor',
-                  hintText: 'Ex: 100 ou -100',
-                  prefixText: 'R\$ ',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-
-              const SizedBox(height: 12),
-
-              TextField(
-                controller: descricaoController,
-                decoration: const InputDecoration(
-                  labelText: 'Descrição',
-                  hintText: 'Ex: Doação ou gasto da ONG',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-            ],
-          ),
-
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text('Cancelar'),
-            ),
-
-            ElevatedButton(
-              onPressed: () {
-                _adicionarValorPix(
-                  valorController.text,
-                  descricaoController.text,
-                );
-
-                Navigator.pop(context);
-              },
-              child: const Text('Salvar'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  // ==========================================================
-  // ADICIONAR / RETIRAR DO PIX
-  // ==========================================================
-
-  void _adicionarValorPix(
-    String valorTexto,
-    String descricao,
-  ) {
-    String valorFormatado = valorTexto
-        .replaceAll('.', '')
-        .replaceAll(',', '.');
-
-    final double? valor = double.tryParse(valorFormatado);
-
-    if (valor == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'Digite um valor válido.',
-          ),
-        ),
-      );
-
-      return;
-    }
-
-    setState(() {
-      totalPix += valor;
-    });
-
-    String mensagem;
-
-    if (valor >= 0) {
-      mensagem =
-          'Adicionado ${_formatarReais(valor)} ao PIX.';
-    } else {
-      mensagem =
-          'Retirado ${_formatarReais(valor.abs())} do PIX.';
-    }
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(mensagem),
-      ),
-    );
-  }
-
-  // ==========================================================
-  // GRÁFICO DE COLUNAS
-  // ==========================================================
+  // ==============================
+  // GRÁFICO
+  // ==============================
 
   Widget _buildDonationChart() {
-    // Descobre qual é o maior valor.
-    double maiorValor = 0;
-
-    for (final mes in months) {
-      final double valor = mes['value'];
-
-      if (valor > maiorValor) {
-        maiorValor = valor;
-      }
-    }
-
-    // Evita divisão por zero.
-    if (maiorValor == 0) {
-      maiorValor = 1;
-    }
-
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(18),
@@ -480,18 +290,16 @@ class _AdminDashboardState extends State<AdminDashboard> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Título
           Row(
             children: [
-              Icon(
-                Icons.bar_chart,
+              const Icon(
+                Icons.show_chart,
                 color: primaryColor,
-                size: 22,
               ),
 
               const SizedBox(width: 8),
 
-              Expanded(
+              const Expanded(
                 child: Text(
                   'Doações nos últimos 6 meses',
                   style: TextStyle(
@@ -501,54 +309,28 @@ class _AdminDashboardState extends State<AdminDashboard> {
                   ),
                 ),
               ),
+
+              IconButton(
+                onPressed: _editarGrafico,
+                icon: const Icon(
+                  Icons.edit,
+                  color: primaryColor,
+                ),
+              ),
             ],
           ),
 
-          const SizedBox(height: 8),
-
-          Text(
-            'Clique em uma coluna para editar o valor.',
-            style: TextStyle(
-              color: Colors.grey.shade600,
-              fontSize: 12,
-            ),
-          ),
-
-          const SizedBox(height: 25),
-
-          // ==================================================
-          // COLUNAS
-          // ==================================================
+          const SizedBox(height: 20),
 
           SizedBox(
-            height: 240,
+            height: 170,
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: months.map((data) {
-                final String mes = data['month'];
-                final double valor = data['value'];
-
-                // Calcula o tamanho da coluna.
-                double altura = (valor / maiorValor) * 150;
-
-                // Altura mínima para valores pequenos.
-                if (altura < 10 && valor > 0) {
-                  altura = 10;
-                }
-
-                return GestureDetector(
-                  onTap: () {
-                    _editarValorGrafico(
-                      mes,
-                      valor,
-                    );
-                  },
-                  child: _buildChartBar(
-                    mes,
-                    valor,
-                    altura,
-                  ),
+              children: meses.map((item) {
+                return _buildChartBar(
+                  item['mes'],
+                  item['valor'],
                 );
               }).toList(),
             ),
@@ -558,170 +340,40 @@ class _AdminDashboardState extends State<AdminDashboard> {
     );
   }
 
-  // ==========================================================
-  // COLUNA INDIVIDUAL
-  // ==========================================================
-
   Widget _buildChartBar(
-    String month,
-    double value,
-    double height,
-  ) {
-    return SizedBox(
-      width: 45,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          // ==================================================
-          // NÚMERO ACIMA DA COLUNA
-          // ==================================================
-
-          Text(
-            _formatarReais(value),
-            style: TextStyle(
-              color: primaryColor,
-              fontSize: 10,
-              fontWeight: FontWeight.bold,
-            ),
-            textAlign: TextAlign.center,
-          ),
-
-          const SizedBox(height: 5),
-
-          // ==================================================
-          // COLUNA
-          // ==================================================
-
-          Container(
-            width: 30,
-            height: height,
-            decoration: BoxDecoration(
-              color: accentColor,
-              borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(7),
-              ),
-            ),
-          ),
-
-          const SizedBox(height: 7),
-
-          // ==================================================
-          // NOME DO MÊS
-          // ==================================================
-
-          Text(
-            month,
-            style: TextStyle(
-              color: Colors.grey.shade600,
-              fontSize: 11,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // ==========================================================
-  // EDITAR VALOR DO GRÁFICO
-  // ==========================================================
-
-  void _editarValorGrafico(
     String mes,
-    double valorAtual,
+    double valor,
   ) {
-    final TextEditingController controller =
-        TextEditingController(
-      text: valorAtual.toStringAsFixed(2).replaceAll('.', ','),
-    );
-
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(
-            'Editar $mes',
-          ),
-
-          content: TextField(
-            controller: controller,
-            keyboardType: const TextInputType.numberWithOptions(
-              decimal: true,
-            ),
-            decoration: const InputDecoration(
-              labelText: 'Valor das doações',
-              hintText: 'Ex: 1500,00',
-              prefixText: 'R\$ ',
-              border: OutlineInputBorder(),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Container(
+          width: 25,
+          height: 120 * valor,
+          decoration: const BoxDecoration(
+            color: accentColor,
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(6),
             ),
           ),
+        ),
 
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text(
-                'Cancelar',
-              ),
-            ),
+        const SizedBox(height: 8),
 
-            ElevatedButton(
-              onPressed: () {
-                String texto = controller.text
-                    .replaceAll('.', '')
-                    .replaceAll(',', '.');
-
-                final double? novoValor =
-                    double.tryParse(texto);
-
-                if (novoValor == null) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text(
-                        'Digite um valor válido.',
-                      ),
-                    ),
-                  );
-
-                  return;
-                }
-
-                setState(() {
-                  // Procura o mês que foi clicado
-                  // e troca o valor dele.
-                  for (final item in months) {
-                    if (item['month'] == mes) {
-                      item['value'] = novoValor;
-                      break;
-                    }
-                  }
-                });
-
-                Navigator.pop(context);
-
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      '$mes atualizado para '
-                      '${_formatarReais(novoValor)}.',
-                    ),
-                  ),
-                );
-              },
-              child: const Text(
-                'Salvar',
-              ),
-            ),
-          ],
-        );
-      },
+        Text(
+          mes,
+          style: TextStyle(
+            color: Colors.grey.shade600,
+            fontSize: 11,
+          ),
+        ),
+      ],
     );
   }
 
-  // ==========================================================
-  // ÚLTIMAS DOAÇÕES
-  // ==========================================================
+  // ==============================
+  // DOAÇÕES
+  // ==============================
 
   Widget _buildRecentDonations() {
     return Container(
@@ -731,54 +383,57 @@ class _AdminDashboardState extends State<AdminDashboard> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Últimas Doações',
-            style: TextStyle(
-              color: primaryColor,
-              fontSize: 17,
-              fontWeight: FontWeight.bold,
-            ),
+          Row(
+            children: [
+              const Expanded(
+                child: Text(
+                  'Últimas Doações',
+                  style: TextStyle(
+                    color: primaryColor,
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              IconButton(
+                onPressed: _adicionarDoacao,
+                icon: const Icon(
+                  Icons.add,
+                  color: primaryColor,
+                ),
+              ),
+            ],
           ),
 
-          const SizedBox(height: 15),
+          const SizedBox(height: 10),
 
-          _buildDonationItem(
-            name: 'Ana Costa',
-            date: '17 de maio',
-            value: 'R\$ 100',
-            method: 'PIX',
-          ),
+          ...doacoes.asMap().entries.map((entry) {
+            final index = entry.key;
+            final doacao = entry.value;
 
-          const Divider(),
+            return Column(
+              children: [
+                _buildDonationItem(
+                  index,
+                  doacao,
+                ),
 
-          _buildDonationItem(
-            name: 'Carlos Silva',
-            date: '15 de maio',
-            value: 'R\$ 250',
-            method: 'Cartão',
-          ),
-
-          const Divider(),
-
-          _buildDonationItem(
-            name: 'Mariana Souza',
-            date: '12 de maio',
-            value: 'R\$ 80',
-            method: 'PIX',
-          ),
+                if (index < doacoes.length - 1)
+                  const Divider(),
+              ],
+            );
+          }),
         ],
       ),
     );
   }
 
-  Widget _buildDonationItem({
-    required String name,
-    required String date,
-    required String value,
-    required String method,
-  }) {
+  Widget _buildDonationItem(
+    int index,
+    Map<String, String> doacao,
+  ) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5),
+      padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         children: [
           Expanded(
@@ -786,17 +441,16 @@ class _AdminDashboardState extends State<AdminDashboard> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  name,
+                  doacao['nome']!,
                   style: const TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 15,
                   ),
                 ),
-
                 const SizedBox(height: 3),
 
                 Text(
-                  date,
+                  doacao['data']!,
                   style: TextStyle(
                     color: Colors.grey.shade600,
                     fontSize: 12,
@@ -810,17 +464,15 @@ class _AdminDashboardState extends State<AdminDashboard> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                value,
-                style: TextStyle(
+                doacao['valor']!,
+                style: const TextStyle(
                   color: accentColor,
                   fontWeight: FontWeight.bold,
                 ),
               ),
 
-              const SizedBox(height: 3),
-
               Text(
-                method,
+                doacao['metodo']!,
                 style: TextStyle(
                   color: Colors.grey.shade600,
                   fontSize: 11,
@@ -828,34 +480,322 @@ class _AdminDashboardState extends State<AdminDashboard> {
               ),
             ],
           ),
+
+          IconButton(
+            onPressed: () {
+              _editarDoacao(index);
+            },
+            icon: const Icon(
+              Icons.edit_outlined,
+              size: 20,
+            ),
+          ),
+
+          IconButton(
+            onPressed: () {
+              setState(() {
+                doacoes.removeAt(index);
+              });
+            },
+            icon: const Icon(
+              Icons.delete_outline,
+              color: Colors.red,
+              size: 20,
+            ),
+          ),
         ],
       ),
     );
   }
 
-  // ==========================================================
-  // FORMATAÇÃO DE DINHEIRO
-  // ==========================================================
+  // ==============================
+  // EDITAR DASHBOARD
+  // ==============================
 
-  String _formatarReais(double valor) {
-    final bool negativo = valor < 0;
+  void _abrirEdicaoDashboard() {
+    final totalController =
+        TextEditingController(text: totalMes);
+    final doadoresController =
+        TextEditingController(text: doadoresAtivos);
 
-    final double valorAbsoluto = valor.abs();
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Editar Dashboard'),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: totalController,
+                  decoration: const InputDecoration(
+                    labelText: 'Total do mês',
+                    prefixText: 'R\$ ',
+                  ),
+                ),
+                const SizedBox(height: 15),
 
-    final String numero = valorAbsoluto
-        .toStringAsFixed(2)
-        .replaceAll('.', ',');
+                TextField(
+                  controller: doadoresController,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    labelText: 'Doadores ativos',
+                  ),
+                ),
+              ],
+            ),
+          ),
 
-    return '${negativo ? '-' : ''}R\$ $numero';
+@@ -575,277 +661,211 @@
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Cancelar'),
+            ),
+
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  totalMes = 'R\$ ${totalController.text}';
+                  doadoresAtivos = doadoresController.text;
+                });
+
+                Navigator.pop(context);
+              },
+              child: const Text('Salvar'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
-  // ==========================================================
-  // ESTILO DOS CARDS
-  // ==========================================================
+  // ==============================
+  // EDITAR META
+  // ==============================
+
+  void _editarMeta() {
+    final atualController =
+        TextEditingController(text: metaAtual);
+    final totalController =
+        TextEditingController(text: metaTotal);
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Editar Meta Mensal'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: atualController,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  labelText: 'Valor atual',
+                ),
+              ),
+              TextField(
+                controller: totalController,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  labelText: 'Meta total',
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancelar'),
+            ),
+
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  metaAtual = atualController.text;
+                  metaTotal = totalController.text;
+
+                  final atual =
+                      double.tryParse(metaAtual) ?? 0;
+
+                  final total =
+                      double.tryParse(metaTotal) ?? 1;
+
+                  porcentagem =
+                      '${((atual / total) * 100).toStringAsFixed(1)}%';
+                });
+
+                Navigator.pop(context);
+              },
+              child: const Text('Salvar'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _editarGrafico() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text(
+          'A edição individual dos meses ficará nesta View.',
+        ),
+      ),
+    );
+  }
+
+  void _adicionarDoacao() {
+    final nome = TextEditingController();
+    final valor = TextEditingController();
+    final data = TextEditingController();
+    final metodo = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Adicionar Doação'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: [
+                TextField(
+                  controller: nome,
+                  decoration: const InputDecoration(
+                    labelText: 'Nome',
+                  ),
+                ),
+                TextField(
+                  controller: data,
+                  decoration: const InputDecoration(
+                    labelText: 'Data',
+                  ),
+                ),
+
+                TextField(
+                  controller: valor,
+                  decoration: const InputDecoration(
+                    labelText: 'Valor',
+                    prefixText: 'R\$ ',
+                  ),
+                ),
+
+                TextField(
+                  controller: metodo,
+                  decoration: const InputDecoration(
+                    labelText: 'Método',
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancelar'),
+            ),
+
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  doacoes.add({
+                    'nome': nome.text,
+                    'data': data.text,
+                    'valor': 'R\$ ${valor.text}',
+                    'metodo': metodo.text,
+                  });
+                });
+
+                Navigator.pop(context);
+              },
+              child: const Text('Adicionar'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _editarDoacao(int index) {
+    final doacao = doacoes[index];
+
+    final nome =
+        TextEditingController(text: doacao['nome']);
+
+    final data =
+        TextEditingController(text: doacao['data']);
+
+    final valor =
+        TextEditingController(
+          text: doacao['valor']!.replaceFirst('R\$ ', ''),
+        );
+
+    final metodo =
+        TextEditingController(text: doacao['metodo']);
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Editar Doação'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: [
+                TextField(
+                  controller: nome,
+                  decoration: const InputDecoration(
+                    labelText: 'Nome',
+                  ),
+                ),
+                TextField(
+                  controller: data,
+                  decoration: const InputDecoration(
+                    labelText: 'Data',
+                  ),
+                ),
+                TextField(
+                  controller: valor,
+                  decoration: const InputDecoration(
+                    labelText: 'Valor',
+                  ),
+                ),
+                TextField(
+                  controller: metodo,
+                  decoration: const InputDecoration(
+                    labelText: 'Método',
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancelar'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  doacoes[index] = {
+                    'nome': nome.text,
+                    'data': data.text,
+                    'valor': 'R\$ ${valor.text}',
+                    'metodo': metodo.text,
+                  };
+                });
+                Navigator.pop(context);
+              },
+              child: const Text('Salvar'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   BoxDecoration _cardDecoration() {
     return BoxDecoration(
-      color: const Color(0xFFFDFDFD),
+      color: Colors.white,
       borderRadius: BorderRadius.circular(16),
       border: Border.all(
         color: Colors.grey.shade300,
@@ -869,4 +809,3 @@ class _AdminDashboardState extends State<AdminDashboard> {
       ],
     );
   }
-}

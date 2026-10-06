@@ -7,11 +7,14 @@ import 'views/auth/login_estudante.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await FirebaseService.instance.initialize();
 
-  runApp(
-    const OngApp(),
-  );
+  try {
+    await FirebaseService.instance.initialize();
+  } catch (e) {
+    debugPrint('Firebase bootstrap skipped: $e');
+  }
+
+  runApp(const OngApp());
 }
 
 class OngApp extends StatelessWidget {
@@ -24,10 +27,7 @@ class OngApp extends StatelessWidget {
 
       title: 'ONG Apoio à Infância',
 
-      theme: ThemeData(
-        useMaterial3: true,
-        fontFamily: 'Arial',
-      ),
+      theme: ThemeData(useMaterial3: true, fontFamily: 'Arial'),
 
       home: const TelaInicial(),
     );
@@ -52,23 +52,17 @@ class TelaInicial extends StatelessWidget {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFFB9A9D9),
-              Color(0xFFEFE3DC),
-            ],
+            colors: [Color(0xFFB9A9D9), Color(0xFFEFE3DC)],
           ),
         ),
 
         child: SafeArea(
           child: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 50,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 50),
 
               child: Column(
                 children: [
-
                   // ==================================================
                   // LOGO
                   // ==================================================
@@ -104,7 +98,6 @@ class TelaInicial extends StatelessWidget {
                   // ==================================================
                   // TÍTULO
                   // ==================================================
-
                   const Text(
                     'ONG Apoio à Infância',
 
@@ -122,7 +115,6 @@ class TelaInicial extends StatelessWidget {
                   // ==================================================
                   // SUBTÍTULO
                   // ==================================================
-
                   const Text(
                     'Transformando vidas através da educação,\ncultura e amor',
 
@@ -140,10 +132,8 @@ class TelaInicial extends StatelessWidget {
                   // ==================================================
                   // ESTATÍSTICAS
                   // ==================================================
-
                   const Row(
-                    mainAxisAlignment:
-                        MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
                     children: [
                       Estatistica(
@@ -171,7 +161,6 @@ class TelaInicial extends StatelessWidget {
                   // ==================================================
                   // ACESSO ADMINISTRADOR
                   // ==================================================
-
                   BotaoAcesso(
                     texto: 'Acessar como Administrador',
 
@@ -185,8 +174,7 @@ class TelaInicial extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              const AdminLoginPage(),
+                          builder: (context) => const AdminLoginPage(),
                         ),
                       );
                     },
@@ -197,7 +185,6 @@ class TelaInicial extends StatelessWidget {
                   // ==================================================
                   // ACESSO ALUNO
                   // ==================================================
-
                   BotaoAcesso(
                     texto: 'Acessar como Aluno',
 
@@ -211,8 +198,7 @@ class TelaInicial extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) =>
-                              const LoginEstudantePage(),
+                          builder: (context) => const LoginEstudantePage(),
                         ),
                       );
                     },
@@ -223,7 +209,6 @@ class TelaInicial extends StatelessWidget {
                   // ==================================================
                   // ACESSO DOADOR
                   // ==================================================
-
                   BotaoAcesso(
                     texto: 'Acessar como Doador',
 
@@ -237,8 +222,7 @@ class TelaInicial extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) =>
-                              const LoginDoadorPage(),
+                          builder: (context) => const LoginDoadorPage(),
                         ),
                       );
                     },
@@ -249,23 +233,18 @@ class TelaInicial extends StatelessWidget {
                   // ==================================================
                   // RODAPÉ
                   // ==================================================
-
                   const Text(
                     '© 2026 ONG Apoio à Infância',
 
                     textAlign: TextAlign.center,
 
-                    style: TextStyle(
-                      color: Color(0xFF555555),
-                      fontSize: 20,
-                    ),
+                    style: TextStyle(color: Color(0xFF555555), fontSize: 20),
                   ),
 
                   const SizedBox(height: 14),
 
                   const Row(
-                    mainAxisAlignment:
-                        MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
 
                     children: [
                       Text(
@@ -276,11 +255,7 @@ class TelaInicial extends StatelessWidget {
                         ),
                       ),
 
-                      Icon(
-                        Icons.favorite,
-                        color: Color(0xFFFF3B81),
-                        size: 25,
-                      ),
+                      Icon(Icons.favorite, color: Color(0xFFFF3B81), size: 25),
 
                       Text(
                         ' para transformar vidas',
@@ -324,7 +299,6 @@ class Estatistica extends StatelessWidget {
     return Expanded(
       child: Column(
         children: [
-
           Container(
             width: 100,
             height: 100,
@@ -334,11 +308,7 @@ class Estatistica extends StatelessWidget {
               color: Colors.white,
             ),
 
-            child: Icon(
-              icone,
-              color: const Color(0xFF5558AD),
-              size: 50,
-            ),
+            child: Icon(icone, color: const Color(0xFF5558AD), size: 50),
           ),
 
           const SizedBox(height: 25),
@@ -362,10 +332,7 @@ class Estatistica extends StatelessWidget {
 
             textAlign: TextAlign.center,
 
-            style: const TextStyle(
-              color: Color(0xFF555555),
-              fontSize: 17,
-            ),
+            style: const TextStyle(color: Color(0xFF555555), fontSize: 17),
           ),
         ],
       ),
@@ -409,12 +376,10 @@ class BotaoAcesso extends StatelessWidget {
 
                 elevation: 4,
 
-                shadowColor:
-                    Colors.black.withOpacity(0.25),
+                shadowColor: Colors.black.withOpacity(0.25),
 
                 shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(22),
+                  borderRadius: BorderRadius.circular(22),
                 ),
               ),
 
@@ -433,17 +398,12 @@ class BotaoAcesso extends StatelessWidget {
               style: OutlinedButton.styleFrom(
                 foregroundColor: textoCor,
 
-                backgroundColor:
-                    Colors.transparent,
+                backgroundColor: Colors.transparent,
 
-                side: BorderSide(
-                  color: cor,
-                  width: 3,
-                ),
+                side: BorderSide(color: cor, width: 3),
 
                 shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(22),
+                  borderRadius: BorderRadius.circular(22),
                 ),
               ),
 

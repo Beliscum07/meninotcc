@@ -1,15 +1,18 @@
-class Atividade {
-  final String id;
-  final String nome;
-  final String professor;
-  final String descricao;
-  final String horario;
-  final String dias;
-  final int inscritos;
-  final int vagas;
-  final String categoria;
+import 'package:flutter/material.dart';
 
-  const Atividade({
+class Atividade {
+  String id;
+  String nome;
+  String professor;
+  String descricao;
+  String horario;
+  String dias;
+  int inscritos;
+  int vagas;
+  String categoria;
+  Color cor;
+
+  Atividade({
     required this.id,
     required this.nome,
     required this.professor,
@@ -19,11 +22,12 @@ class Atividade {
     required this.inscritos,
     required this.vagas,
     required this.categoria,
+    this.cor = const Color(0xFFE778E8),
   });
 }
 
 final List<Atividade> atividadesMock = [
-  const Atividade(
+  Atividade(
     id: 'atv-1',
     nome: 'Arte e Criatividade',
     professor: 'Prof. Ana',
@@ -33,8 +37,9 @@ final List<Atividade> atividadesMock = [
     inscritos: 18,
     vagas: 25,
     categoria: 'Cultura',
+    cor: const Color(0xFFE778E8),
   ),
-  const Atividade(
+  Atividade(
     id: 'atv-2',
     nome: 'Futebol Comunitário',
     professor: 'Prof. Bruno',
@@ -44,8 +49,9 @@ final List<Atividade> atividadesMock = [
     inscritos: 22,
     vagas: 30,
     categoria: 'Esporte',
+    cor: const Color(0xFF66BB6A),
   ),
-  const Atividade(
+  Atividade(
     id: 'atv-3',
     nome: 'Leitura em Grupo',
     professor: 'Prof. Carla',
@@ -55,5 +61,6 @@ final List<Atividade> atividadesMock = [
     inscritos: 14,
     vagas: 20,
     categoria: 'Educação',
+    cor: const Color(0xFF42A5F5),
   ),
 ];

@@ -398,6 +398,7 @@ class _AdminAtividadesPageState
                   if (atividade == null) {
                     atividades.add(
                       Atividade(
+                        id: 'atv-${DateTime.now().millisecondsSinceEpoch}',
                         nome: nome,
                         professor: professor,
                         descricao: descricao,
@@ -405,9 +406,8 @@ class _AdminAtividadesPageState
                         dias: dias,
                         inscritos: inscritos,
                         vagas: vagas,
-                        cor: const Color(
-                          0xFFE778E8,
-                        ),
+                        categoria: 'Geral',
+                        cor: const Color(0xFFE778E8),
                       ),
                     );
                   } else {

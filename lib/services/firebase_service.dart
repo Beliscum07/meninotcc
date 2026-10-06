@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 
 class FirebaseService {
   FirebaseService._();
@@ -9,7 +10,17 @@ class FirebaseService {
   FirebaseFirestore get firestore => FirebaseFirestore.instance;
 
   Future<void> initialize() async {
-    await Firebase.initializeApp();
+    if (Firebase.apps.isNotEmpty) {
+      return;
+    }
+
+    try {
+      await Firebase.initializeApp();
+    } on FirebaseException catch (e) {
+      debugPrint('Firebase initialization failed: ${e.message ?? e.code}');
+    } catch (e) {
+      debugPrint('Firebase initialization unavailable: $e');
+    }
   }
 
   Future<void> salvarUsuario({
@@ -60,12 +71,14 @@ class FirebaseService {
     return firestore.collection('doadores').doc(id).get();
   }
 
-  Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>> listarUsuarios() async {
+  Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>>
+  listarUsuarios() async {
     final snapshot = await firestore.collection('usuarios').get();
     return snapshot.docs;
   }
 
-  Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>> listarDoadores() async {
+  Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>>
+  listarDoadores() async {
     final snapshot = await firestore.collection('doadores').get();
     return snapshot.docs;
   }

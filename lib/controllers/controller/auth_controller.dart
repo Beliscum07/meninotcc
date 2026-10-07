@@ -183,6 +183,63 @@ class AuthController extends ChangeNotifier {
     return true;
   }
 
+  Future<bool> atualizarDoadorPerfil({
+    required String nome,
+    required String email,
+    required String telefone,
+    String? senhaAtual,
+    String? novaSenha,
+  }) async {
+    final atual = _doadorLogado;
+    if (atual == null) return false;
+
+    final nomeFinal = nome.trim();
+    final emailFinal = email.trim().toLowerCase();
+    final telefoneFinal = telefone.trim();
+    if (nomeFinal.isEmpty || emailFinal.isEmpty || telefoneFinal.isEmpty) {
+      return false;
+    }
+    if (senhaAtual != null &&
+        senhaAtual.isNotEmpty &&
+        senhaAtual != atual.senha) {
+      return false;
+    }
+    if (novaSenha != null && novaSenha.isNotEmpty && novaSenha.length < 6) {
+      return false;
+    }
+
+    final emailEmUso =
+        _usuarios.any((usuario) => usuario.email.toLowerCase() == emailFinal) ||
+        _doadores.any(
+          (doador) =>
+              doador.id != atual.id && doador.email.toLowerCase() == emailFinal,
+        );
+    if (emailEmUso) return false;
+
+    final atualizado = Doador(
+      id: atual.id,
+      nome: nomeFinal,
+      email: emailFinal,
+      telefone: telefoneFinal,
+      senha: novaSenha?.isNotEmpty == true ? novaSenha! : atual.senha,
+      totalDoado: atual.totalDoado,
+    );
+    final index = _doadores.indexWhere((doador) => doador.id == atual.id);
+    if (index >= 0) _doadores[index] = atualizado;
+    _doadorLogado = atualizado;
+
+    await LocalStorage.salvarDoadorLogado({
+      'id': atualizado.id,
+      'nome': atualizado.nome,
+      'email': atualizado.email,
+      'senha': atualizado.senha,
+      'telefone': atualizado.telefone,
+      'totalDoado': atualizado.totalDoado,
+    });
+    notifyListeners();
+    return true;
+  }
+
   void registrarDoacao(double valor) {
     if (_doadorLogado == null) {
       return;

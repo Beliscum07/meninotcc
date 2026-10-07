@@ -5,14 +5,10 @@ import '../../../services/aluno_data_service.dart';
 class AlunoPerfilView extends StatefulWidget {
   final String alunoId;
 
-  const AlunoPerfilView({
-    super.key,
-    this.alunoId = '001',
-  });
+  const AlunoPerfilView({super.key, this.alunoId = '001'});
 
   @override
-  State<AlunoPerfilView> createState() =>
-      _AlunoPerfilViewState();
+  State<AlunoPerfilView> createState() => _AlunoPerfilViewState();
 }
 
 class _AlunoPerfilViewState extends State<AlunoPerfilView> {
@@ -41,8 +37,26 @@ class _AlunoPerfilViewState extends State<AlunoPerfilView> {
   @override
   void initState() {
     super.initState();
+    AlunoDataService.instance.addListener(_sincronizarDados);
+    _sincronizarDados();
+  }
+
+  @override
+  void dispose() {
+    AlunoDataService.instance.removeListener(_sincronizarDados);
+    super.dispose();
+  }
+
+  void _sincronizarDados() {
     final aluno = AlunoDataService.instance.alunoPorId(widget.alunoId);
-    nome = aluno?['nome']?.toString() ?? nome;
+    if (aluno == null) return;
+    setState(() {
+      nome = aluno['nome']?.toString() ?? nome;
+      email = aluno['email']?.toString() ?? email;
+      telefone = aluno['telefone']?.toString() ?? telefone;
+      atividades = (aluno['atividades'] as List? ?? const []).length;
+      presenca = (aluno['presenca'] as num?)?.toInt() ?? presenca;
+    });
   }
 
   // ==========================================================
@@ -61,10 +75,7 @@ class _AlunoPerfilViewState extends State<AlunoPerfilView> {
 
         title: const Text(
           'Meu Perfil',
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
       ),
 
@@ -73,7 +84,6 @@ class _AlunoPerfilViewState extends State<AlunoPerfilView> {
 
         child: Column(
           children: [
-
             // ------------------------------------------------
             // CABEÇALHO
             // ------------------------------------------------
@@ -85,7 +95,6 @@ class _AlunoPerfilViewState extends State<AlunoPerfilView> {
             // ------------------------------------------------
             // ESTATÍSTICAS
             // ------------------------------------------------
-
             _buildEstatisticas(),
 
             const SizedBox(height: 22),
@@ -96,9 +105,25 @@ class _AlunoPerfilViewState extends State<AlunoPerfilView> {
                 final aluno = AlunoDataService.instance.alunoPorId(
                   widget.alunoId,
                 );
-                final bolsas = (aluno?['bolsas'] as List?)
+                final atividades =
+                    (aluno?['atividades'] as List?)
                         ?.whereType<String>()
                         .toList() ??
+                    <String>[];
+                return _buildAtividades(atividades);
+              },
+            ),
+
+            const SizedBox(height: 22),
+
+            ListenableBuilder(
+              listenable: AlunoDataService.instance,
+              builder: (context, child) {
+                final aluno = AlunoDataService.instance.alunoPorId(
+                  widget.alunoId,
+                );
+                final bolsas =
+                    (aluno?['bolsas'] as List?)?.whereType<String>().toList() ??
                     <String>[];
 
                 return _buildBolsa(bolsas);
@@ -110,7 +135,6 @@ class _AlunoPerfilViewState extends State<AlunoPerfilView> {
             // ------------------------------------------------
             // DADOS DO ALUNO
             // ------------------------------------------------
-
             _buildDadosConta(),
 
             const SizedBox(height: 22),
@@ -118,7 +142,6 @@ class _AlunoPerfilViewState extends State<AlunoPerfilView> {
             // ------------------------------------------------
             // AÇÕES
             // ------------------------------------------------
-
             _buildAcoes(),
 
             const SizedBox(height: 30),
@@ -139,12 +162,7 @@ class _AlunoPerfilViewState extends State<AlunoPerfilView> {
       padding: const EdgeInsets.all(24),
 
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [
-            rosa,
-            roxo,
-          ],
-        ),
+        gradient: const LinearGradient(colors: [rosa, roxo]),
 
         borderRadius: BorderRadius.circular(30),
 
@@ -159,7 +177,6 @@ class _AlunoPerfilViewState extends State<AlunoPerfilView> {
 
       child: Column(
         children: [
-
           // FOTO
           Container(
             width: 110,
@@ -170,17 +187,10 @@ class _AlunoPerfilViewState extends State<AlunoPerfilView> {
 
               shape: BoxShape.circle,
 
-              border: Border.all(
-                color: Colors.white,
-                width: 2,
-              ),
+              border: Border.all(color: Colors.white, width: 2),
             ),
 
-            child: const Icon(
-              Icons.person,
-              color: Colors.white,
-              size: 64,
-            ),
+            child: const Icon(Icons.person, color: Colors.white, size: 64),
           ),
 
           const SizedBox(height: 18),
@@ -203,10 +213,7 @@ class _AlunoPerfilViewState extends State<AlunoPerfilView> {
           Text(
             'Aluno • Turma $turma',
 
-            style: const TextStyle(
-              color: Color(0xFFEDE7F8),
-              fontSize: 18,
-            ),
+            style: const TextStyle(color: Color(0xFFEDE7F8), fontSize: 18),
           ),
         ],
       ),
@@ -220,7 +227,6 @@ class _AlunoPerfilViewState extends State<AlunoPerfilView> {
   Widget _buildEstatisticas() {
     return Row(
       children: [
-
         Expanded(
           child: _estatistica(
             titulo: 'Atividades',
@@ -263,10 +269,7 @@ class _AlunoPerfilViewState extends State<AlunoPerfilView> {
         children: [
           Row(
             children: [
-              const Icon(
-                Icons.workspace_premium_outlined,
-                color: roxo,
-              ),
+              const Icon(Icons.workspace_premium_outlined, color: roxo),
               const SizedBox(width: 10),
               const Text(
                 'Minhas bolsas',
@@ -304,6 +307,59 @@ class _AlunoPerfilViewState extends State<AlunoPerfilView> {
     );
   }
 
+  Widget _buildAtividades(List<String> lista) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(color: const Color(0xFFE9E0F4)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(Icons.event_available_outlined, color: rosa),
+              const SizedBox(width: 10),
+              Text(
+                'Minhas atividades (${lista.length})',
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: rosa,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+          if (lista.isEmpty)
+            const Text(
+              'Nenhuma atividade atribuída.',
+              style: TextStyle(color: Colors.black54),
+            )
+          else
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: lista
+                  .map(
+                    (atividade) => Chip(
+                      avatar: const Icon(
+                        Icons.event_available_outlined,
+                        size: 18,
+                      ),
+                      label: Text(atividade),
+                    ),
+                  )
+                  .toList(),
+            ),
+        ],
+      ),
+    );
+  }
+
   // ==========================================================
   // CARD DE ESTATÍSTICA
   // ==========================================================
@@ -332,7 +388,6 @@ class _AlunoPerfilViewState extends State<AlunoPerfilView> {
 
       child: Column(
         children: [
-
           Text(
             valor,
 
@@ -348,10 +403,7 @@ class _AlunoPerfilViewState extends State<AlunoPerfilView> {
           Text(
             titulo,
 
-            style: const TextStyle(
-              fontSize: 16,
-              color: Color(0xFF555555),
-            ),
+            style: const TextStyle(fontSize: 16, color: Color(0xFF555555)),
           ),
         ],
       ),
@@ -373,9 +425,7 @@ class _AlunoPerfilViewState extends State<AlunoPerfilView> {
 
         borderRadius: BorderRadius.circular(24),
 
-        border: Border.all(
-          color: const Color(0xFFE9E0F4),
-        ),
+        border: Border.all(color: const Color(0xFFE9E0F4)),
 
         boxShadow: [
           BoxShadow(
@@ -387,14 +437,11 @@ class _AlunoPerfilViewState extends State<AlunoPerfilView> {
       ),
 
       child: Column(
-        crossAxisAlignment:
-            CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
 
         children: [
-
           Row(
             children: [
-
               const Expanded(
                 child: Text(
                   'Dados da conta',
@@ -410,21 +457,14 @@ class _AlunoPerfilViewState extends State<AlunoPerfilView> {
               IconButton(
                 onPressed: _abrirEditarPerfil,
 
-                icon: const Icon(
-                  Icons.edit,
-                  color: roxo,
-                ),
+                icon: const Icon(Icons.edit, color: roxo),
               ),
             ],
           ),
 
           const SizedBox(height: 18),
 
-          _itemPerfil(
-            icone: Icons.person_outline,
-            titulo: 'Nome',
-            valor: nome,
-          ),
+          _itemPerfil(icone: Icons.person_outline, titulo: 'Nome', valor: nome),
 
           _itemPerfil(
             icone: Icons.email_outlined,
@@ -462,33 +502,25 @@ class _AlunoPerfilViewState extends State<AlunoPerfilView> {
 
       child: Row(
         children: [
-
           Container(
             width: 46,
             height: 46,
 
             decoration: BoxDecoration(
               color: const Color(0xFFE9E0F4),
-              borderRadius:
-                  BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(14),
             ),
 
-            child: Icon(
-              icone,
-              color: roxo,
-              size: 24,
-            ),
+            child: Icon(icone, color: roxo, size: 24),
           ),
 
           const SizedBox(width: 14),
 
           Expanded(
             child: Column(
-              crossAxisAlignment:
-                  CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
 
               children: [
-
                 Text(
                   titulo,
 
@@ -534,11 +566,9 @@ class _AlunoPerfilViewState extends State<AlunoPerfilView> {
       ),
 
       child: Column(
-        crossAxisAlignment:
-            CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
 
         children: [
-
           const Text(
             'Ações rápidas',
 
@@ -592,18 +622,11 @@ class _AlunoPerfilViewState extends State<AlunoPerfilView> {
       child: Container(
         width: double.infinity,
 
-        padding: const EdgeInsets.symmetric(
-          vertical: 14,
-        ),
+        padding: const EdgeInsets.symmetric(vertical: 14),
 
         child: Row(
           children: [
-
-            Icon(
-              icone,
-              color: cor,
-              size: 26,
-            ),
+            Icon(icone, color: cor, size: 26),
 
             const SizedBox(width: 12),
 
@@ -619,10 +642,7 @@ class _AlunoPerfilViewState extends State<AlunoPerfilView> {
               ),
             ),
 
-            Icon(
-              Icons.chevron_right,
-              color: cor,
-            ),
+            Icon(Icons.chevron_right, color: cor),
           ],
         ),
       ),
@@ -634,41 +654,30 @@ class _AlunoPerfilViewState extends State<AlunoPerfilView> {
   // ==========================================================
 
   void _abrirEditarPerfil() {
+    final nomeController = TextEditingController(text: nome);
 
-    final nomeController =
-        TextEditingController(text: nome);
+    final emailController = TextEditingController(text: email);
 
-    final emailController =
-        TextEditingController(text: email);
+    final telefoneController = TextEditingController(text: telefone);
 
-    final telefoneController =
-        TextEditingController(text: telefone);
-
-    final enderecoController =
-        TextEditingController(text: endereco);
+    final enderecoController = TextEditingController(text: endereco);
 
     showDialog(
       context: context,
 
       builder: (context) {
-
         return AlertDialog(
-          title: const Text(
-            'Editar perfil',
-          ),
+          title: const Text('Editar perfil'),
 
           content: SingleChildScrollView(
             child: Column(
               children: [
-
                 TextField(
                   controller: nomeController,
 
-                  decoration:
-                      const InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Nome',
-                    prefixIcon:
-                        Icon(Icons.person),
+                    prefixIcon: Icon(Icons.person),
                   ),
                 ),
 
@@ -677,39 +686,31 @@ class _AlunoPerfilViewState extends State<AlunoPerfilView> {
                 TextField(
                   controller: emailController,
 
-                  decoration:
-                      const InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'E-mail',
-                    prefixIcon:
-                        Icon(Icons.email),
+                    prefixIcon: Icon(Icons.email),
                   ),
                 ),
 
                 const SizedBox(height: 12),
 
                 TextField(
-                  controller:
-                      telefoneController,
+                  controller: telefoneController,
 
-                  decoration:
-                      const InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Telefone',
-                    prefixIcon:
-                        Icon(Icons.phone),
+                    prefixIcon: Icon(Icons.phone),
                   ),
                 ),
 
                 const SizedBox(height: 12),
 
                 TextField(
-                  controller:
-                      enderecoController,
+                  controller: enderecoController,
 
-                  decoration:
-                      const InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Endereço',
-                    prefixIcon:
-                        Icon(Icons.location_on),
+                    prefixIcon: Icon(Icons.location_on),
                   ),
                 ),
               ],
@@ -717,49 +718,44 @@ class _AlunoPerfilViewState extends State<AlunoPerfilView> {
           ),
 
           actions: [
-
             TextButton(
               onPressed: () {
                 Navigator.pop(context);
               },
 
-              child: const Text(
-                'Cancelar',
-              ),
+              child: const Text('Cancelar'),
             ),
 
             ElevatedButton(
               onPressed: () {
-
                 setState(() {
-                  nome =
-                      nomeController.text;
+                  nome = nomeController.text;
 
-                  email =
-                      emailController.text;
+                  email = emailController.text;
 
-                  telefone =
-                      telefoneController.text;
+                  telefone = telefoneController.text;
 
-                  endereco =
-                      enderecoController.text;
+                  endereco = enderecoController.text;
                 });
+
+                final aluno = AlunoDataService.instance.alunoPorId(
+                  widget.alunoId,
+                );
+                if (aluno != null) {
+                  aluno['nome'] = nome.trim();
+                  aluno['email'] = email.trim().toLowerCase();
+                  aluno['telefone'] = telefone.trim();
+                  AlunoDataService.instance.notificarAlteracao();
+                }
 
                 Navigator.pop(context);
 
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(
-                  const SnackBar(
-                    content: Text(
-                      'Perfil atualizado!',
-                    ),
-                  ),
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Perfil atualizado!')),
                 );
               },
 
-              child: const Text(
-                'Salvar',
-              ),
+              child: const Text('Salvar'),
             ),
           ],
         );
@@ -772,40 +768,29 @@ class _AlunoPerfilViewState extends State<AlunoPerfilView> {
   // ==========================================================
 
   void _alterarSenha() {
+    final senhaAtual = TextEditingController();
 
-    final senhaAtual =
-        TextEditingController();
+    final novaSenha = TextEditingController();
 
-    final novaSenha =
-        TextEditingController();
-
-    final confirmarSenha =
-        TextEditingController();
+    final confirmarSenha = TextEditingController();
 
     showDialog(
       context: context,
 
       builder: (context) {
-
         return AlertDialog(
-          title: const Text(
-            'Alterar senha',
-          ),
+          title: const Text('Alterar senha'),
 
           content: Column(
             mainAxisSize: MainAxisSize.min,
 
             children: [
-
               TextField(
                 controller: senhaAtual,
 
                 obscureText: true,
 
-                decoration:
-                    const InputDecoration(
-                  labelText: 'Senha atual',
-                ),
+                decoration: const InputDecoration(labelText: 'Senha atual'),
               ),
 
               TextField(
@@ -813,52 +798,33 @@ class _AlunoPerfilViewState extends State<AlunoPerfilView> {
 
                 obscureText: true,
 
-                decoration:
-                    const InputDecoration(
-                  labelText: 'Nova senha',
-                ),
+                decoration: const InputDecoration(labelText: 'Nova senha'),
               ),
 
               TextField(
-                controller:
-                    confirmarSenha,
+                controller: confirmarSenha,
 
                 obscureText: true,
 
-                decoration:
-                    const InputDecoration(
-                  labelText:
-                      'Confirmar nova senha',
+                decoration: const InputDecoration(
+                  labelText: 'Confirmar nova senha',
                 ),
               ),
             ],
           ),
 
           actions: [
-
             TextButton(
-              onPressed: () =>
-                  Navigator.pop(context),
+              onPressed: () => Navigator.pop(context),
 
-              child: const Text(
-                'Cancelar',
-              ),
+              child: const Text('Cancelar'),
             ),
 
             ElevatedButton(
               onPressed: () {
-
-                if (novaSenha.text !=
-                    confirmarSenha.text) {
-
-                  ScaffoldMessenger.of(
-                    context,
-                  ).showSnackBar(
-                    const SnackBar(
-                      content: Text(
-                        'As senhas não são iguais.',
-                      ),
-                    ),
+                if (novaSenha.text != confirmarSenha.text) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('As senhas não são iguais.')),
                   );
 
                   return;
@@ -866,20 +832,12 @@ class _AlunoPerfilViewState extends State<AlunoPerfilView> {
 
                 Navigator.pop(context);
 
-                ScaffoldMessenger.of(
-                  context,
-                ).showSnackBar(
-                  const SnackBar(
-                    content: Text(
-                      'Senha alterada!',
-                    ),
-                  ),
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Senha alterada!')),
                 );
               },
 
-              child: const Text(
-                'Salvar',
-              ),
+              child: const Text('Salvar'),
             ),
           ],
         );
@@ -892,40 +850,26 @@ class _AlunoPerfilViewState extends State<AlunoPerfilView> {
   // ==========================================================
 
   void _confirmarSaida() {
-
     showDialog(
       context: context,
 
       builder: (context) {
-
         return AlertDialog(
-          title: const Text(
-            'Sair da conta?',
-          ),
+          title: const Text('Sair da conta?'),
 
-          content: const Text(
-            'Você precisará fazer login novamente.',
-          ),
+          content: const Text('Você precisará fazer login novamente.'),
 
           actions: [
-
             TextButton(
-              onPressed: () =>
-                  Navigator.pop(context),
+              onPressed: () => Navigator.pop(context),
 
-              child: const Text(
-                'Cancelar',
-              ),
+              child: const Text('Cancelar'),
             ),
 
             ElevatedButton(
-              style:
-                  ElevatedButton.styleFrom(
-                backgroundColor: Colors.red,
-              ),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
 
               onPressed: () {
-
                 Navigator.pop(context);
 
                 // Aqui futuramente:
@@ -940,12 +884,7 @@ class _AlunoPerfilViewState extends State<AlunoPerfilView> {
                 Navigator.pop(context);
               },
 
-              child: const Text(
-                'Sair',
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ),
+              child: const Text('Sair', style: TextStyle(color: Colors.white)),
             ),
           ],
         );

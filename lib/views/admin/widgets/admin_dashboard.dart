@@ -42,13 +42,20 @@ class _AdminDashboardState extends State<AdminDashboard> {
   ];
 
   final List<Map<String, dynamic>> meses = [
-    {'mes': 'Dez', 'valor': 0.60},
-    {'mes': 'Jan', 'valor': 0.72},
-    {'mes': 'Fev', 'valor': 0.65},
-    {'mes': 'Mar', 'valor': 0.82},
-    {'mes': 'Abr', 'valor': 1.0},
-    {'mes': 'Mai', 'valor': 0.88},
+    {'mes': 'Dez', 'valor': 9000.0},
+    {'mes': 'Jan', 'valor': 10800.0},
+    {'mes': 'Fev', 'valor': 9750.0},
+    {'mes': 'Mar', 'valor': 12300.0},
+    {'mes': 'Abr', 'valor': 15000.0},
+    {'mes': 'Mai', 'valor': 13200.0},
   ];
+
+  double get _maiorValorGrafico => meses.fold<double>(
+    0,
+    (maior, item) => (item['valor'] as num).toDouble() > maior
+        ? (item['valor'] as num).toDouble()
+        : maior,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -285,9 +292,13 @@ class _AdminDashboardState extends State<AdminDashboard> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
+        Text(_dinheiroCompacto(valor), style: const TextStyle(fontSize: 10)),
+        const SizedBox(height: 4),
         Container(
           width: 25,
-          height: 120 * valor,
+          height:
+              (120 * valor / (_maiorValorGrafico == 0 ? 1 : _maiorValorGrafico))
+                  .clamp(4.0, 120.0),
           decoration: const BoxDecoration(
             color: accentColor,
             borderRadius: BorderRadius.vertical(top: Radius.circular(6)),
@@ -523,12 +534,82 @@ class _AdminDashboardState extends State<AdminDashboard> {
   }
 
   void _editarGrafico() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('A edição individual dos meses ficará nesta View.'),
+    final controllers = {
+      for (final item in meses)
+        item['mes'] as String: TextEditingController(
+          text: (item['valor'] as num).toStringAsFixed(2),
+        ),
+    };
+
+    showDialog<void>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Editar gráfico'),
+        content: SizedBox(
+          width: 430,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: meses.map((item) {
+                final mes = item['mes'] as String;
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: TextField(
+                    controller: controllers[mes],
+                    keyboardType: const TextInputType.numberWithOptions(
+                      decimal: true,
+                    ),
+                    decoration: InputDecoration(
+                      labelText: 'Doações em $mes',
+                      prefixText: 'R\$ ',
+                      border: const OutlineInputBorder(),
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: const Text('Cancelar'),
+          ),
+          FilledButton(
+            onPressed: () {
+              final valores = <String, double>{};
+              for (final item in meses) {
+                final mes = item['mes'] as String;
+                final valor = double.tryParse(
+                  controllers[mes]!.text.replaceAll(',', '.'),
+                );
+                if (valor == null || valor < 0) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Informe valores válidos e não negativos.'),
+                    ),
+                  );
+                  return;
+                }
+                valores[mes] = valor;
+              }
+              setState(() {
+                for (final item in meses) {
+                  item['valor'] = valores[item['mes'] as String]!;
+                }
+              });
+              Navigator.pop(dialogContext);
+            },
+            child: const Text('Salvar'),
+          ),
+        ],
       ),
     );
   }
+
+  String _dinheiroCompacto(double valor) => valor >= 1000
+      ? 'R\$ ${(valor / 1000).toStringAsFixed(1)}k'
+      : 'R\$ ${valor.toStringAsFixed(0)}';
 
   void _adicionarDoacao() {
     final nome = TextEditingController();

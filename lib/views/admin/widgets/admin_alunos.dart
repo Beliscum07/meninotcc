@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../models/atividade_model.dart';
 import '../../../services/aluno_data_service.dart';
+import '../../../services/api_service.dart';
 
 class AdminAlunosPage extends StatefulWidget {
   const AdminAlunosPage({super.key});
@@ -12,6 +13,7 @@ class AdminAlunosPage extends StatefulWidget {
 
 class _AdminAlunosPageState extends State<AdminAlunosPage> {
   final TextEditingController buscaController = TextEditingController();
+  final GmailService gmailService = GmailService();
 
   final List<String> bolsasDisponiveis = [
     'Bolsa Educação Integral',
@@ -22,8 +24,7 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
   List<String> get atividadesDisponiveis =>
       atividadesMock.map((atividade) => atividade.nome).toList();
 
-  List<Map<String, dynamic>> get alunos =>
-      AlunoDataService.instance.alunos;
+  List<Map<String, dynamic>> get alunos => AlunoDataService.instance.alunos;
 
   String busca = '';
 
@@ -41,10 +42,9 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
   @override
   Widget build(BuildContext context) {
     final alunosFiltrados = alunos.where((aluno) {
-      return aluno['nome']
-          .toString()
-          .toLowerCase()
-          .contains(busca.toLowerCase());
+      return aluno['nome'].toString().toLowerCase().contains(
+        busca.toLowerCase(),
+      );
     }).toList();
 
     return SafeArea(
@@ -102,10 +102,7 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
         onChanged: (valor) => setState(() => busca = valor),
         decoration: InputDecoration(
           hintText: 'Buscar aluno...',
-          prefixIcon: const Icon(
-            Icons.search,
-            color: Color(0xFF565A9A),
-          ),
+          prefixIcon: const Icon(Icons.search, color: Color(0xFF565A9A)),
           suffixIcon: busca.isEmpty
               ? null
               : IconButton(
@@ -115,9 +112,7 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
                   },
                   icon: const Icon(Icons.close),
                 ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15),
-          ),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
         ),
       ),
     );
@@ -268,6 +263,11 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
             'Responsável: ${aluno['responsavel']}\n${aluno['telefone']}',
             style: const TextStyle(fontSize: 13),
           ),
+          const SizedBox(height: 6),
+          Text(
+            'E-mail: ${aluno['email'] ?? 'Não cadastrado'}',
+            style: const TextStyle(fontSize: 13),
+          ),
           const SizedBox(height: 12),
           Row(
             children: [
@@ -290,6 +290,15 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
                 ),
               ),
             ],
+          ),
+          const SizedBox(height: 8),
+          SizedBox(
+            width: double.infinity,
+            child: FilledButton.icon(
+              onPressed: () => _enviarMensagem(aluno),
+              icon: const Icon(Icons.mail_outline),
+              label: const Text('Enviar mensagem ao aluno'),
+            ),
           ),
         ],
       ),
@@ -372,9 +381,7 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
                       initialValue: bolsaSelecionada,
                       decoration: const InputDecoration(
                         labelText: 'Bolsa',
-                        prefixIcon: Icon(
-                          Icons.workspace_premium_outlined,
-                        ),
+                        prefixIcon: Icon(Icons.workspace_premium_outlined),
                         border: OutlineInputBorder(),
                       ),
                       items: bolsasParaAtribuir.map((bolsa) {
@@ -416,6 +423,7 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
     final idade = TextEditingController();
     final responsavel = TextEditingController();
     final telefone = TextEditingController();
+    final email = TextEditingController();
 
     showDialog(
       context: context,
@@ -442,6 +450,11 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
                   controller: telefone,
                   decoration: const InputDecoration(labelText: 'Telefone'),
                 ),
+                TextField(
+                  controller: email,
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: const InputDecoration(labelText: 'E-mail'),
+                ),
               ],
             ),
           ),
@@ -452,6 +465,10 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
             ),
             ElevatedButton(
               onPressed: () {
+                if (!_emailValido(email.text.trim())) {
+                  _mensagem('Informe um e-mail válido para o aluno.');
+                  return;
+                }
                 _atualizarDados(() {
                   alunos.add({
                     'id': _novoIdAluno(),
@@ -459,6 +476,7 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
                     'idade': int.tryParse(idade.text) ?? 0,
                     'responsavel': responsavel.text.trim(),
                     'telefone': telefone.text.trim(),
+                    'email': email.text.trim().toLowerCase(),
                     'presenca': 100,
                     'atividades': <String>[],
                     'bolsas': <String>[],
@@ -469,6 +487,7 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
                 idade.dispose();
                 responsavel.dispose();
                 telefone.dispose();
+                email.dispose();
               },
               child: const Text('Adicionar'),
             ),
@@ -488,9 +507,11 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
   void _editarAluno(Map<String, dynamic> aluno) {
     final nome = TextEditingController(text: aluno['nome'].toString());
     final idade = TextEditingController(text: aluno['idade'].toString());
-    final responsavel =
-        TextEditingController(text: aluno['responsavel'].toString());
+    final responsavel = TextEditingController(
+      text: aluno['responsavel'].toString(),
+    );
     final telefone = TextEditingController(text: aluno['telefone'].toString());
+    final email = TextEditingController(text: aluno['email']?.toString() ?? '');
 
     showDialog(
       context: context,
@@ -517,6 +538,11 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
                   controller: telefone,
                   decoration: const InputDecoration(labelText: 'Telefone'),
                 ),
+                TextField(
+                  controller: email,
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: const InputDecoration(labelText: 'E-mail'),
+                ),
               ],
             ),
           ),
@@ -527,17 +553,23 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
             ),
             ElevatedButton(
               onPressed: () {
+                if (!_emailValido(email.text.trim())) {
+                  _mensagem('Informe um e-mail válido para o aluno.');
+                  return;
+                }
                 _atualizarDados(() {
                   aluno['nome'] = nome.text.trim();
                   aluno['idade'] = int.tryParse(idade.text) ?? 0;
                   aluno['responsavel'] = responsavel.text.trim();
                   aluno['telefone'] = telefone.text.trim();
+                  aluno['email'] = email.text.trim().toLowerCase();
                 });
                 Navigator.pop(dialogContext);
                 nome.dispose();
                 idade.dispose();
                 responsavel.dispose();
                 telefone.dispose();
+                email.dispose();
               },
               child: const Text('Salvar'),
             ),
@@ -583,5 +615,74 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
         style: TextStyle(fontSize: 16, color: Colors.grey),
       ),
     );
+  }
+
+  bool _emailValido(String valor) =>
+      RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(valor);
+
+  void _enviarMensagem(Map<String, dynamic> aluno) {
+    final destinatario = aluno['email']?.toString().trim() ?? '';
+    if (!_emailValido(destinatario)) {
+      _mensagem('Este aluno não possui um e-mail válido.');
+      return;
+    }
+    final assunto = TextEditingController();
+    final corpo = TextEditingController();
+
+    showDialog<void>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text('Mensagem para ${aluno['nome']}'),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: assunto,
+                maxLength: 100,
+                decoration: const InputDecoration(labelText: 'Assunto'),
+              ),
+              TextField(
+                controller: corpo,
+                maxLength: 2000,
+                maxLines: 6,
+                decoration: const InputDecoration(labelText: 'Mensagem'),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: const Text('Cancelar'),
+          ),
+          FilledButton(
+            onPressed: () async {
+              if (assunto.text.trim().isEmpty || corpo.text.trim().isEmpty) {
+                return;
+              }
+              Navigator.pop(dialogContext);
+              final enviado = await gmailService.enviarEmail(
+                destinatario: destinatario,
+                assunto: assunto.text.trim(),
+                corpoTexto: corpo.text.trim(),
+              );
+              if (mounted) {
+                _mensagem(
+                  enviado
+                      ? 'Mensagem enviada para $destinatario.'
+                      : 'Não foi possível enviar. Confira o Google Sign-In/API.',
+                );
+              }
+            },
+            child: const Text('Enviar'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _mensagem(String texto) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(texto)));
   }
 }

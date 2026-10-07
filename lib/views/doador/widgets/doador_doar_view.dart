@@ -138,7 +138,7 @@ class _DoadorDoarState extends State<DoadorDoar> {
                     width: 48,
                     height: 48,
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.25),
+                      color: Colors.white.withValues(alpha: 0.25),
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(

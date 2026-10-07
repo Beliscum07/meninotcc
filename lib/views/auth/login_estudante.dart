@@ -104,7 +104,7 @@ class _LoginEstudantePageState extends State<LoginEstudantePage> {
                           color: const Color(0xFFE17BEA),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.12),
+                              color: Colors.black.withValues(alpha: 0.12),
                               blurRadius: 15,
                               offset: const Offset(0, 8),
                             ),

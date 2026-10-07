@@ -150,7 +150,7 @@ class _AlunoPerfilViewState extends State<AlunoPerfilView> {
 
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.12),
+            color: Colors.black.withValues(alpha: 0.12),
             blurRadius: 12,
             offset: const Offset(0, 8),
           ),
@@ -166,7 +166,7 @@ class _AlunoPerfilViewState extends State<AlunoPerfilView> {
             height: 110,
 
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.22),
+              color: Colors.white.withValues(alpha: 0.22),
 
               shape: BoxShape.circle,
 
@@ -252,7 +252,7 @@ class _AlunoPerfilViewState extends State<AlunoPerfilView> {
         border: Border.all(color: const Color(0xFFE9E0F4)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -323,7 +323,7 @@ class _AlunoPerfilViewState extends State<AlunoPerfilView> {
 
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -379,7 +379,7 @@ class _AlunoPerfilViewState extends State<AlunoPerfilView> {
 
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 8,
             offset: const Offset(0, 3),
           ),

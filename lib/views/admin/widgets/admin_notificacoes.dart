@@ -129,7 +129,7 @@ class AdminNotificacoesView extends StatelessWidget {
 
               decoration: BoxDecoration(
                 color: const Color(0xFFC56BE0)
-                    .withOpacity(0.12),
+                    .withValues(alpha: 0.12),
 
                 shape: BoxShape.circle,
               ),

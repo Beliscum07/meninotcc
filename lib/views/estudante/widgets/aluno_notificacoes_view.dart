@@ -142,7 +142,7 @@ class AlunoNotificacoesView extends StatelessWidget {
 
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 5,
               offset: const Offset(0, 2),
             ),
@@ -158,7 +158,7 @@ class AlunoNotificacoesView extends StatelessWidget {
               height: 52,
 
               decoration: BoxDecoration(
-                color: cor.withOpacity(0.12),
+                color: cor.withValues(alpha: 0.12),
                 shape: BoxShape.circle,
               ),
 

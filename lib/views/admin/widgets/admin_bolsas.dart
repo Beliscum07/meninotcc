@@ -27,8 +27,7 @@ class Bolsa {
 final List<Bolsa> bolsasMock = [
   Bolsa(
     nome: 'Bolsa Educação Integral',
-    descricao:
-        'Apoio completo para educação e material escolar.',
+    descricao: 'Apoio completo para educação e material escolar.',
     beneficiarios: 25,
     valorMensal: 300,
     ativa: true,
@@ -36,8 +35,7 @@ final List<Bolsa> bolsasMock = [
 
   Bolsa(
     nome: 'Bolsa Esporte e Cultura',
-    descricao:
-        'Auxílio para atividades esportivas e culturais.',
+    descricao: 'Auxílio para atividades esportivas e culturais.',
     beneficiarios: 15,
     valorMensal: 150,
     ativa: true,
@@ -45,8 +43,7 @@ final List<Bolsa> bolsasMock = [
 
   Bolsa(
     nome: 'Bolsa Alimentação',
-    descricao:
-        'Auxílio para alimentação dos beneficiários.',
+    descricao: 'Auxílio para alimentação dos beneficiários.',
     beneficiarios: 40,
     valorMensal: 200,
     ativa: true,
@@ -58,51 +55,36 @@ final List<Bolsa> bolsasMock = [
 // ============================================================
 
 class AdminBolsas extends StatefulWidget {
-  const AdminBolsas({
-    super.key,
-  });
+  const AdminBolsas({super.key});
 
   @override
-  State<AdminBolsas> createState() =>
-      _AdminBolsasState();
+  State<AdminBolsas> createState() => _AdminBolsasState();
 }
 
-class _AdminBolsasState
-    extends State<AdminBolsas> {
-  final List<Bolsa> bolsas =
-      List.from(bolsasMock);
+class _AdminBolsasState extends State<AdminBolsas> {
+  final List<Bolsa> bolsas = List.from(bolsasMock);
 
   String pesquisa = '';
 
   @override
   Widget build(BuildContext context) {
     final lista = bolsas.where((bolsa) {
-      final texto =
-          pesquisa.toLowerCase();
+      final texto = pesquisa.toLowerCase();
 
-      return bolsa.nome
-              .toLowerCase()
-              .contains(texto) ||
-          bolsa.descricao
-              .toLowerCase()
-              .contains(texto);
+      return bolsa.nome.toLowerCase().contains(texto) ||
+          bolsa.descricao.toLowerCase().contains(texto);
     }).toList();
 
-    final bolsasAtivas =
-        bolsas.where((b) => b.ativa);
+    final bolsasAtivas = bolsas.where((b) => b.ativa);
 
-    final totalBeneficiarios =
-        bolsasAtivas.fold<int>(
+    final totalBeneficiarios = bolsasAtivas.fold<int>(
       0,
-      (total, bolsa) =>
-          total + bolsa.beneficiarios,
+      (total, bolsa) => total + bolsa.beneficiarios,
     );
 
-    final investimentoTotal =
-        bolsasAtivas.fold<double>(
+    final investimentoTotal = bolsasAtivas.fold<double>(
       0,
-      (total, bolsa) =>
-          total + bolsa.investimento,
+      (total, bolsa) => total + bolsa.investimento,
     );
 
     return Container(
@@ -117,47 +99,29 @@ class _AdminBolsasState
 
             Expanded(
               child: SingleChildScrollView(
-                padding:
-                    const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
 
                 child: Column(
                   children: [
-                    _resumo(
-                      totalBeneficiarios,
-                      investimentoTotal,
-                    ),
+                    _resumo(totalBeneficiarios, investimentoTotal),
 
-                    const SizedBox(
-                      height: 24,
-                    ),
+                    const SizedBox(height: 24),
 
                     if (lista.isEmpty)
                       const Padding(
-                        padding:
-                            EdgeInsets.all(40),
+                        padding: EdgeInsets.all(40),
 
                         child: Text(
                           'Nenhuma bolsa encontrada.',
-                          style: TextStyle(
-                            fontSize: 18,
-                            color:
-                                Colors.grey,
-                          ),
+                          style: TextStyle(fontSize: 18, color: Colors.grey),
                         ),
                       )
                     else
                       ...lista.map(
-                        (bolsa) =>
-                            Padding(
-                          padding:
-                              const EdgeInsets.only(
-                            bottom: 16,
-                          ),
+                        (bolsa) => Padding(
+                          padding: const EdgeInsets.only(bottom: 16),
 
-                          child:
-                              _cardBolsa(
-                            bolsa,
-                          ),
+                          child: _cardBolsa(bolsa),
                         ),
                       ),
                   ],
@@ -178,11 +142,7 @@ class _AdminBolsasState
     return Container(
       width: double.infinity,
 
-      padding:
-          const EdgeInsets.symmetric(
-        horizontal: 20,
-        vertical: 14,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
 
       color: const Color(0xFF565A9A),
 
@@ -195,8 +155,7 @@ class _AdminBolsasState
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 20,
-                fontWeight:
-                    FontWeight.bold,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),
@@ -204,13 +163,9 @@ class _AdminBolsasState
           IconButton(
             onPressed: _adicionarBolsa,
 
-            icon: const Icon(
-              Icons.add,
-              color: Colors.white,
-            ),
+            icon: const Icon(Icons.add, color: Colors.white),
 
-            tooltip:
-                'Adicionar bolsa',
+            tooltip: 'Adicionar bolsa',
           ),
         ],
       ),
@@ -233,11 +188,9 @@ class _AdminBolsasState
         },
 
         decoration: InputDecoration(
-          hintText:
-              'Buscar bolsa...',
+          hintText: 'Buscar bolsa...',
 
-          prefixIcon:
-              const Icon(Icons.search),
+          prefixIcon: const Icon(Icons.search),
 
           suffixIcon: pesquisa.isNotEmpty
               ? IconButton(
@@ -247,23 +200,17 @@ class _AdminBolsasState
                     });
                   },
 
-                  icon:
-                      const Icon(Icons.clear),
+                  icon: const Icon(Icons.clear),
                 )
               : null,
 
           filled: true,
           fillColor: Colors.white,
 
-          border:
-              OutlineInputBorder(
-            borderRadius:
-                BorderRadius.circular(
-              16,
-            ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
 
-            borderSide:
-                BorderSide.none,
+            borderSide: BorderSide.none,
           ),
         ),
       ),
@@ -274,10 +221,7 @@ class _AdminBolsasState
   // RESUMO
   // ============================================================
 
-  Widget _resumo(
-    int beneficiarios,
-    double investimento,
-  ) {
+  Widget _resumo(int beneficiarios, double investimento) {
     return Row(
       children: [
         Expanded(
@@ -303,52 +247,31 @@ class _AdminBolsasState
     );
   }
 
-  Widget _cardResumo(
-    IconData icone,
-    String titulo,
-    String valor,
-    Color cor,
-  ) {
+  Widget _cardResumo(IconData icone, String titulo, String valor, Color cor) {
     return Container(
       height: 100,
 
-      padding:
-          const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
 
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius:
-            BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(18),
 
-        border: Border.all(
-          color:
-              const Color(0xFFD9D9D9),
-        ),
+        border: Border.all(color: const Color(0xFFD9D9D9)),
       ),
 
       child: Column(
-        crossAxisAlignment:
-            CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
 
         children: [
           Row(
             children: [
-              Icon(
-                icone,
-                color: cor,
-              ),
+              Icon(icone, color: cor),
 
               const SizedBox(width: 8),
 
               Expanded(
-                child: Text(
-                  titulo,
-                  style:
-                      const TextStyle(
-                    color:
-                        Colors.grey,
-                  ),
-                ),
+                child: Text(titulo, style: const TextStyle(color: Colors.grey)),
               ),
             ],
           ),
@@ -361,8 +284,7 @@ class _AdminBolsasState
             style: TextStyle(
               color: cor,
               fontSize: 22,
-              fontWeight:
-                  FontWeight.bold,
+              fontWeight: FontWeight.bold,
             ),
           ),
         ],
@@ -374,25 +296,18 @@ class _AdminBolsasState
   // CARD DA BOLSA
   // ============================================================
 
-  Widget _cardBolsa(
-    Bolsa bolsa,
-  ) {
+  Widget _cardBolsa(Bolsa bolsa) {
     return Container(
       width: double.infinity,
 
-      padding:
-          const EdgeInsets.all(18),
+      padding: const EdgeInsets.all(18),
 
       decoration: BoxDecoration(
         color: Colors.white,
 
-        borderRadius:
-            BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(18),
 
-        border: Border.all(
-          color:
-              const Color(0xFFD9D9D9),
-        ),
+        border: Border.all(color: const Color(0xFFD9D9D9)),
 
         boxShadow: [
           BoxShadow(
@@ -406,33 +321,23 @@ class _AdminBolsasState
       child: Column(
         children: [
           Row(
-            crossAxisAlignment:
-                CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
 
             children: [
               Container(
                 width: 50,
                 height: 50,
 
-                decoration:
-                    BoxDecoration(
-                  gradient:
-                      const LinearGradient(
-                    colors: [
-                      Color(0xFFB96DD9),
-                      Color(0xFF565A9A),
-                    ],
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFFB96DD9), Color(0xFF565A9A)],
                   ),
 
-                  borderRadius:
-                      BorderRadius.circular(
-                    16,
-                  ),
+                  borderRadius: BorderRadius.circular(16),
                 ),
 
                 child: const Icon(
-                  Icons
-                      .workspace_premium_outlined,
+                  Icons.workspace_premium_outlined,
                   color: Colors.white,
                 ),
               ),
@@ -441,8 +346,7 @@ class _AdminBolsasState
 
               Expanded(
                 child: Column(
-                  crossAxisAlignment:
-                      CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
 
                   children: [
                     Row(
@@ -451,54 +355,38 @@ class _AdminBolsasState
                           child: Text(
                             bolsa.nome,
 
-                            style:
-                                const TextStyle(
+                            style: const TextStyle(
                               fontSize: 19,
-                              fontWeight:
-                                  FontWeight.bold,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
 
                         Container(
-                          padding:
-                              const EdgeInsets
-                                  .symmetric(
+                          padding: const EdgeInsets.symmetric(
                             horizontal: 10,
                             vertical: 5,
                           ),
 
-                          decoration:
-                              BoxDecoration(
+                          decoration: BoxDecoration(
                             color: bolsa.ativa
-                                ? const Color(
-                                    0xFFDDF1E5,
-                                  )
-                                : Colors.grey
-                                    .shade200,
+                                ? const Color(0xFFDDF1E5)
+                                : Colors.grey.shade200,
 
-                            borderRadius:
-                                BorderRadius.circular(
-                              8,
-                            ),
+                            borderRadius: BorderRadius.circular(8),
                           ),
 
                           child: Text(
-                            bolsa.ativa
-                                ? 'Ativo'
-                                : 'Inativo',
+                            bolsa.ativa ? 'Ativo' : 'Inativo',
 
                             style: TextStyle(
                               color: bolsa.ativa
-                                  ? const Color(
-                                      0xFF39835A,
-                                    )
+                                  ? const Color(0xFF39835A)
                                   : Colors.grey,
 
                               fontSize: 12,
 
-                              fontWeight:
-                                  FontWeight.w600,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ),
@@ -510,12 +398,7 @@ class _AdminBolsasState
                     Text(
                       bolsa.descricao,
 
-                      style:
-                          const TextStyle(
-                        color:
-                            Colors.grey,
-                        fontSize: 15,
-                      ),
+                      style: const TextStyle(color: Colors.grey, fontSize: 15),
                     ),
                   ],
                 ),
@@ -528,21 +411,13 @@ class _AdminBolsasState
           Row(
             children: [
               Expanded(
-                child: _infoBox(
-                  'Beneficiários',
-                  '${bolsa.beneficiarios}',
-                ),
+                child: _infoBox('Beneficiários', '${bolsa.beneficiarios}'),
               ),
 
               const SizedBox(width: 12),
 
               Expanded(
-                child: _infoBox(
-                  'Valor mensal',
-                  _dinheiro(
-                    bolsa.valorMensal,
-                  ),
-                ),
+                child: _infoBox('Valor mensal', _dinheiro(bolsa.valorMensal)),
               ),
             ],
           ),
@@ -558,11 +433,7 @@ class _AdminBolsasState
                   'Investimento: '
                   '${_dinheiro(bolsa.investimento)}',
 
-                  style:
-                      const TextStyle(
-                    fontWeight:
-                        FontWeight.w600,
-                  ),
+                  style: const TextStyle(fontWeight: FontWeight.w600),
                 ),
               ),
 
@@ -570,31 +441,20 @@ class _AdminBolsasState
                 tooltip: 'Editar',
 
                 onPressed: () {
-                  _editarBolsa(
-                    bolsa,
-                  );
+                  _editarBolsa(bolsa);
                 },
 
-                icon: const Icon(
-                  Icons.edit_outlined,
-                  color:
-                      Color(0xFF565A9A),
-                ),
+                icon: const Icon(Icons.edit_outlined, color: Color(0xFF565A9A)),
               ),
 
               IconButton(
                 tooltip: 'Excluir',
 
                 onPressed: () {
-                  _removerBolsa(
-                    bolsa,
-                  );
+                  _removerBolsa(bolsa);
                 },
 
-                icon: const Icon(
-                  Icons.delete_outline,
-                  color: Colors.red,
-                ),
+                icon: const Icon(Icons.delete_outline, color: Colors.red),
               ),
             ],
           ),
@@ -603,35 +463,24 @@ class _AdminBolsasState
     );
   }
 
-  Widget _infoBox(
-    String titulo,
-    String valor,
-  ) {
+  Widget _infoBox(String titulo, String valor) {
     return Container(
-      padding:
-          const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(14),
 
       decoration: BoxDecoration(
-        color:
-            const Color(0xFFF0EEF5),
+        color: const Color(0xFFF0EEF5),
 
-        borderRadius:
-            BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(16),
       ),
 
       child: Column(
-        crossAxisAlignment:
-            CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
 
         children: [
           Text(
             titulo,
 
-            style:
-                const TextStyle(
-              color: Colors.grey,
-              fontSize: 13,
-            ),
+            style: const TextStyle(color: Colors.grey, fontSize: 13),
           ),
 
           const SizedBox(height: 6),
@@ -639,12 +488,7 @@ class _AdminBolsasState
           Text(
             valor,
 
-            style:
-                const TextStyle(
-              fontSize: 18,
-              fontWeight:
-                  FontWeight.bold,
-            ),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
         ],
       ),
@@ -659,103 +503,77 @@ class _AdminBolsasState
     _abrirFormulario();
   }
 
-  void _editarBolsa(
-    Bolsa bolsa,
-  ) {
-    _abrirFormulario(
-      bolsa: bolsa,
-    );
+  void _editarBolsa(Bolsa bolsa) {
+    _abrirFormulario(bolsa: bolsa);
   }
 
-  void _abrirFormulario({
-    Bolsa? bolsa,
-  }) {
-    final nomeController =
-        TextEditingController(
-      text: bolsa?.nome ?? '',
-    );
+  void _abrirFormulario({Bolsa? bolsa}) {
+    final nomeController = TextEditingController(text: bolsa?.nome ?? '');
 
-    final descricaoController =
-        TextEditingController(
+    final descricaoController = TextEditingController(
       text: bolsa?.descricao ?? '',
     );
 
-    final beneficiariosController =
-        TextEditingController(
-      text:
-          '${bolsa?.beneficiarios ?? 0}',
+    final beneficiariosController = TextEditingController(
+      text: '${bolsa?.beneficiarios ?? 0}',
     );
 
-    final valorController =
-        TextEditingController(
-      text:
-          '${bolsa?.valorMensal ?? 0}',
+    final valorController = TextEditingController(
+      text: '${bolsa?.valorMensal ?? 0}',
     );
 
-    bool ativa =
-        bolsa?.ativa ?? true;
+    bool ativa = bolsa?.ativa ?? true;
 
     showDialog(
       context: context,
 
       builder: (context) {
         return StatefulBuilder(
-          builder:
-              (context, setDialogState) {
+          builder: (context, setDialogState) {
             return AlertDialog(
-              title: Text(
-                bolsa == null
-                    ? 'Adicionar bolsa'
-                    : 'Editar bolsa',
-              ),
+              title: Text(bolsa == null ? 'Adicionar bolsa' : 'Editar bolsa'),
 
               content: SizedBox(
                 width: 450,
 
-                child:
-                    SingleChildScrollView(
+                child: SingleChildScrollView(
                   child: Column(
-                    mainAxisSize:
-                        MainAxisSize.min,
+                    mainAxisSize: MainAxisSize.min,
 
                     children: [
                       _campo(
                         nomeController,
-                        'Nome',
+                        'Nome da bolsa',
                         Icons.title,
+                        maxLength: 50,
                       ),
 
                       _campo(
                         descricaoController,
                         'Descrição',
                         Icons.description_outlined,
-                        maxLines: 3,
+                        maxLines: 5,
+                        maxLength: 500,
                       ),
 
                       _campo(
                         beneficiariosController,
                         'Beneficiários',
                         Icons.people_outline,
-                        tipo:
-                            TextInputType.number,
+                        tipo: TextInputType.number,
                       ),
 
                       _campo(
                         valorController,
                         'Valor mensal',
                         Icons.attach_money,
-                        tipo:
-                            const TextInputType
-                                .numberWithOptions(
+                        tipo: const TextInputType.numberWithOptions(
                           decimal: true,
                         ),
                       ),
 
                       SwitchListTile(
-                        title:
-                            const Text(
-                          'Bolsa ativa',
-                        ),
+                        title: const Text('Bolsa ativa'),
 
                         value: ativa,
 
@@ -773,53 +591,48 @@ class _AdminBolsasState
               actions: [
                 TextButton(
                   onPressed: () {
-                    Navigator.pop(
-                      context,
-                    );
+                    Navigator.pop(context);
                   },
 
-                  child:
-                      const Text(
-                    'Cancelar',
-                  ),
+                  child: const Text('Cancelar'),
                 ),
 
                 FilledButton(
                   onPressed: () {
-                    final nome =
-                        nomeController
-                            .text
-                            .trim();
+                    final nome = nomeController.text.trim();
 
-                    final descricao =
-                        descricaoController
-                            .text
-                            .trim();
+                    final descricao = descricaoController.text.trim();
 
                     final beneficiarios =
-                        int.tryParse(
-                              beneficiariosController
-                                  .text,
-                            ) ??
-                            0;
+                        int.tryParse(beneficiariosController.text) ?? 0;
 
                     final valor =
                         double.tryParse(
-                              valorController
-                                  .text
-                                  .replaceAll(
-                                ',',
-                                '.',
-                              ),
-                            ) ??
-                            0;
+                          valorController.text.replaceAll(',', '.'),
+                        ) ??
+                        0;
 
-                    if (nome.isEmpty ||
-                        beneficiarios < 0 ||
-                        valor < 0) {
+                    if (nome.isEmpty) {
+                      _mensagem('Informe o nome da bolsa.');
+                      return;
+                    }
+
+                    if (nome.length > 50) {
                       _mensagem(
-                        'Preencha os dados corretamente.',
+                        'O nome da bolsa pode ter no máximo 50 caracteres.',
                       );
+                      return;
+                    }
+
+                    if (descricao.length > 500) {
+                      _mensagem(
+                        'A descrição pode ter no máximo 500 caracteres.',
+                      );
+                      return;
+                    }
+
+                    if (beneficiarios < 0 || valor < 0) {
+                      _mensagem('Preencha os dados corretamente.');
 
                       return;
                     }
@@ -829,44 +642,29 @@ class _AdminBolsasState
                         bolsas.add(
                           Bolsa(
                             nome: nome,
-                            descricao:
-                                descricao,
-                            beneficiarios:
-                                beneficiarios,
-                            valorMensal:
-                                valor,
+                            descricao: descricao,
+                            beneficiarios: beneficiarios,
+                            valorMensal: valor,
                             ativa: ativa,
                           ),
                         );
                       } else {
                         bolsa.nome = nome;
-                        bolsa.descricao =
-                            descricao;
-                        bolsa.beneficiarios =
-                            beneficiarios;
-                        bolsa.valorMensal =
-                            valor;
-                        bolsa.ativa =
-                            ativa;
+                        bolsa.descricao = descricao;
+                        bolsa.beneficiarios = beneficiarios;
+                        bolsa.valorMensal = valor;
+                        bolsa.ativa = ativa;
                       }
                     });
 
-                    Navigator.pop(
-                      context,
-                    );
+                    Navigator.pop(context);
 
                     _mensagem(
-                      bolsa == null
-                          ? 'Bolsa adicionada!'
-                          : 'Bolsa atualizada!',
+                      bolsa == null ? 'Bolsa adicionada!' : 'Bolsa atualizada!',
                     );
                   },
 
-                  child: Text(
-                    bolsa == null
-                        ? 'Adicionar'
-                        : 'Salvar',
-                  ),
+                  child: Text(bolsa == null ? 'Adicionar' : 'Salvar'),
                 ),
               ],
             );
@@ -880,64 +678,39 @@ class _AdminBolsasState
   // REMOVER
   // ============================================================
 
-  void _removerBolsa(
-    Bolsa bolsa,
-  ) {
+  void _removerBolsa(Bolsa bolsa) {
     showDialog(
       context: context,
 
       builder: (context) {
         return AlertDialog(
-          title:
-              const Text(
-            'Remover bolsa?',
-          ),
+          title: const Text('Remover bolsa?'),
 
-          content: Text(
-            'Deseja realmente remover "${bolsa.nome}"?',
-          ),
+          content: Text('Deseja realmente remover "${bolsa.nome}"?'),
 
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.pop(
-                  context,
-                );
+                Navigator.pop(context);
               },
 
-              child:
-                  const Text(
-                'Cancelar',
-              ),
+              child: const Text('Cancelar'),
             ),
 
             FilledButton(
-              style:
-                  FilledButton.styleFrom(
-                backgroundColor:
-                    Colors.red,
-              ),
+              style: FilledButton.styleFrom(backgroundColor: Colors.red),
 
               onPressed: () {
                 setState(() {
-                  bolsas.remove(
-                    bolsa,
-                  );
+                  bolsas.remove(bolsa);
                 });
 
-                Navigator.pop(
-                  context,
-                );
+                Navigator.pop(context);
 
-                _mensagem(
-                  'Bolsa removida!',
-                );
+                _mensagem('Bolsa removida!');
               },
 
-              child:
-                  const Text(
-                'Remover',
-              ),
+              child: const Text('Remover'),
             ),
           ],
         );
@@ -953,54 +726,34 @@ class _AdminBolsasState
     TextEditingController controller,
     String label,
     IconData icon, {
-    TextInputType tipo =
-        TextInputType.text,
+    TextInputType tipo = TextInputType.text,
     int maxLines = 1,
+    int? maxLength,
   }) {
     return Padding(
-      padding:
-          const EdgeInsets.only(
-        bottom: 12,
-      ),
+      padding: const EdgeInsets.only(bottom: 12),
 
       child: TextField(
         controller: controller,
         keyboardType: tipo,
         maxLines: maxLines,
+        maxLength: maxLength,
 
-        decoration:
-            InputDecoration(
+        decoration: InputDecoration(
           labelText: label,
-          prefixIcon:
-              Icon(icon),
+          prefixIcon: Icon(icon),
 
-          border:
-              OutlineInputBorder(
-            borderRadius:
-                BorderRadius.circular(
-              12,
-            ),
-          ),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         ),
       ),
     );
   }
 
-  String _dinheiro(
-    double valor,
-  ) {
+  String _dinheiro(double valor) {
     return 'R\$ ${valor.toStringAsFixed(2).replaceAll('.', ',')}';
   }
 
-  void _mensagem(
-    String texto,
-  ) {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(
-      SnackBar(
-        content:
-            Text(texto),
-      ),
-    );
+  void _mensagem(String texto) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(texto)));
   }
 }

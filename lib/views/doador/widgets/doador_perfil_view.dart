@@ -87,45 +87,67 @@ class DoadorPerfil extends StatelessWidget {
                   valor: telefone,
                 ),
 
-                const SizedBox(height: 20),
+                const SizedBox(height: 24),
+
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: const Color(0xFFE0E0E0)),
+                  ),
+                  child: Column(
+                    children: [
+                      ListTile(
+                        leading: const Icon(
+                          Icons.edit_outlined,
+                          color: Color(0xFF5558AD),
+                        ),
+                        title: const Text(
+                          'Editar perfil',
+                          style: TextStyle(fontWeight: FontWeight.w600),
+                        ),
+                        subtitle: const Text('Altere seus dados pessoais'),
+                        trailing: const Icon(Icons.chevron_right),
+                        onTap: () => _editarPerfil(context),
+                      ),
+                      const Divider(height: 1),
+                      ListTile(
+                        leading: const Icon(
+                          Icons.lock_outline,
+                          color: Color(0xFF5558AD),
+                        ),
+                        title: const Text(
+                          'E-mail e senha',
+                          style: TextStyle(fontWeight: FontWeight.w600),
+                        ),
+                        subtitle: const Text('Alterar dados de acesso'),
+                        trailing: const Icon(Icons.chevron_right),
+                        onTap: () => _editarPerfil(context, editarSenha: true),
+                      ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 16),
 
                 SizedBox(
                   width: double.infinity,
-
                   child: OutlinedButton.icon(
-                    onPressed: () => _editarPerfil(context),
-
-                    icon: const Icon(Icons.edit_outlined),
-
-                    label: const Text('Editar perfil'),
-
+                    onPressed: () => _sair(context),
+                    icon: const Icon(Icons.logout, color: Colors.red),
+                    label: const Text(
+                      'Sair da conta',
+                      style: TextStyle(color: Colors.red),
+                    ),
                     style: OutlinedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 15),
-
+                      side: const BorderSide(color: Colors.red),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
                   ),
-                ),
-
-                ListTile(
-                  onTap: () => _editarPerfil(context, editarSenha: true),
-                  leading: const Icon(
-                    Icons.lock_outline,
-                    color: Color(0xFF5558AD),
-                  ),
-                  title: const Text('Editar e-mail / senha'),
-                  trailing: const Icon(Icons.chevron_right),
-                ),
-                ListTile(
-                  onTap: () => _sair(context),
-                  leading: const Icon(Icons.logout, color: Colors.red),
-                  title: const Text(
-                    'Sair da conta',
-                    style: TextStyle(color: Colors.red),
-                  ),
-                  trailing: const Icon(Icons.chevron_right, color: Colors.red),
                 ),
               ],
             ),

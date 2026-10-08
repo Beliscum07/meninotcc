@@ -10,47 +10,26 @@ import '../../../services/aluno_data_service.dart';
 class AdminAtividadesPage extends StatefulWidget {
   final List<Atividade>? atividades;
 
-  const AdminAtividadesPage({
-    super.key,
-    this.atividades,
-  });
+  const AdminAtividadesPage({super.key, this.atividades});
 
   @override
-  State<AdminAtividadesPage> createState() =>
-      _AdminAtividadesPageState();
+  State<AdminAtividadesPage> createState() => _AdminAtividadesPageState();
 }
 
-class _AdminAtividadesPageState
-    extends State<AdminAtividadesPage> {
-  late List<Atividade> atividades;
+class _AdminAtividadesPageState extends State<AdminAtividadesPage> {
+  List<Atividade> get atividades => widget.atividades ?? atividadesMock;
 
   String pesquisa = '';
-
-  @override
-  void initState() {
-    super.initState();
-
-    atividades =
-        widget.atividades ?? atividadesMock;
-  }
 
   @override
   Widget build(BuildContext context) {
     final lista = atividades.where((atividade) {
       final texto = pesquisa.toLowerCase();
 
-      return atividade.nome
-              .toLowerCase()
-              .contains(texto) ||
-          atividade.professor
-              .toLowerCase()
-              .contains(texto) ||
-          atividade.dias
-              .toLowerCase()
-              .contains(texto) ||
-          atividade.descricao
-              .toLowerCase()
-              .contains(texto);
+      return atividade.nome.toLowerCase().contains(texto) ||
+          atividade.professor.toLowerCase().contains(texto) ||
+          atividade.dias.toLowerCase().contains(texto) ||
+          atividade.descricao.toLowerCase().contains(texto);
     }).toList();
 
     return SafeArea(
@@ -65,41 +44,30 @@ class _AdminAtividadesPageState
                 ? const Center(
                     child: Text(
                       'Nenhuma atividade encontrada.',
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.grey,
-                      ),
+                      style: TextStyle(fontSize: 18, color: Colors.grey),
                     ),
                   )
                 : ListView.builder(
-                    padding:
-                        const EdgeInsets.all(12),
+                    padding: const EdgeInsets.all(12),
 
                     itemCount: lista.length,
 
                     itemBuilder: (context, index) {
-                      final atividade =
-                          lista[index];
+                      final atividade = lista[index];
 
                       return CardAtividade(
                         atividade: atividade,
 
                         onTap: () {
-                          _mostrarDetalhes(
-                            atividade,
-                          );
+                          _mostrarDetalhes(atividade);
                         },
 
                         onEditar: () {
-                          _editarAtividade(
-                            atividade,
-                          );
+                          _editarAtividade(atividade);
                         },
 
                         onExcluir: () {
-                          _removerAtividade(
-                            atividade,
-                          );
+                          _removerAtividade(atividade);
                         },
                       );
                     },
@@ -120,8 +88,7 @@ class _AdminAtividadesPageState
       width: double.infinity,
       color: const Color(0xFF5558AD),
 
-      padding:
-          const EdgeInsets.symmetric(horizontal: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 12),
 
       child: Row(
         children: [
@@ -139,10 +106,7 @@ class _AdminAtividadesPageState
           IconButton(
             onPressed: _criarAtividade,
 
-            icon: const Icon(
-              Icons.add,
-              color: Colors.white,
-            ),
+            icon: const Icon(Icons.add, color: Colors.white),
 
             tooltip: 'Criar atividade',
           ),
@@ -167,11 +131,9 @@ class _AdminAtividadesPageState
         },
 
         decoration: InputDecoration(
-          hintText:
-              'Buscar atividade, professor ou dia...',
+          hintText: 'Buscar atividade, professor ou dia...',
 
-          prefixIcon:
-              const Icon(Icons.search),
+          prefixIcon: const Icon(Icons.search),
 
           suffixIcon: pesquisa.isNotEmpty
               ? IconButton(
@@ -181,8 +143,7 @@ class _AdminAtividadesPageState
                     });
                   },
 
-                  icon:
-                      const Icon(Icons.clear),
+                  icon: const Icon(Icons.clear),
                 )
               : null,
 
@@ -190,8 +151,7 @@ class _AdminAtividadesPageState
           fillColor: Colors.white,
 
           border: OutlineInputBorder(
-            borderRadius:
-                BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(16),
 
             borderSide: BorderSide.none,
           ),
@@ -212,53 +172,36 @@ class _AdminAtividadesPageState
   // EDITAR
   // ============================================================
 
-  void _editarAtividade(
-    Atividade atividade,
-  ) {
-    _abrirFormulario(
-      atividade: atividade,
-    );
+  void _editarAtividade(Atividade atividade) {
+    _abrirFormulario(atividade: atividade);
   }
 
   // ============================================================
   // FORMULÁRIO
   // ============================================================
 
-  void _abrirFormulario({
-    Atividade? atividade,
-  }) {
-    final nomeController =
-        TextEditingController(
-      text: atividade?.nome ?? '',
-    );
+  void _abrirFormulario({Atividade? atividade}) {
+    final nomeController = TextEditingController(text: atividade?.nome ?? '');
 
-    final professorController =
-        TextEditingController(
+    final professorController = TextEditingController(
       text: atividade?.professor ?? '',
     );
 
-    final descricaoController =
-        TextEditingController(
+    final descricaoController = TextEditingController(
       text: atividade?.descricao ?? '',
     );
 
-    final horarioController =
-        TextEditingController(
+    final horarioController = TextEditingController(
       text: atividade?.horario ?? '',
     );
 
-    final diasController =
-        TextEditingController(
-      text: atividade?.dias ?? '',
-    );
+    final diasController = TextEditingController(text: atividade?.dias ?? '');
 
-    final inscritosController =
-        TextEditingController(
+    final inscritosController = TextEditingController(
       text: '${atividade?.inscritos ?? 0}',
     );
 
-    final vagasController =
-        TextEditingController(
+    final vagasController = TextEditingController(
       text: '${atividade?.vagas ?? 20}',
     );
 
@@ -268,9 +211,7 @@ class _AdminAtividadesPageState
       builder: (context) {
         return AlertDialog(
           title: Text(
-            atividade == null
-                ? 'Criar atividade'
-                : 'Editar atividade',
+            atividade == null ? 'Criar atividade' : 'Editar atividade',
           ),
 
           content: SizedBox(
@@ -278,55 +219,57 @@ class _AdminAtividadesPageState
 
             child: SingleChildScrollView(
               child: Column(
-                mainAxisSize:
-                    MainAxisSize.min,
+                mainAxisSize: MainAxisSize.min,
 
                 children: [
                   _campo(
                     nomeController,
                     'Nome da atividade',
                     Icons.title,
+                    maxLength: 80,
                   ),
 
                   _campo(
                     professorController,
                     'Professor',
                     Icons.person_outline,
+                    maxLength: 80,
                   ),
 
                   _campo(
                     descricaoController,
                     'Descrição',
                     Icons.description_outlined,
-                    maxLines: 3,
+                    maxLines: 4,
+                    maxLength: 500,
                   ),
 
                   _campo(
                     horarioController,
                     'Horário',
                     Icons.access_time,
+                    maxLength: 20,
                   ),
 
                   _campo(
                     diasController,
                     'Dias',
                     Icons.calendar_month_outlined,
+                    maxLength: 50,
                   ),
 
                   _campo(
                     inscritosController,
                     'Inscritos',
                     Icons.people_outline,
-                    tipo:
-                        TextInputType.number,
+                    tipo: TextInputType.number,
                   ),
 
                   _campo(
                     vagasController,
                     'Vagas',
                     Icons.event_seat_outlined,
-                    tipo:
-                        TextInputType.number,
+                    tipo: TextInputType.number,
                   ),
                 ],
               ),
@@ -339,58 +282,36 @@ class _AdminAtividadesPageState
                 Navigator.pop(context);
               },
 
-              child:
-                  const Text('Cancelar'),
+              child: const Text('Cancelar'),
             ),
 
             FilledButton(
               style: FilledButton.styleFrom(
-                backgroundColor:
-                    const Color(0xFF5552A6),
+                backgroundColor: const Color(0xFF5552A6),
               ),
 
               onPressed: () {
-                final nome =
-                    nomeController.text.trim();
+                final nome = nomeController.text.trim();
 
-                final professor =
-                    professorController.text.trim();
+                final professor = professorController.text.trim();
 
-                final descricao =
-                    descricaoController.text.trim();
+                final descricao = descricaoController.text.trim();
 
-                final horario =
-                    horarioController.text.trim();
+                final horario = horarioController.text.trim();
 
-                final dias =
-                    diasController.text.trim();
+                final dias = diasController.text.trim();
 
-                final inscritos =
-                    int.tryParse(
-                          inscritosController
-                              .text,
-                        ) ??
-                        0;
+                final inscritos = int.tryParse(inscritosController.text) ?? 0;
 
-                final vagas =
-                    int.tryParse(
-                          vagasController.text,
-                        ) ??
-                        0;
+                final vagas = int.tryParse(vagasController.text) ?? 0;
 
-                if (nome.isEmpty ||
-                    professor.isEmpty ||
-                    vagas <= 0) {
-                  _mensagem(
-                    'Preencha nome, professor e vagas.',
-                  );
+                if (nome.isEmpty || professor.isEmpty || vagas <= 0) {
+                  _mensagem('Preencha nome, professor e vagas.');
                   return;
                 }
 
                 if (inscritos > vagas) {
-                  _mensagem(
-                    'Os inscritos não podem ser maiores que as vagas.',
-                  );
+                  _mensagem('Os inscritos não podem ser maiores que as vagas.');
                   return;
                 }
 
@@ -413,24 +334,18 @@ class _AdminAtividadesPageState
                   } else {
                     final nomeAnterior = atividade.nome;
                     atividade.nome = nome;
-                    atividade.professor =
-                        professor;
-                    atividade.descricao =
-                        descricao;
-                    atividade.horario =
-                        horario;
+                    atividade.professor = professor;
+                    atividade.descricao = descricao;
+                    atividade.horario = horario;
                     atividade.dias = dias;
-                    atividade.inscritos =
-                        inscritos;
+                    atividade.inscritos = inscritos;
                     atividade.vagas = vagas;
 
                     if (nomeAnterior != nome) {
-                      for (final aluno
-                          in AlunoDataService.instance.alunos) {
+                      for (final aluno in AlunoDataService.instance.alunos) {
                         final atividadesDoAluno =
                             aluno['atividades'] as List<String>;
-                        final indice =
-                            atividadesDoAluno.indexOf(nomeAnterior);
+                        final indice = atividadesDoAluno.indexOf(nomeAnterior);
                         if (indice != -1) {
                           if (atividadesDoAluno.contains(nome)) {
                             atividadesDoAluno.removeAt(indice);
@@ -454,11 +369,7 @@ class _AdminAtividadesPageState
                 );
               },
 
-              child: Text(
-                atividade == null
-                    ? 'Criar'
-                    : 'Salvar',
-              ),
+              child: Text(atividade == null ? 'Criar' : 'Salvar'),
             ),
           ],
         );
@@ -470,20 +381,15 @@ class _AdminAtividadesPageState
   // REMOVER
   // ============================================================
 
-  void _removerAtividade(
-    Atividade atividade,
-  ) {
+  void _removerAtividade(Atividade atividade) {
     showDialog(
       context: context,
 
       builder: (context) {
         return AlertDialog(
-          title:
-              const Text('Remover atividade?'),
+          title: const Text('Remover atividade?'),
 
-          content: Text(
-            'Deseja realmente remover "${atividade.nome}"?',
-          ),
+          content: Text('Deseja realmente remover "${atividade.nome}"?'),
 
           actions: [
             TextButton(
@@ -491,25 +397,20 @@ class _AdminAtividadesPageState
                 Navigator.pop(context);
               },
 
-              child:
-                  const Text('Cancelar'),
+              child: const Text('Cancelar'),
             ),
 
             FilledButton(
-              style: FilledButton.styleFrom(
-                backgroundColor: Colors.red,
-              ),
+              style: FilledButton.styleFrom(backgroundColor: Colors.red),
 
               onPressed: () {
                 setState(() {
-                  atividades.remove(
-                    atividade,
-                  );
+                  atividades.remove(atividade);
 
-                  for (final aluno
-                      in AlunoDataService.instance.alunos) {
-                    (aluno['atividades'] as List<String>)
-                        .remove(atividade.nome);
+                  for (final aluno in AlunoDataService.instance.alunos) {
+                    (aluno['atividades'] as List<String>).remove(
+                      atividade.nome,
+                    );
                   }
                 });
 
@@ -517,13 +418,10 @@ class _AdminAtividadesPageState
 
                 Navigator.pop(context);
 
-                _mensagem(
-                  'Atividade removida!',
-                );
+                _mensagem('Atividade removida!');
               },
 
-              child:
-                  const Text('Remover'),
+              child: const Text('Remover'),
             ),
           ],
         );
@@ -535,9 +433,7 @@ class _AdminAtividadesPageState
   // DETALHES
   // ============================================================
 
-  void _mostrarDetalhes(
-    Atividade atividade,
-  ) {
+  void _mostrarDetalhes(Atividade atividade) {
     showDialog(
       context: context,
 
@@ -547,35 +443,22 @@ class _AdminAtividadesPageState
 
           content: SingleChildScrollView(
             child: Column(
-              crossAxisAlignment:
-                  CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
 
               children: [
-                Text(
-                  atividade.descricao,
-                ),
+                Text(atividade.descricao),
 
                 const SizedBox(height: 15),
 
-                Text(
-                  'Professor: ${atividade.professor}',
-                ),
+                Text('Professor: ${atividade.professor}'),
 
-                Text(
-                  'Horário: ${atividade.horario}',
-                ),
+                Text('Horário: ${atividade.horario}'),
 
-                Text(
-                  'Dias: ${atividade.dias}',
-                ),
+                Text('Dias: ${atividade.dias}'),
 
-                Text(
-                  'Inscritos: ${atividade.inscritos}',
-                ),
+                Text('Inscritos: ${atividade.inscritos}'),
 
-                Text(
-                  'Vagas: ${atividade.vagas}',
-                ),
+                Text('Vagas: ${atividade.vagas}'),
               ],
             ),
           ),
@@ -586,21 +469,17 @@ class _AdminAtividadesPageState
                 Navigator.pop(context);
               },
 
-              child:
-                  const Text('Fechar'),
+              child: const Text('Fechar'),
             ),
 
             FilledButton(
               onPressed: () {
                 Navigator.pop(context);
 
-                _editarAtividade(
-                  atividade,
-                );
+                _editarAtividade(atividade);
               },
 
-              child:
-                  const Text('Editar'),
+              child: const Text('Editar'),
             ),
           ],
         );
@@ -612,41 +491,31 @@ class _AdminAtividadesPageState
     TextEditingController controller,
     String label,
     IconData icon, {
-    TextInputType tipo =
-        TextInputType.text,
+    TextInputType tipo = TextInputType.text,
     int maxLines = 1,
+    int? maxLength,
   }) {
     return Padding(
-      padding:
-          const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.only(bottom: 12),
 
       child: TextField(
         controller: controller,
         keyboardType: tipo,
         maxLines: maxLines,
+        maxLength: maxLength,
 
         decoration: InputDecoration(
           labelText: label,
-          prefixIcon:
-              Icon(icon),
+          prefixIcon: Icon(icon),
 
-          border:
-              OutlineInputBorder(
-            borderRadius:
-                BorderRadius.circular(12),
-          ),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         ),
       ),
     );
   }
 
   void _mensagem(String texto) {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(
-      SnackBar(
-        content: Text(texto),
-      ),
-    );
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(texto)));
   }
 }
 
@@ -671,39 +540,28 @@ class CardAtividade extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ocupacao =
-        atividade.vagas > 0
-            ? (atividade.inscritos /
-                    atividade.vagas)
-                .clamp(0.0, 1.0)
-            : 0.0;
+    final ocupacao = atividade.vagas > 0
+        ? (atividade.inscritos / atividade.vagas).clamp(0.0, 1.0)
+        : 0.0;
     return Container(
-      margin:
-          const EdgeInsets.only(bottom: 12),
+      margin: const EdgeInsets.only(bottom: 12),
 
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius:
-            BorderRadius.circular(17),
-        border: Border.all(
-          color:
-              const Color(0xFFD9D9E5),
-        ),
+        borderRadius: BorderRadius.circular(17),
+        border: Border.all(color: const Color(0xFFD9D9E5)),
       ),
 
       child: InkWell(
         onTap: onTap,
 
-        borderRadius:
-            BorderRadius.circular(17),
+        borderRadius: BorderRadius.circular(17),
 
         child: Padding(
-          padding:
-              const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
 
           child: Column(
-            crossAxisAlignment:
-                CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
 
             children: [
               Row(
@@ -712,56 +570,38 @@ class CardAtividade extends StatelessWidget {
                     width: 48,
                     height: 48,
 
-                    decoration:
-                        BoxDecoration(
-                      color: atividade.cor
-                          .withValues(alpha: 0.1),
+                    decoration: BoxDecoration(
+                      color: atividade.cor.withValues(alpha: 0.1),
 
-                      borderRadius:
-                          BorderRadius.circular(
-                        15,
-                      ),
+                      borderRadius: BorderRadius.circular(15),
                     ),
 
                     child: Icon(
-                      Icons
-                          .calendar_month_outlined,
-                      color:
-                          atividade.cor,
+                      Icons.calendar_month_outlined,
+                      color: atividade.cor,
                     ),
                   ),
 
-                  const SizedBox(
-                    width: 13,
-                  ),
+                  const SizedBox(width: 13),
 
                   Expanded(
                     child: Column(
-                      crossAxisAlignment:
-                          CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
 
                       children: [
                         Text(
                           atividade.nome,
-                          style:
-                              const TextStyle(
+                          style: const TextStyle(
                             fontSize: 18,
-                            fontWeight:
-                                FontWeight.w600,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
 
-                        const SizedBox(
-                          height: 4,
-                        ),
+                        const SizedBox(height: 4),
 
                         Text(
                           atividade.professor,
-                          style:
-                              const TextStyle(
-                            color:
-                                Colors.black54,
-                          ),
+                          style: const TextStyle(color: Colors.black54),
                         ),
                       ],
                     ),
@@ -769,51 +609,29 @@ class CardAtividade extends StatelessWidget {
                 ],
               ),
 
-              const SizedBox(
-                height: 15,
-              ),
+              const SizedBox(height: 15),
 
               Text(
                 atividade.descricao,
-                style:
-                    const TextStyle(
-                  color:
-                      Colors.black54,
-                ),
+                style: const TextStyle(color: Colors.black54),
               ),
 
-              const SizedBox(
-                height: 15,
-              ),
+              const SizedBox(height: 15),
 
-              Text(
-                '${atividade.horario} • ${atividade.dias}',
-              ),
+              Text('${atividade.horario} • ${atividade.dias}'),
 
-              const SizedBox(
-                height: 8,
-              ),
+              const SizedBox(height: 8),
 
-              Text(
-                '${atividade.inscritos} / ${atividade.vagas} vagas',
-              ),
+              Text('${atividade.inscritos} / ${atividade.vagas} vagas'),
 
-              const SizedBox(
-                height: 8,
-              ),
+              const SizedBox(height: 8),
 
-              LinearProgressIndicator(
-                value: ocupacao,
-                color: atividade.cor,
-              ),
+              LinearProgressIndicator(value: ocupacao, color: atividade.cor),
 
-              const SizedBox(
-                height: 10,
-              ),
+              const SizedBox(height: 10),
 
               Row(
-                mainAxisAlignment:
-                    MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.end,
 
                 children: [
                   IconButton(
@@ -822,8 +640,7 @@ class CardAtividade extends StatelessWidget {
 
                     icon: const Icon(
                       Icons.edit_outlined,
-                      color:
-                          Color(0xFF5552A6),
+                      color: Color(0xFF5552A6),
                     ),
                   ),
 
@@ -831,10 +648,7 @@ class CardAtividade extends StatelessWidget {
                     tooltip: 'Excluir',
                     onPressed: onExcluir,
 
-                    icon: const Icon(
-                      Icons.delete_outline,
-                      color: Colors.red,
-                    ),
+                    icon: const Icon(Icons.delete_outline, color: Colors.red),
                   ),
                 ],
               ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../../models/atividade_model.dart';
 import '../../../services/aluno_data_service.dart';
@@ -21,8 +22,10 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
     'Bolsa Alimentação',
   ];
 
+  List<Atividade> get atividades => atividadesMock;
+
   List<String> get atividadesDisponiveis =>
-      atividadesMock.map((atividade) => atividade.nome).toList();
+      atividades.map((atividade) => atividade.nome).toList();
 
   List<Map<String, dynamic>> get alunos => AlunoDataService.instance.alunos;
 
@@ -213,18 +216,70 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
               ),
             ],
           ),
-          const Divider(height: 24),
-          Text(
-            'Bolsas (${bolsas.length})',
-            style: const TextStyle(
-              color: Color(0xFF565A9A),
-              fontWeight: FontWeight.w600,
-            ),
+          const Divider(height: 28),
+          Row(
+            children: [
+              const Icon(
+                Icons.calendar_month_outlined,
+                color: Color(0xFFC56BE0),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                'Atividades (${atividades.length})',
+                style: const TextStyle(
+                  color: Color(0xFFC56BE0),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: 8),
+          if (atividades.isEmpty)
+            const Text(
+              'Nenhuma atividade atribuída.',
+              style: TextStyle(color: Colors.black54),
+            )
+          else
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: atividades.map((atividade) {
+                return Chip(
+                  avatar: const Icon(
+                    Icons.directions_run,
+                    size: 18,
+                    color: Color(0xFFC56BE0),
+                  ),
+                  label: Text(atividade),
+                  onDeleted: () {
+                    _atualizarDados(() => atividades.remove(atividade));
+                  },
+                );
+              }).toList(),
+            ),
+          const SizedBox(height: 20),
+          Row(
+            children: [
+              const Icon(
+                Icons.workspace_premium_outlined,
+                color: Color(0xFF565A9A),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                'Bolsas (${bolsas.length})',
+                style: const TextStyle(
+                  color: Color(0xFF565A9A),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
           if (bolsas.isEmpty)
             const Text(
-              'Nenhuma bolsa atribuída',
+              'Nenhuma bolsa atribuída.',
               style: TextStyle(color: Colors.black54),
             )
           else
@@ -236,24 +291,11 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
                   avatar: const Icon(
                     Icons.workspace_premium_outlined,
                     size: 18,
+                    color: Color(0xFF565A9A),
                   ),
                   label: Text(bolsa),
                   onDeleted: () {
                     _atualizarDados(() => bolsas.remove(bolsa));
-                  },
-                );
-              }).toList(),
-            ),
-          const SizedBox(height: 8),
-          if (atividades.isNotEmpty)
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: atividades.map((atividade) {
-                return Chip(
-                  label: Text(atividade),
-                  onDeleted: () {
-                    _atualizarDados(() => atividades.remove(atividade));
                   },
                 );
               }).toList(),
@@ -424,6 +466,7 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
     final responsavel = TextEditingController();
     final telefone = TextEditingController();
     final email = TextEditingController();
+    final senha = TextEditingController();
 
     showDialog(
       context: context,
@@ -435,7 +478,16 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
               children: [
                 TextField(
                   controller: nome,
-                  decoration: const InputDecoration(labelText: 'Nome'),
+                  maxLength: 80,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp(r'[a-zA-ZÀ-ÿ\s]')),
+                  ],
+                  decoration: const InputDecoration(
+                    labelText: 'Nome do aluno',
+                    prefixIcon: Icon(Icons.person_outline),
+                    border: OutlineInputBorder(),
+                    counterText: '',
+                  ),
                 ),
                 TextField(
                   controller: idade,
@@ -455,6 +507,17 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
                   keyboardType: TextInputType.emailAddress,
                   decoration: const InputDecoration(labelText: 'E-mail'),
                 ),
+                TextField(
+                  controller: senha,
+                  obscureText: true,
+                  maxLength: 64,
+                  decoration: const InputDecoration(
+                    labelText: 'Senha',
+                    prefixIcon: Icon(Icons.lock_outline),
+                    border: OutlineInputBorder(),
+                    counterText: '',
+                  ),
+                ),
               ],
             ),
           ),
@@ -469,6 +532,10 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
                   _mensagem('Informe um e-mail válido para o aluno.');
                   return;
                 }
+                if (senha.text.trim().length < 6) {
+                  _mensagem('A senha precisa ter pelo menos 6 caracteres.');
+                  return;
+                }
                 _atualizarDados(() {
                   alunos.add({
                     'id': _novoIdAluno(),
@@ -477,6 +544,7 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
                     'responsavel': responsavel.text.trim(),
                     'telefone': telefone.text.trim(),
                     'email': email.text.trim().toLowerCase(),
+                    'alunoSenha': senha.text,
                     'presenca': 100,
                     'atividades': <String>[],
                     'bolsas': <String>[],
@@ -488,6 +556,7 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
                 responsavel.dispose();
                 telefone.dispose();
                 email.dispose();
+                senha.dispose();
               },
               child: const Text('Adicionar'),
             ),

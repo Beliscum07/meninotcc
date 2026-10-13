@@ -181,7 +181,7 @@ class DoadorPerfil extends StatelessWidget {
               ),
               TextField(
                 controller: email,
-                maxLength: 120,
+                maxLength: 254,
                 keyboardType: TextInputType.emailAddress,
                 decoration: const InputDecoration(labelText: 'E-mail'),
               ),

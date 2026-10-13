@@ -181,6 +181,7 @@ class _AdminBolsasState extends State<AdminBolsas> {
       padding: const EdgeInsets.all(12),
 
       child: TextField(
+               maxLength: 15,
         onChanged: (valor) {
           setState(() {
             pesquisa = valor;

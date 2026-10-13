@@ -101,6 +101,7 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
     return Padding(
       padding: const EdgeInsets.all(12),
       child: TextField(
+               maxLength: 15,
         controller: buscaController,
         onChanged: (valor) => setState(() => busca = valor),
         decoration: InputDecoration(
@@ -490,19 +491,23 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
                   ),
                 ),
                 TextField(
+                  maxLength: 3,
                   controller: idade,
                   keyboardType: TextInputType.number,
                   decoration: const InputDecoration(labelText: 'Idade'),
                 ),
                 TextField(
+                  maxLength: 100,
                   controller: responsavel,
                   decoration: const InputDecoration(labelText: 'Responsável'),
                 ),
                 TextField(
+                  maxLength: 15,
                   controller: telefone,
                   decoration: const InputDecoration(labelText: 'Telefone'),
                 ),
                 TextField(
+                  maxLength: 254,
                   controller: email,
                   keyboardType: TextInputType.emailAddress,
                   decoration: const InputDecoration(labelText: 'E-mail'),
@@ -591,23 +596,28 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
             child: Column(
               children: [
                 TextField(
+                  maxLength: 100,
                   controller: nome,
                   decoration: const InputDecoration(labelText: 'Nome'),
                 ),
                 TextField(
+                  maxLength: 3,
                   controller: idade,
                   keyboardType: TextInputType.number,
                   decoration: const InputDecoration(labelText: 'Idade'),
                 ),
                 TextField(
+                  maxLength: 100,
                   controller: responsavel,
                   decoration: const InputDecoration(labelText: 'Responsável'),
                 ),
                 TextField(
+                  maxLength: 15,
                   controller: telefone,
                   decoration: const InputDecoration(labelText: 'Telefone'),
                 ),
                 TextField(
+                  maxLength: 254,
                   controller: email,
                   keyboardType: TextInputType.emailAddress,
                   decoration: const InputDecoration(labelText: 'E-mail'),

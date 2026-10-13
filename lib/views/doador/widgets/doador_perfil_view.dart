@@ -193,6 +193,7 @@ class DoadorPerfil extends StatelessWidget {
               ),
               if (editarSenha) ...[
                 TextField(
+                  maxLength: 64,
                   controller: senhaAtual,
                   obscureText: true,
                   decoration: const InputDecoration(labelText: 'Senha atual'),
@@ -206,6 +207,7 @@ class DoadorPerfil extends StatelessWidget {
                   ),
                 ),
                 TextField(
+                  maxLength: 64,
                   controller: confirmarSenha,
                   obscureText: true,
                   decoration: const InputDecoration(

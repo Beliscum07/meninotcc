@@ -673,6 +673,7 @@ class _AlunoPerfilViewState extends State<AlunoPerfilView> {
             child: Column(
               children: [
                 TextField(
+                  maxLength: 100,
                   controller: nomeController,
 
                   decoration: const InputDecoration(
@@ -684,6 +685,7 @@ class _AlunoPerfilViewState extends State<AlunoPerfilView> {
                 const SizedBox(height: 12),
 
                 TextField(
+                  maxLength: 254,
                   controller: emailController,
 
                   decoration: const InputDecoration(
@@ -695,6 +697,7 @@ class _AlunoPerfilViewState extends State<AlunoPerfilView> {
                 const SizedBox(height: 12),
 
                 TextField(
+                  maxLength: 15,
                   controller: telefoneController,
 
                   decoration: const InputDecoration(
@@ -706,6 +709,7 @@ class _AlunoPerfilViewState extends State<AlunoPerfilView> {
                 const SizedBox(height: 12),
 
                 TextField(
+                  maxLength: 100,
                   controller: enderecoController,
 
                   decoration: const InputDecoration(
@@ -786,6 +790,7 @@ class _AlunoPerfilViewState extends State<AlunoPerfilView> {
 
             children: [
               TextField(
+                maxLength: 64,
                 controller: senhaAtual,
 
                 obscureText: true,
@@ -794,6 +799,7 @@ class _AlunoPerfilViewState extends State<AlunoPerfilView> {
               ),
 
               TextField(
+                maxLength: 64,
                 controller: novaSenha,
 
                 obscureText: true,
@@ -802,6 +808,7 @@ class _AlunoPerfilViewState extends State<AlunoPerfilView> {
               ),
 
               TextField(
+                maxLength: 64,
                 controller: confirmarSenha,
 
                 obscureText: true,

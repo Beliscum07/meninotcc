@@ -187,7 +187,7 @@ class DoadorPerfil extends StatelessWidget {
               ),
               TextField(
                 controller: telefone,
-                maxLength: 20,
+                maxLength: 15,
                 keyboardType: TextInputType.phone,
                 decoration: const InputDecoration(labelText: 'Telefone'),
               ),

@@ -356,6 +356,7 @@ class _LoginDoadorPageState extends State<LoginDoadorPage> {
         const SizedBox(height: 10),
 
         TextField(
+          maxLength: 150,
           controller: controller,
           obscureText: obscureText,
 

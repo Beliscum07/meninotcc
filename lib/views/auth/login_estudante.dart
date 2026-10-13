@@ -248,6 +248,7 @@ class _LoginEstudantePageState extends State<LoginEstudantePage> {
         const SizedBox(height: 10),
 
         TextField(
+          maxLength: 150,
           controller: controller,
           obscureText: obscureText,
           style: const TextStyle(

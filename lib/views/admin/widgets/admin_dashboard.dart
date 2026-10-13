@@ -428,6 +428,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextField(
+                  maxLength: 150,
                   controller: totalController,
                   decoration: const InputDecoration(
                     labelText: 'Total do mês',
@@ -436,6 +437,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 ),
                 const SizedBox(height: 15),
                 TextField(
+                  maxLength: 150,
                   controller: doadoresController,
                   keyboardType: TextInputType.number,
                   decoration: const InputDecoration(
@@ -482,12 +484,14 @@ class _AdminDashboardState extends State<AdminDashboard> {
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
+                maxLength: 15,
                 controller: atualController,
                 keyboardType: TextInputType.number,
                 decoration: const InputDecoration(labelText: 'Valor atual'),
               ),
               const SizedBox(height: 12),
               TextField(
+                maxLength: 15,
                 controller: totalController,
                 keyboardType: TextInputType.number,
                 decoration: const InputDecoration(labelText: 'Meta total'),
@@ -555,6 +559,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 10),
                   child: TextField(
+                           maxLength: 15,
                     controller: controllers[mes],
                     keyboardType: const TextInputType.numberWithOptions(
                       decimal: true,
@@ -626,14 +631,17 @@ class _AdminDashboardState extends State<AdminDashboard> {
             child: Column(
               children: [
                 TextField(
+                  maxLength: 100,
                   controller: nome,
                   decoration: const InputDecoration(labelText: 'Nome'),
                 ),
                 TextField(
+                  maxLength: 30,
                   controller: data,
                   decoration: const InputDecoration(labelText: 'Data'),
                 ),
                 TextField(
+                  maxLength: 15,
                   controller: valor,
                   decoration: const InputDecoration(
                     labelText: 'Valor',
@@ -641,6 +649,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                   ),
                 ),
                 TextField(
+                  maxLength: 100,
                   controller: metodo,
                   decoration: const InputDecoration(labelText: 'Método'),
                 ),
@@ -697,18 +706,22 @@ class _AdminDashboardState extends State<AdminDashboard> {
             child: Column(
               children: [
                 TextField(
+                  maxLength: 100,
                   controller: nome,
                   decoration: const InputDecoration(labelText: 'Nome'),
                 ),
                 TextField(
+                  maxLength: 30,
                   controller: data,
                   decoration: const InputDecoration(labelText: 'Data'),
                 ),
                 TextField(
+                  maxLength: 15,
                   controller: valor,
                   decoration: const InputDecoration(labelText: 'Valor'),
                 ),
                 TextField(
+                  maxLength: 100,
                   controller: metodo,
                   decoration: const InputDecoration(labelText: 'Método'),
                 ),

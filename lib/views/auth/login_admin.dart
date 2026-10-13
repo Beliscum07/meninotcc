@@ -113,6 +113,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
 
                       // CAMPO EMAIL — atualiza a variável `email` local
                       TextField(
+                        maxLength: 254,
                         onChanged: (valor) => email = valor,
                         keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
@@ -132,6 +133,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
 
                       // CAMPO SENHA — atualiza a variável `senha` local
                       TextField(
+                        maxLength: 64,
                         onChanged: (valor) => senha = valor,
                         obscureText: !_senhaVisivel,
                         decoration: InputDecoration(

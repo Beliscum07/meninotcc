@@ -124,7 +124,7 @@ class _AdminAtividadesPageState extends State<AdminAtividadesPage> {
       padding: const EdgeInsets.all(12),
 
       child: TextField(
-          maxLength: 4,
+        maxLength: 100,
         onChanged: (valor) {
           setState(() {
             pesquisa = valor;

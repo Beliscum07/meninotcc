@@ -124,6 +124,7 @@ class _AdminAtividadesPageState extends State<AdminAtividadesPage> {
       padding: const EdgeInsets.all(12),
 
       child: TextField(
+          maxLength: 4,
         onChanged: (valor) {
           setState(() {
             pesquisa = valor;
@@ -263,6 +264,7 @@ class _AdminAtividadesPageState extends State<AdminAtividadesPage> {
                     'Inscritos',
                     Icons.people_outline,
                     tipo: TextInputType.number,
+                    maxLength: 4,
                   ),
 
                   _campo(
@@ -270,6 +272,7 @@ class _AdminAtividadesPageState extends State<AdminAtividadesPage> {
                     'Vagas',
                     Icons.event_seat_outlined,
                     tipo: TextInputType.number,
+                    maxLength: 4,
                   ),
                 ],
               ),

@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import '../../../controllers/controller/auth_controller.dart';
 
@@ -181,13 +182,13 @@ class DoadorPerfil extends StatelessWidget {
               ),
               TextField(
                 controller: email,
-                maxLength: 120,
+                maxLength: 254,
                 keyboardType: TextInputType.emailAddress,
                 decoration: const InputDecoration(labelText: 'E-mail'),
               ),
               TextField(
                 controller: telefone,
-                maxLength: 20,
+                maxLength: 15,
                 keyboardType: TextInputType.phone,
                 decoration: const InputDecoration(labelText: 'Telefone'),
               ),
@@ -195,6 +196,7 @@ class DoadorPerfil extends StatelessWidget {
                 TextField(
                   controller: senhaAtual,
                   obscureText: true,
+                  maxLength: 64,
                   decoration: const InputDecoration(labelText: 'Senha atual'),
                 ),
                 TextField(
@@ -208,6 +210,7 @@ class DoadorPerfil extends StatelessWidget {
                 TextField(
                   controller: confirmarSenha,
                   obscureText: true,
+                  maxLength: 64,
                   decoration: const InputDecoration(
                     labelText: 'Confirmar nova senha',
                   ),

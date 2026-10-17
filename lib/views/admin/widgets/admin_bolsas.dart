@@ -181,6 +181,7 @@ class _AdminBolsasState extends State<AdminBolsas> {
       padding: const EdgeInsets.all(12),
 
       child: TextField(
+          maxLength: 100,
         onChanged: (valor) {
           setState(() {
             pesquisa = valor;
@@ -561,6 +562,7 @@ class _AdminBolsasState extends State<AdminBolsas> {
                         'Beneficiários',
                         Icons.people_outline,
                         tipo: TextInputType.number,
+                        maxLength: 4,
                       ),
 
                       _campo(
@@ -570,6 +572,7 @@ class _AdminBolsasState extends State<AdminBolsas> {
                         tipo: const TextInputType.numberWithOptions(
                           decimal: true,
                         ),
+                        maxLength: 15,
                       ),
 
                       SwitchListTile(

@@ -102,6 +102,7 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
       padding: const EdgeInsets.all(12),
       child: TextField(
         controller: buscaController,
+        maxLength: 100,
         onChanged: (valor) => setState(() => busca = valor),
         decoration: InputDecoration(
           hintText: 'Buscar aluno...',
@@ -479,9 +480,6 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
                 TextField(
                   controller: nome,
                   maxLength: 80,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp(r'[a-zA-ZÀ-ÿ\s]')),
-                  ],
                   decoration: const InputDecoration(
                     labelText: 'Nome do aluno',
                     prefixIcon: Icon(Icons.person_outline),
@@ -492,19 +490,28 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
                 TextField(
                   controller: idade,
                   keyboardType: TextInputType.number,
+                  maxLength: 3,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   decoration: const InputDecoration(labelText: 'Idade'),
                 ),
                 TextField(
                   controller: responsavel,
+                  maxLength: 100,
                   decoration: const InputDecoration(labelText: 'Responsável'),
                 ),
                 TextField(
                   controller: telefone,
+                  maxLength: 15,
+                  keyboardType: TextInputType.phone,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp(r'[0-9+() -]')),
+                  ],
                   decoration: const InputDecoration(labelText: 'Telefone'),
                 ),
                 TextField(
                   controller: email,
                   keyboardType: TextInputType.emailAddress,
+                  maxLength: 254,
                   decoration: const InputDecoration(labelText: 'E-mail'),
                 ),
                 TextField(
@@ -528,8 +535,19 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
             ),
             ElevatedButton(
               onPressed: () {
-                if (!_emailValido(email.text.trim())) {
-                  _mensagem('Informe um e-mail válido para o aluno.');
+                final erro = _validarDadosAluno(
+                  nome: nome.text,
+                  idade: idade.text,
+                  responsavel: responsavel.text,
+                  telefone: telefone.text,
+                  email: email.text,
+                );
+                if (erro != null) {
+                  _mensagem(erro);
+                  return;
+                }
+                if (senha.text.trim().isEmpty) {
+                  _mensagem('Informe uma senha para o aluno.');
                   return;
                 }
                 if (senha.text.trim().length < 6) {
@@ -592,24 +610,34 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
               children: [
                 TextField(
                   controller: nome,
+                  maxLength: 80,
                   decoration: const InputDecoration(labelText: 'Nome'),
                 ),
                 TextField(
                   controller: idade,
                   keyboardType: TextInputType.number,
+                  maxLength: 3,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   decoration: const InputDecoration(labelText: 'Idade'),
                 ),
                 TextField(
                   controller: responsavel,
+                  maxLength: 100,
                   decoration: const InputDecoration(labelText: 'Responsável'),
                 ),
                 TextField(
                   controller: telefone,
+                  maxLength: 15,
+                  keyboardType: TextInputType.phone,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp(r'[0-9+() -]')),
+                  ],
                   decoration: const InputDecoration(labelText: 'Telefone'),
                 ),
                 TextField(
                   controller: email,
                   keyboardType: TextInputType.emailAddress,
+                  maxLength: 254,
                   decoration: const InputDecoration(labelText: 'E-mail'),
                 ),
               ],
@@ -622,8 +650,15 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
             ),
             ElevatedButton(
               onPressed: () {
-                if (!_emailValido(email.text.trim())) {
-                  _mensagem('Informe um e-mail válido para o aluno.');
+                final erro = _validarDadosAluno(
+                  nome: nome.text,
+                  idade: idade.text,
+                  responsavel: responsavel.text,
+                  telefone: telefone.text,
+                  email: email.text,
+                );
+                if (erro != null) {
+                  _mensagem(erro);
                   return;
                 }
                 _atualizarDados(() {
@@ -686,8 +721,43 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
     );
   }
 
+  String? _validarDadosAluno({
+    required String nome,
+    required String idade,
+    required String responsavel,
+    required String telefone,
+    required String email,
+  }) {
+    final nomeLimpo = nome.trim();
+    final idadeNumerica = int.tryParse(idade);
+    final emailLimpo = email.trim();
+    final telefoneLimpo = telefone.trim();
+
+    if (nomeLimpo.isEmpty) return 'Informe o nome do aluno.';
+    if (nomeLimpo.length > 80) {
+      return 'O nome do aluno pode ter no máximo 80 caracteres.';
+    }
+    if (idadeNumerica == null || idadeNumerica < 0 || idadeNumerica > 999) {
+      return 'Informe uma idade válida entre 0 e 999.';
+    }
+    if (responsavel.trim().length > 100) {
+      return 'O nome do responsável pode ter no máximo 100 caracteres.';
+    }
+    if (telefoneLimpo.length > 15 ||
+        !RegExp(r'^[0-9+() -]*$').hasMatch(telefoneLimpo)) {
+      return 'Informe um telefone com até 15 caracteres usando apenas números e + ( ) - ou espaços.';
+    }
+    if (!_emailValido(emailLimpo)) {
+      return 'Informe um e-mail válido para o aluno.';
+    }
+    return null;
+  }
+
   bool _emailValido(String valor) =>
-      RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(valor);
+      valor.length <= 254 &&
+      RegExp(
+        r'^[^@\s.]+(?:\.[^@\s.]+)*@[^@\s.]+(?:\.[^@\s.]+)+$',
+      ).hasMatch(valor);
 
   void _enviarMensagem(Map<String, dynamic> aluno) {
     final destinatario = aluno['email']?.toString().trim() ?? '';
@@ -727,7 +797,12 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
           ),
           FilledButton(
             onPressed: () async {
-              if (assunto.text.trim().isEmpty || corpo.text.trim().isEmpty) {
+              if (assunto.text.trim().isEmpty) {
+                _mensagem('Informe o assunto da mensagem.');
+                return;
+              }
+              if (corpo.text.trim().isEmpty) {
+                _mensagem('Informe o conteúdo da mensagem.');
                 return;
               }
               Navigator.pop(dialogContext);

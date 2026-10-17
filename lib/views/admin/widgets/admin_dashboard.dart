@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class AdminDashboard extends StatefulWidget {
   const AdminDashboard({super.key});
@@ -178,13 +179,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
   }
 
   Widget _buildMonthlyGoal() {
-    final atual =
-        double.tryParse(metaAtual.replaceAll('.', '').replaceAll(',', '.')) ??
-        0;
-
-    final total =
-        double.tryParse(metaTotal.replaceAll('.', '').replaceAll(',', '.')) ??
-        1;
+    final atual = _parseValor(metaAtual) ?? 0;
+    final total = _parseValor(metaTotal) ?? 1;
 
     final progresso = (atual / total).clamp(0.0, 1.0);
 
@@ -429,6 +425,11 @@ class _AdminDashboardState extends State<AdminDashboard> {
               children: [
                 TextField(
                   controller: totalController,
+                  maxLength: 15,
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
+                  inputFormatters: [_valorInputFormatter()],
                   decoration: const InputDecoration(
                     labelText: 'Total do mês',
                     prefixText: 'R\$ ',
@@ -438,6 +439,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 TextField(
                   controller: doadoresController,
                   keyboardType: TextInputType.number,
+                  maxLength: 4,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   decoration: const InputDecoration(
                     labelText: 'Doadores ativos',
                   ),
@@ -454,9 +457,21 @@ class _AdminDashboardState extends State<AdminDashboard> {
             ),
             ElevatedButton(
               onPressed: () {
+                final total = _parseValor(totalController.text);
+                final doadores = int.tryParse(doadoresController.text);
+                if (total == null || total < 0) {
+                  _mensagem('Informe um total mensal válido e não negativo.');
+                  return;
+                }
+                if (doadores == null || doadores < 0 || doadores > 9999) {
+                  _mensagem(
+                    'Informe uma quantidade válida de doadores (0 a 9999).',
+                  );
+                  return;
+                }
                 setState(() {
-                  totalMes = 'R\$ ${totalController.text}';
-                  doadoresAtivos = doadoresController.text;
+                  totalMes = 'R\$ ${totalController.text.trim()}';
+                  doadoresAtivos = doadores.toString();
                 });
 
                 Navigator.pop(dialogContext);
@@ -483,13 +498,21 @@ class _AdminDashboardState extends State<AdminDashboard> {
             children: [
               TextField(
                 controller: atualController,
-                keyboardType: TextInputType.number,
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
+                maxLength: 15,
+                inputFormatters: [_valorInputFormatter()],
                 decoration: const InputDecoration(labelText: 'Valor atual'),
               ),
               const SizedBox(height: 12),
               TextField(
                 controller: totalController,
-                keyboardType: TextInputType.number,
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
+                maxLength: 15,
+                inputFormatters: [_valorInputFormatter()],
                 decoration: const InputDecoration(labelText: 'Meta total'),
               ),
             ],
@@ -503,21 +526,17 @@ class _AdminDashboardState extends State<AdminDashboard> {
             ),
             ElevatedButton(
               onPressed: () {
+                final atual = _parseValor(atualController.text);
+                final total = _parseValor(totalController.text);
+                if (atual == null || total == null || atual < 0 || total <= 0) {
+                  _mensagem(
+                    'Informe valores válidos e não negativos; a meta total deve ser maior que zero.',
+                  );
+                  return;
+                }
                 setState(() {
-                  metaAtual = atualController.text;
-                  metaTotal = totalController.text;
-
-                  final atual =
-                      double.tryParse(
-                        metaAtual.replaceAll('.', '').replaceAll(',', '.'),
-                      ) ??
-                      0;
-
-                  final total =
-                      double.tryParse(
-                        metaTotal.replaceAll('.', '').replaceAll(',', '.'),
-                      ) ??
-                      1;
+                  metaAtual = atualController.text.trim();
+                  metaTotal = totalController.text.trim();
 
                   porcentagem =
                       '${((atual / total) * 100).toStringAsFixed(1)}%';
@@ -559,6 +578,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
                     keyboardType: const TextInputType.numberWithOptions(
                       decimal: true,
                     ),
+                    maxLength: 15,
+                    inputFormatters: [_valorInputFormatter()],
                     decoration: InputDecoration(
                       labelText: 'Doações em $mes',
                       prefixText: 'R\$ ',
@@ -580,9 +601,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
               final valores = <String, double>{};
               for (final item in meses) {
                 final mes = item['mes'] as String;
-                final valor = double.tryParse(
-                  controllers[mes]!.text.replaceAll(',', '.'),
-                );
+                final valor = _parseValor(controllers[mes]!.text);
                 if (valor == null || valor < 0) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
@@ -611,6 +630,50 @@ class _AdminDashboardState extends State<AdminDashboard> {
       ? 'R\$ ${(valor / 1000).toStringAsFixed(1)}k'
       : 'R\$ ${valor.toStringAsFixed(0)}';
 
+  TextInputFormatter _valorInputFormatter() => TextInputFormatter.withFunction((
+    oldValue,
+    newValue,
+  ) {
+    return RegExp(r'^[0-9.,]*$').hasMatch(newValue.text) ? newValue : oldValue;
+  });
+
+  double? _parseValor(String entrada) {
+    final texto = entrada.trim();
+    if (texto.isEmpty ||
+        texto.length > 15 ||
+        !RegExp(r'^[0-9.,]+$').hasMatch(texto)) {
+      return null;
+    }
+
+    late final String normalizado;
+    if (texto.contains(',') && texto.contains('.')) {
+      if (!RegExp(r'^\d{1,3}(?:\.\d{3})+,\d+$').hasMatch(texto)) {
+        return null;
+      }
+      normalizado = texto.replaceAll('.', '').replaceAll(',', '.');
+    } else if (texto.contains(',')) {
+      if (!RegExp(r'^\d+(?:,\d+)?$').hasMatch(texto)) return null;
+      normalizado = texto.replaceAll(',', '.');
+    } else if (texto.contains('.')) {
+      if (RegExp(r'^\d{1,3}(?:\.\d{3})+$').hasMatch(texto)) {
+        normalizado = texto.replaceAll('.', '');
+      } else if (RegExp(r'^\d+(?:\.\d+)?$').hasMatch(texto)) {
+        normalizado = texto;
+      } else {
+        return null;
+      }
+    } else {
+      normalizado = texto;
+    }
+
+    final valor = double.tryParse(normalizado);
+    return valor != null && valor.isFinite ? valor : null;
+  }
+
+  void _mensagem(String texto) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(texto)));
+  }
+
   void _adicionarDoacao() {
     final nome = TextEditingController();
     final valor = TextEditingController();
@@ -627,14 +690,21 @@ class _AdminDashboardState extends State<AdminDashboard> {
               children: [
                 TextField(
                   controller: nome,
+                  maxLength: 100,
                   decoration: const InputDecoration(labelText: 'Nome'),
                 ),
                 TextField(
                   controller: data,
+                  maxLength: 30,
                   decoration: const InputDecoration(labelText: 'Data'),
                 ),
                 TextField(
                   controller: valor,
+                  maxLength: 15,
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
+                  inputFormatters: [_valorInputFormatter()],
                   decoration: const InputDecoration(
                     labelText: 'Valor',
                     prefixText: 'R\$ ',
@@ -642,6 +712,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 ),
                 TextField(
                   controller: metodo,
+                  maxLength: 50,
                   decoration: const InputDecoration(labelText: 'Método'),
                 ),
               ],
@@ -656,12 +727,35 @@ class _AdminDashboardState extends State<AdminDashboard> {
             ),
             ElevatedButton(
               onPressed: () {
+                final nomeLimpo = nome.text.trim();
+                final dataLimpa = data.text.trim();
+                final metodoLimpo = metodo.text.trim();
+                final valorNumerico = _parseValor(valor.text);
+                if (nomeLimpo.isEmpty ||
+                    dataLimpa.isEmpty ||
+                    metodoLimpo.isEmpty ||
+                    valor.text.trim().isEmpty) {
+                  _mensagem('Preencha nome, data, valor e método da doação.');
+                  return;
+                }
+                if (nomeLimpo.length > 100 ||
+                    dataLimpa.length > 30 ||
+                    metodoLimpo.length > 50) {
+                  _mensagem('Confira os limites dos campos da doação.');
+                  return;
+                }
+                if (valorNumerico == null || valorNumerico < 0) {
+                  _mensagem(
+                    'Informe um valor de doação válido e não negativo.',
+                  );
+                  return;
+                }
                 setState(() {
                   doacoes.add({
-                    'nome': nome.text,
-                    'data': data.text,
-                    'valor': 'R\$ ${valor.text}',
-                    'metodo': metodo.text,
+                    'nome': nomeLimpo,
+                    'data': dataLimpa,
+                    'valor': 'R\$ ${valor.text.trim()}',
+                    'metodo': metodoLimpo,
                   });
                 });
 
@@ -698,18 +792,26 @@ class _AdminDashboardState extends State<AdminDashboard> {
               children: [
                 TextField(
                   controller: nome,
+                  maxLength: 100,
                   decoration: const InputDecoration(labelText: 'Nome'),
                 ),
                 TextField(
                   controller: data,
+                  maxLength: 30,
                   decoration: const InputDecoration(labelText: 'Data'),
                 ),
                 TextField(
                   controller: valor,
+                  maxLength: 15,
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
+                  inputFormatters: [_valorInputFormatter()],
                   decoration: const InputDecoration(labelText: 'Valor'),
                 ),
                 TextField(
                   controller: metodo,
+                  maxLength: 50,
                   decoration: const InputDecoration(labelText: 'Método'),
                 ),
               ],
@@ -724,12 +826,35 @@ class _AdminDashboardState extends State<AdminDashboard> {
             ),
             ElevatedButton(
               onPressed: () {
+                final nomeLimpo = nome.text.trim();
+                final dataLimpa = data.text.trim();
+                final metodoLimpo = metodo.text.trim();
+                final valorNumerico = _parseValor(valor.text);
+                if (nomeLimpo.isEmpty ||
+                    dataLimpa.isEmpty ||
+                    metodoLimpo.isEmpty ||
+                    valor.text.trim().isEmpty) {
+                  _mensagem('Preencha nome, data, valor e método da doação.');
+                  return;
+                }
+                if (nomeLimpo.length > 100 ||
+                    dataLimpa.length > 30 ||
+                    metodoLimpo.length > 50) {
+                  _mensagem('Confira os limites dos campos da doação.');
+                  return;
+                }
+                if (valorNumerico == null || valorNumerico < 0) {
+                  _mensagem(
+                    'Informe um valor de doação válido e não negativo.',
+                  );
+                  return;
+                }
                 setState(() {
                   doacoes[index] = {
-                    'nome': nome.text,
-                    'data': data.text,
-                    'valor': 'R\$ ${valor.text}',
-                    'metodo': metodo.text,
+                    'nome': nomeLimpo,
+                    'data': dataLimpa,
+                    'valor': 'R\$ ${valor.text.trim()}',
+                    'metodo': metodoLimpo,
                   };
                 });
 

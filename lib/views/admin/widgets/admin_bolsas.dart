@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class Bolsa {
   String nome;
@@ -181,6 +182,7 @@ class _AdminBolsasState extends State<AdminBolsas> {
       padding: const EdgeInsets.all(12),
 
       child: TextField(
+        maxLength: 100,
         onChanged: (valor) {
           setState(() {
             pesquisa = valor;
@@ -561,6 +563,10 @@ class _AdminBolsasState extends State<AdminBolsas> {
                         'Beneficiários',
                         Icons.people_outline,
                         tipo: TextInputType.number,
+                        maxLength: 4,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
                       ),
 
                       _campo(
@@ -570,6 +576,8 @@ class _AdminBolsasState extends State<AdminBolsas> {
                         tipo: const TextInputType.numberWithOptions(
                           decimal: true,
                         ),
+                        maxLength: 15,
+                        inputFormatters: [_valorInputFormatter()],
                       ),
 
                       SwitchListTile(
@@ -603,14 +611,14 @@ class _AdminBolsasState extends State<AdminBolsas> {
 
                     final descricao = descricaoController.text.trim();
 
-                    final beneficiarios =
-                        int.tryParse(beneficiariosController.text) ?? 0;
+                    final beneficiarios = int.tryParse(
+                      beneficiariosController.text,
+                    );
 
-                    final valor =
-                        double.tryParse(
-                          valorController.text.replaceAll(',', '.'),
-                        ) ??
-                        0;
+                    final valorTexto = valorController.text.trim();
+                    final valor = double.tryParse(
+                      valorTexto.replaceAll(',', '.'),
+                    );
 
                     if (nome.isEmpty) {
                       _mensagem('Informe o nome da bolsa.');
@@ -631,9 +639,27 @@ class _AdminBolsasState extends State<AdminBolsas> {
                       return;
                     }
 
-                    if (beneficiarios < 0 || valor < 0) {
-                      _mensagem('Preencha os dados corretamente.');
+                    if (beneficiarios == null ||
+                        beneficiarios < 0 ||
+                        beneficiarios > 9999) {
+                      _mensagem(
+                        'Informe uma quantidade válida de beneficiários (0 a 9999).',
+                      );
+                      return;
+                    }
 
+                    if (valor == null || !valor.isFinite || valor < 0) {
+                      _mensagem(
+                        'Informe um valor mensal válido e não negativo.',
+                      );
+
+                      return;
+                    }
+
+                    if (valorTexto.length > 15) {
+                      _mensagem(
+                        'O valor mensal pode ter no máximo 15 caracteres.',
+                      );
                       return;
                     }
 
@@ -729,6 +755,7 @@ class _AdminBolsasState extends State<AdminBolsas> {
     TextInputType tipo = TextInputType.text,
     int maxLines = 1,
     int? maxLength,
+    List<TextInputFormatter>? inputFormatters,
   }) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
@@ -738,6 +765,7 @@ class _AdminBolsasState extends State<AdminBolsas> {
         keyboardType: tipo,
         maxLines: maxLines,
         maxLength: maxLength,
+        inputFormatters: inputFormatters,
 
         decoration: InputDecoration(
           labelText: label,
@@ -748,6 +776,13 @@ class _AdminBolsasState extends State<AdminBolsas> {
       ),
     );
   }
+
+  TextInputFormatter _valorInputFormatter() => TextInputFormatter.withFunction((
+    oldValue,
+    newValue,
+  ) {
+    return RegExp(r'^[0-9.,]*$').hasMatch(newValue.text) ? newValue : oldValue;
+  });
 
   String _dinheiro(double valor) {
     return 'R\$ ${valor.toStringAsFixed(2).replaceAll('.', ',')}';

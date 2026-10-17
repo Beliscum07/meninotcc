@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../../models/atividade_model.dart';
 import '../../../services/aluno_data_service.dart';
@@ -124,6 +125,7 @@ class _AdminAtividadesPageState extends State<AdminAtividadesPage> {
       padding: const EdgeInsets.all(12),
 
       child: TextField(
+        maxLength: 100,
         onChanged: (valor) {
           setState(() {
             pesquisa = valor;
@@ -233,7 +235,7 @@ class _AdminAtividadesPageState extends State<AdminAtividadesPage> {
                     professorController,
                     'Professor',
                     Icons.person_outline,
-                    maxLength: 80,
+                    maxLength: 100,
                   ),
 
                   _campo(
@@ -263,6 +265,8 @@ class _AdminAtividadesPageState extends State<AdminAtividadesPage> {
                     'Inscritos',
                     Icons.people_outline,
                     tipo: TextInputType.number,
+                    maxLength: 4,
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   ),
 
                   _campo(
@@ -270,6 +274,8 @@ class _AdminAtividadesPageState extends State<AdminAtividadesPage> {
                     'Vagas',
                     Icons.event_seat_outlined,
                     tipo: TextInputType.number,
+                    maxLength: 4,
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   ),
                 ],
               ),
@@ -301,12 +307,41 @@ class _AdminAtividadesPageState extends State<AdminAtividadesPage> {
 
                 final dias = diasController.text.trim();
 
-                final inscritos = int.tryParse(inscritosController.text) ?? 0;
+                final inscritos = int.tryParse(inscritosController.text);
 
-                final vagas = int.tryParse(vagasController.text) ?? 0;
+                final vagas = int.tryParse(vagasController.text);
 
-                if (nome.isEmpty || professor.isEmpty || vagas <= 0) {
+                if (nome.isEmpty || professor.isEmpty || vagas == null) {
                   _mensagem('Preencha nome, professor e vagas.');
+                  return;
+                }
+
+                if (nome.length > 80 || professor.length > 100) {
+                  _mensagem(
+                    'O nome da atividade deve ter até 80 caracteres e o professor até 100.',
+                  );
+                  return;
+                }
+                if (descricao.length > 500 ||
+                    horario.length > 20 ||
+                    dias.length > 50) {
+                  _mensagem(
+                    'Confira os limites da descrição, horário e dias da atividade.',
+                  );
+                  return;
+                }
+
+                if (inscritos == null || inscritos < 0 || inscritos > 9999) {
+                  _mensagem(
+                    'Informe uma quantidade válida de inscritos (0 a 9999).',
+                  );
+                  return;
+                }
+
+                if (vagas <= 0 || vagas > 9999) {
+                  _mensagem(
+                    'Informe uma quantidade válida de vagas (1 a 9999).',
+                  );
                   return;
                 }
 
@@ -494,6 +529,7 @@ class _AdminAtividadesPageState extends State<AdminAtividadesPage> {
     TextInputType tipo = TextInputType.text,
     int maxLines = 1,
     int? maxLength,
+    List<TextInputFormatter>? inputFormatters,
   }) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
@@ -503,6 +539,7 @@ class _AdminAtividadesPageState extends State<AdminAtividadesPage> {
         keyboardType: tipo,
         maxLines: maxLines,
         maxLength: maxLength,
+        inputFormatters: inputFormatters,
 
         decoration: InputDecoration(
           labelText: label,

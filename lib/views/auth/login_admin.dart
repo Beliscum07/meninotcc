@@ -32,21 +32,21 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
       tipo: TipoUsuario.admin,
     );
 
-    if (loginValido) {
-      setState(() {
-        mensagem = 'Login realizado com sucesso! Redirecionando...';
-      });
-
-      if (mounted) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => const AdminHomeView()),
-        );
-      }
-    } else {
+    if (!loginValido) {
       setState(() {
         mensagem = 'E-mail ou senha incorretos.';
       });
+      return;
     }
+
+    if (!mounted) return;
+
+    setState(() {
+      mensagem = 'Login realizado com sucesso! Redirecionando...';
+    });
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (_) => const AdminHomeView()),
+    );
   }
 
   @override

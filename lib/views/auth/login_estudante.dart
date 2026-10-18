@@ -28,26 +28,27 @@ class _LoginEstudantePageState extends State<LoginEstudantePage> {
       tipo: TipoUsuario.aluno,
     );
 
-    if (loginValido) {
-      if (mounted) {
-        final usuario = authController.usuarioLogado;
-        final alunoId = AlunoDataService.instance.idDoAlunoSelecionado(
-          id: usuario?.id,
-          nome: usuario?.nome,
-        );
-
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => StudentHomeView(alunoId: alunoId),
-          ),
-        );
-      }
-    } else {
+    if (!loginValido) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Email ou senha incorretos.')),
       );
+      return;
     }
+
+    if (!mounted) return;
+
+    final usuario = authController.usuarioLogado;
+    final alunoId = AlunoDataService.instance.idDoAlunoSelecionado(
+      id: usuario?.id,
+      nome: usuario?.nome,
+    );
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => StudentHomeView(alunoId: alunoId),
+      ),
+    );
   }
 
   @override

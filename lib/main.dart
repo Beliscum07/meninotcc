@@ -112,6 +112,7 @@ class TelaInicial extends StatelessWidget {
                   ),
                   const SizedBox(height: 80),
 
+
                   // ==================================================
                   // ACESSO ADMINISTRADOR
                   // ==================================================

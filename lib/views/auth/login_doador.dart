@@ -39,18 +39,19 @@ class _LoginDoadorPageState extends State<LoginDoadorPage> {
       tipo: TipoUsuario.doador,
     );
 
-    if (loginValido) {
-      if (mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const DonorHomeView()),
-        );
-      }
-    } else {
+    if (!loginValido) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Email ou senha incorretos.')),
       );
+      return;
     }
+
+    if (!mounted) return;
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const DonorHomeView()),
+    );
   }
 
   @override

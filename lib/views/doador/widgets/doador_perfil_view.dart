@@ -1,6 +1,7 @@
-
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../../../controllers/controller/auth_controller.dart';
+import '../../../services/auth_service.dart';
 
 class DoadorPerfil extends StatelessWidget {
   const DoadorPerfil({super.key});
@@ -237,24 +238,40 @@ class DoadorPerfil extends StatelessWidget {
               if (editarSenha && novaSenha.text != confirmarSenha.text) {
                 return;
               }
-              final salvo = await _auth.atualizarDoadorPerfil(
-                nome: nome.text,
-                email: email.text,
-                telefone: telefone.text,
-                senhaAtual: editarSenha ? senhaAtual.text : null,
-                novaSenha: editarSenha ? novaSenha.text : null,
-              );
-              if (!dialogContext.mounted) return;
-              Navigator.pop(dialogContext);
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    salvo
-                        ? 'Perfil atualizado.'
-                        : 'Não foi possível atualizar. Confira a senha atual e o e-mail.',
+              final emailAlterado =
+                  email.text.trim().toLowerCase() != _auth.doadorLogado?.email;
+              try {
+                final salvo = await _auth.atualizarDoadorPerfil(
+                  nome: nome.text,
+                  email: email.text,
+                  telefone: telefone.text,
+                  senhaAtual: editarSenha ? senhaAtual.text : null,
+                  novaSenha: editarSenha ? novaSenha.text : null,
+                );
+                if (!dialogContext.mounted) return;
+                Navigator.pop(dialogContext);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      salvo
+                          ? emailAlterado
+                                ? 'Perfil atualizado. Confirme o novo e-mail pelo link enviado.'
+                                : 'Perfil atualizado.'
+                          : 'Não foi possível atualizar. Confira a senha atual e o e-mail.',
+                    ),
                   ),
-                ),
-              );
+                );
+              } on FirebaseAuthException catch (error) {
+                if (!dialogContext.mounted) return;
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text(AuthService.mensagemErro(error))),
+                );
+              } on FormatException catch (error) {
+                if (!dialogContext.mounted) return;
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text(AuthService.mensagemErro(error))),
+                );
+              }
             },
             child: const Text('Salvar'),
           ),

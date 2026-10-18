@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
+import '../../../controllers/controller/auth_controller.dart';
+import '../../../services/auth_service.dart';
 import '../../../services/aluno_data_service.dart';
 
 class AlunoPerfilView extends StatefulWidget {
@@ -821,7 +824,15 @@ class _AlunoPerfilViewState extends State<AlunoPerfilView> {
             ),
 
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
+                if (senhaAtual.text.isEmpty || novaSenha.text.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Preencha todos os campos de senha.'),
+                    ),
+                  );
+                  return;
+                }
                 if (novaSenha.text != confirmarSenha.text) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('As senhas não são iguais.')),
@@ -830,11 +841,50 @@ class _AlunoPerfilViewState extends State<AlunoPerfilView> {
                   return;
                 }
 
-                Navigator.pop(context);
+                if (novaSenha.text.length < 6) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                        'A senha precisa ter pelo menos 6 caracteres.',
+                      ),
+                    ),
+                  );
+                  return;
+                }
 
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Senha alterada!')),
-                );
+                final usuario = AuthService.instance.currentUser;
+                if (usuario == null || usuario.email == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Não há uma conta autenticada.'),
+                    ),
+                  );
+                  return;
+                }
+
+                try {
+                  await AuthService.instance.updateCurrentUser(
+                    name: usuario.displayName ?? '',
+                    email: usuario.email!,
+                    currentPassword: senhaAtual.text,
+                    newPassword: novaSenha.text,
+                  );
+                  if (!context.mounted) return;
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Senha alterada.')),
+                  );
+                } on FirebaseAuthException catch (error) {
+                  if (!context.mounted) return;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(AuthService.mensagemErro(error))),
+                  );
+                } on FormatException catch (error) {
+                  if (!context.mounted) return;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(AuthService.mensagemErro(error))),
+                  );
+                }
               },
 
               child: const Text('Salvar'),
@@ -869,19 +919,18 @@ class _AlunoPerfilViewState extends State<AlunoPerfilView> {
             ElevatedButton(
               style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
 
-              onPressed: () {
-                Navigator.pop(context);
-
-                // Aqui futuramente:
-                //
-                // Controller
-                //    ↓
-                // logout()
-                //
-                // Por enquanto apenas
-                // voltamos para a tela anterior.
-
-                Navigator.pop(context);
+              onPressed: () async {
+                try {
+                  await AuthController().logout();
+                  if (!context.mounted) return;
+                  Navigator.pop(context);
+                  Navigator.of(context).popUntil((route) => route.isFirst);
+                } on FirebaseAuthException catch (error) {
+                  if (!context.mounted) return;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(AuthService.mensagemErro(error))),
+                  );
+                }
               },
 
               child: const Text('Sair', style: TextStyle(color: Colors.white)),

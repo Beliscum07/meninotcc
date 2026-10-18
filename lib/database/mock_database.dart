@@ -1,32 +1,4 @@
 class MockDatabase {
-  static const List<Map<String, dynamic>> usuarios = [
-    {
-      'id': 'admin-1',
-      'nome': 'Administrador ONG',
-      'email': 'admin@ong.com',
-      'senha': 'admin123',
-      'tipo': 'admin',
-    },
-    {
-      'id': 'aluno-1',
-      'nome': 'Aluno Teste',
-      'email': 'aluno@ong.com',
-      'senha': 'aluno123',
-      'tipo': 'aluno',
-    },
-  ];
-
-  static const List<Map<String, dynamic>> doadores = [
-    {
-      'id': 'doador-1',
-      'nome': 'Doador Teste',
-      'email': 'doador@ong.com',
-      'senha': 'doador123',
-      'telefone': '(16) 99999-0000',
-      'totalDoado': 120.0,
-    },
-  ];
-
   static const List<Map<String, dynamic>> notificacoes = [
     {
       'id': 'noti-1',

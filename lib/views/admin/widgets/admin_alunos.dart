@@ -467,7 +467,6 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
     final responsavel = TextEditingController();
     final telefone = TextEditingController();
     final email = TextEditingController();
-    final senha = TextEditingController();
 
     showDialog(
       context: context,
@@ -514,17 +513,6 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
                   maxLength: 254,
                   decoration: const InputDecoration(labelText: 'E-mail'),
                 ),
-                TextField(
-                  controller: senha,
-                  obscureText: true,
-                  maxLength: 64,
-                  decoration: const InputDecoration(
-                    labelText: 'Senha',
-                    prefixIcon: Icon(Icons.lock_outline),
-                    border: OutlineInputBorder(),
-                    counterText: '',
-                  ),
-                ),
               ],
             ),
           ),
@@ -546,14 +534,6 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
                   _mensagem(erro);
                   return;
                 }
-                if (senha.text.trim().isEmpty) {
-                  _mensagem('Informe uma senha para o aluno.');
-                  return;
-                }
-                if (senha.text.trim().length < 6) {
-                  _mensagem('A senha precisa ter pelo menos 6 caracteres.');
-                  return;
-                }
                 _atualizarDados(() {
                   alunos.add({
                     'id': _novoIdAluno(),
@@ -562,7 +542,6 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
                     'responsavel': responsavel.text.trim(),
                     'telefone': telefone.text.trim(),
                     'email': email.text.trim().toLowerCase(),
-                    'alunoSenha': senha.text,
                     'presenca': 100,
                     'atividades': <String>[],
                     'bolsas': <String>[],
@@ -574,7 +553,6 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
                 responsavel.dispose();
                 telefone.dispose();
                 email.dispose();
-                senha.dispose();
               },
               child: const Text('Adicionar'),
             ),

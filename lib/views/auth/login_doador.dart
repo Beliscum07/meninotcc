@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../controllers/controller/auth_controller.dart';
 import '../../models/usuario_model.dart';
+import '../../services/auth_service.dart';
 import '../doador/doador_home_view.dart';
 import 'cadastro_doador.dart';
 
@@ -19,6 +21,7 @@ class _LoginDoadorPageState extends State<LoginDoadorPage> {
   final AuthController authController = AuthController();
 
   bool mostrarSenha = false;
+  bool carregando = false;
 
   @override
   void dispose() {
@@ -29,29 +32,53 @@ class _LoginDoadorPageState extends State<LoginDoadorPage> {
   }
 
   // FUNÇÃO DE LOGIN
-  void entrar() {
+  Future<void> entrar() async {
+    if (carregando) return;
     final email = emailController.text.trim();
-    final senha = senhaController.text.trim();
+    final senha = senhaController.text;
 
-    final loginValido = authController.login(
-      email: email,
-      senha: senha,
-      tipo: TipoUsuario.doador,
-    );
-
-    if (!loginValido) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Email ou senha incorretos.')),
+    setState(() => carregando = true);
+    try {
+      await authController.login(
+        email: email,
+        senha: senha,
+        tipo: TipoUsuario.doador,
       );
-      return;
+      if (!mounted) return;
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const DonorHomeView()),
+      );
+    } on FirebaseAuthException catch (error) {
+      _mostrarMensagem(AuthService.mensagemErro(error));
+    } on FormatException catch (error) {
+      _mostrarMensagem(AuthService.mensagemErro(error));
+    } finally {
+      if (mounted) setState(() => carregando = false);
     }
+  }
 
+  Future<void> recuperarSenha() async {
+    final email = emailController.text.trim();
+    setState(() => carregando = true);
+    try {
+      await AuthService.instance.sendPasswordResetEmail(email);
+      _mostrarMensagem('Enviamos um link de recuperação para seu e-mail.');
+    } on FirebaseAuthException catch (error) {
+      _mostrarMensagem(AuthService.mensagemErro(error));
+    } on FormatException catch (error) {
+      _mostrarMensagem(AuthService.mensagemErro(error));
+    } finally {
+      if (mounted) setState(() => carregando = false);
+    }
+  }
+
+  void _mostrarMensagem(String mensagem) {
     if (!mounted) return;
-
-    Navigator.pushReplacement(
+    ScaffoldMessenger.of(
       context,
-      MaterialPageRoute(builder: (context) => const DonorHomeView()),
-    );
+    ).showSnackBar(SnackBar(content: Text(mensagem)));
   }
 
   @override
@@ -179,7 +206,7 @@ class _LoginDoadorPageState extends State<LoginDoadorPage> {
                         height: 78,
 
                         child: ElevatedButton(
-                          onPressed: entrar,
+                          onPressed: carregando ? null : entrar,
 
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFFE17BEA),
@@ -191,18 +218,25 @@ class _LoginDoadorPageState extends State<LoginDoadorPage> {
                             ),
                           ),
 
-                          child: const Text(
-                            'Entrar',
-
-                            style: TextStyle(
-                              fontSize: 28,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                          child: carregando
+                              ? const CircularProgressIndicator(
+                                  color: Colors.white,
+                                )
+                              : const Text(
+                                  'Entrar',
+                                  style: TextStyle(
+                                    fontSize: 28,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                         ),
                       ),
 
                       const SizedBox(height: 35),
+                      TextButton(
+                        onPressed: carregando ? null : recuperarSenha,
+                        child: const Text('Esqueci minha senha'),
+                      ),
 
                       // CREDENCIAIS DE TESTE
                       Container(
@@ -220,23 +254,12 @@ class _LoginDoadorPageState extends State<LoginDoadorPage> {
 
                           children: [
                             const Text(
-                              'Credenciais de teste:',
+                              'Acesse com seu e-mail e senha cadastrados.',
 
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
                                 color: Color(0xFF4A4A4A),
-                              ),
-                            ),
-
-                            const SizedBox(height: 14),
-
-                            const Text(
-                              'E-mail: doador@ong.com   |   Senha: doador123',
-
-                              style: TextStyle(
-                                fontSize: 17,
-                                color: Color(0xFF555555),
                               ),
                             ),
 
@@ -256,15 +279,17 @@ class _LoginDoadorPageState extends State<LoginDoadorPage> {
                                   ),
 
                                   TextButton(
-                                    onPressed: () {
-                                      Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              const DoadorCadastroPage(),
-                                        ),
-                                      );
-                                    },
+                                    onPressed: carregando
+                                        ? null
+                                        : () {
+                                            Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const DoadorCadastroPage(),
+                                              ),
+                                            );
+                                          },
 
                                     child: const Text(
                                       'Cadastre-se aqui',

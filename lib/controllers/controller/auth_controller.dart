@@ -1,9 +1,11 @@
+import 'dart:async';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 
-import '../../database/mock_database.dart';
-import '../../database/local_storage.dart';
 import '../../models/doador_model.dart';
 import '../../models/usuario_model.dart';
+import '../../services/auth_service.dart';
 
 class AuthController extends ChangeNotifier {
   static final AuthController _instance = AuthController._internal();
@@ -11,34 +13,15 @@ class AuthController extends ChangeNotifier {
   factory AuthController() => _instance;
 
   AuthController._internal() {
-    _carregarSessao();
+    _atualizarSessao(_authService.currentUser);
+    _authStateSubscription = _authService.authStateChanges.listen(
+      _atualizarSessao,
+    );
   }
 
-  final List<Usuario> _usuarios = MockDatabase.usuarios
-      .map(
-        (usuario) => Usuario(
-          id: usuario['id'] as String,
-          nome: usuario['nome'] as String,
-          email: usuario['email'] as String,
-          senha: usuario['senha'] as String,
-          tipo: _tipoPorString(usuario['tipo'] as String),
-        ),
-      )
-      .toList();
-
-  final List<Doador> _doadores = MockDatabase.doadores
-      .map(
-        (doador) => Doador(
-          id: doador['id'] as String,
-          nome: doador['nome'] as String,
-          email: doador['email'] as String,
-          senha: doador['senha'] as String,
-          telefone: doador['telefone'] as String,
-          totalDoado: (doador['totalDoado'] as num?)?.toDouble() ?? 0.0,
-        ),
-      )
-      .toList();
-
+  final AuthService _authService = AuthService.instance;
+  late final StreamSubscription<User?> _authStateSubscription;
+  TipoUsuario _tipoSessao = TipoUsuario.aluno;
   Usuario? _usuarioLogado;
   Doador? _doadorLogado;
 
@@ -46,141 +29,32 @@ class AuthController extends ChangeNotifier {
   Doador? get doadorLogado => _doadorLogado;
   bool get estaLogado => _usuarioLogado != null || _doadorLogado != null;
 
-  Future<void> _carregarSessao() async {
-    final usuarioMap = await LocalStorage.carregarUsuarioLogado();
-    final doadorMap = await LocalStorage.carregarDoadorLogado();
-
-    if (usuarioMap != null) {
-      _usuarioLogado = Usuario(
-        id: usuarioMap['id'] as String,
-        nome: usuarioMap['nome'] as String,
-        email: usuarioMap['email'] as String,
-        senha: usuarioMap['senha'] as String,
-        tipo: _tipoPorString(usuarioMap['tipo'] as String),
-      );
-    }
-
-    if (doadorMap != null) {
-      _doadorLogado = Doador(
-        id: doadorMap['id'] as String,
-        nome: doadorMap['nome'] as String,
-        email: doadorMap['email'] as String,
-        senha: doadorMap['senha'] as String,
-        telefone: doadorMap['telefone'] as String,
-        totalDoado: (doadorMap['totalDoado'] as num?)?.toDouble() ?? 0.0,
-      );
-    }
-
-    notifyListeners();
-  }
-
-  static TipoUsuario _tipoPorString(String valor) {
-    switch (valor) {
-      case 'admin':
-        return TipoUsuario.admin;
-      case 'doador':
-        return TipoUsuario.doador;
-      case 'aluno':
-      default:
-        return TipoUsuario.aluno;
-    }
-  }
-
-  bool login({
+  Future<void> login({
     required String email,
     required String senha,
     required TipoUsuario tipo,
-  }) {
-    final emailNormalizado = email.trim().toLowerCase();
-    final senhaNormalizada = senha.trim();
-
-    if (tipo == TipoUsuario.doador) {
-      for (final doador in _doadores) {
-        final emailCorreto = doador.email.toLowerCase() == emailNormalizado;
-        final senhaCorreta = doador.senha == senhaNormalizada;
-
-        if (emailCorreto && senhaCorreta) {
-          _doadorLogado = doador;
-          _usuarioLogado = null;
-          LocalStorage.salvarDoadorLogado({
-            'id': doador.id,
-            'nome': doador.nome,
-            'email': doador.email,
-            'senha': doador.senha,
-            'telefone': doador.telefone,
-            'totalDoado': doador.totalDoado,
-          });
-          notifyListeners();
-          return true;
-        }
-      }
-      return false;
-    }
-
-    for (final usuario in _usuarios) {
-      final emailCorreto = usuario.email.toLowerCase() == emailNormalizado;
-      final senhaCorreta = usuario.senha == senhaNormalizada;
-      final tipoCorreto = usuario.tipo == tipo;
-
-      if (emailCorreto && senhaCorreta && tipoCorreto) {
-        _usuarioLogado = usuario;
-        _doadorLogado = null;
-        LocalStorage.salvarUsuarioLogado({
-          'id': usuario.id,
-          'nome': usuario.nome,
-          'email': usuario.email,
-          'senha': usuario.senha,
-          'tipo': usuario.tipo.name,
-        });
-        notifyListeners();
-        return true;
-      }
-    }
-
-    return false;
+  }) async {
+    _tipoSessao = tipo;
+    final credential = await _authService.signIn(email: email, password: senha);
+    _atualizarSessao(credential.user);
   }
 
-  bool cadastrarDoador({
+  Future<void> cadastrarDoador({
     required String nome,
     required String email,
     required String telefone,
     required String senha,
-  }) {
-    final nomeFinal = nome.trim();
-    final emailFinal = email.trim().toLowerCase();
-    final telefoneFinal = telefone.trim();
-    final senhaFinal = senha.trim();
-
-    if (nomeFinal.isEmpty ||
-        emailFinal.isEmpty ||
-        telefoneFinal.isEmpty ||
-        senhaFinal.isEmpty) {
-      return false;
+  }) async {
+    if (nome.trim().isEmpty || telefone.trim().isEmpty) {
+      throw const FormatException('Preencha todos os campos.');
     }
-
-    final emailExisteEmUsuarios = _usuarios.any(
-      (usuario) => usuario.email.toLowerCase() == emailFinal,
+    final credential = await _authService.createAccount(
+      name: nome,
+      email: email,
+      password: senha,
     );
-
-    final emailExisteEmDoadores = _doadores.any(
-      (doador) => doador.email.toLowerCase() == emailFinal,
-    );
-
-    if (emailExisteEmUsuarios || emailExisteEmDoadores) {
-      return false;
-    }
-
-    final novoDoador = Doador(
-      id: 'doador-${_doadores.length + 1}',
-      nome: nomeFinal,
-      email: emailFinal,
-      telefone: telefoneFinal,
-      senha: senhaFinal,
-    );
-
-    _doadores.add(novoDoador);
-    notifyListeners();
-    return true;
+    _tipoSessao = TipoUsuario.doador;
+    _atualizarSessao(credential.user, telefone: telefone.trim());
   }
 
   Future<bool> atualizarDoadorPerfil({
@@ -199,53 +73,31 @@ class AuthController extends ChangeNotifier {
     if (nomeFinal.isEmpty || emailFinal.isEmpty || telefoneFinal.isEmpty) {
       return false;
     }
-    if (senhaAtual != null &&
-        senhaAtual.isNotEmpty &&
-        senhaAtual != atual.senha) {
-      return false;
-    }
-    if (novaSenha != null && novaSenha.isNotEmpty && novaSenha.length < 6) {
+    if (novaSenha?.isNotEmpty == true && novaSenha!.length < 6) {
       return false;
     }
 
-    final emailEmUso =
-        _usuarios.any((usuario) => usuario.email.toLowerCase() == emailFinal) ||
-        _doadores.any(
-          (doador) =>
-              doador.id != atual.id && doador.email.toLowerCase() == emailFinal,
-        );
-    if (emailEmUso) return false;
+    await _authService.updateCurrentUser(
+      name: nomeFinal,
+      email: emailFinal,
+      currentPassword: senhaAtual,
+      newPassword: novaSenha,
+    );
 
     final atualizado = Doador(
       id: atual.id,
       nome: nomeFinal,
-      email: emailFinal,
+      email: _authService.currentUser?.email ?? atual.email,
       telefone: telefoneFinal,
-      senha: novaSenha?.isNotEmpty == true ? novaSenha! : atual.senha,
       totalDoado: atual.totalDoado,
     );
-    final index = _doadores.indexWhere((doador) => doador.id == atual.id);
-    if (index >= 0) _doadores[index] = atualizado;
     _doadorLogado = atualizado;
-
-    await LocalStorage.salvarDoadorLogado({
-      'id': atualizado.id,
-      'nome': atualizado.nome,
-      'email': atualizado.email,
-      'senha': atualizado.senha,
-      'telefone': atualizado.telefone,
-      'totalDoado': atualizado.totalDoado,
-    });
-    notifyListeners();
+    _atualizarSessao(_authService.currentUser, telefone: telefoneFinal);
     return true;
   }
 
   void registrarDoacao(double valor) {
-    if (_doadorLogado == null) {
-      return;
-    }
-
-    if (valor <= 0) {
+    if (_doadorLogado == null || valor <= 0) {
       return;
     }
 
@@ -254,9 +106,49 @@ class AuthController extends ChangeNotifier {
   }
 
   Future<void> logout() async {
-    _usuarioLogado = null;
-    _doadorLogado = null;
-    await LocalStorage.limparSessao();
+    await _authService.signOut();
+    _atualizarSessao(null);
+  }
+
+  void _atualizarSessao(User? user, {String? telefone}) {
+    if (user == null) {
+      _usuarioLogado = null;
+      _doadorLogado = null;
+      notifyListeners();
+      return;
+    }
+
+    final nome = user.displayName ?? user.email?.split('@').first ?? '';
+    final email = user.email ?? '';
+    if (_tipoSessao == TipoUsuario.doador) {
+      final doadorAnterior = _doadorLogado;
+      _usuarioLogado = null;
+      _doadorLogado = Doador(
+        id: user.uid,
+        nome: nome,
+        email: email,
+        telefone:
+            telefone ??
+            (doadorAnterior?.id == user.uid ? doadorAnterior!.telefone : ''),
+        totalDoado: doadorAnterior?.id == user.uid
+            ? doadorAnterior!.totalDoado
+            : 0,
+      );
+    } else {
+      _doadorLogado = null;
+      _usuarioLogado = Usuario(
+        id: user.uid,
+        nome: nome,
+        email: email,
+        tipo: _tipoSessao,
+      );
+    }
     notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    unawaited(_authStateSubscription.cancel());
+    super.dispose();
   }
 }

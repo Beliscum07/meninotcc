@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../../controllers/controller/auth_controller.dart';
 import '../../models/usuario_model.dart';
+import '../../services/auth_service.dart';
 import '../admin/admin_home_view.dart';
 
 // Tela de login do administrador — apenas view (sem tocar em controllers)
@@ -18,6 +20,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
   String email = '';
   String senha = '';
   bool _senhaVisivel = false;
+  bool _carregando = false;
 
   // Mensagem de feedback exibida na tela após tentativa de login
   String mensagem = '';
@@ -25,28 +28,62 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
   // Faz o login localmente na view: compara com credenciais de teste.
   // Se válidas, navega para `AdminHomeView`. Caso contrário, atualiza
   // `mensagem` para informar o usuário.
-  void fazerLogin() {
-    final loginValido = authController.login(
-      email: email,
-      senha: senha,
-      tipo: TipoUsuario.admin,
-    );
-
-    if (!loginValido) {
-      setState(() {
-        mensagem = 'E-mail ou senha incorretos.';
-      });
-      return;
-    }
-
-    if (!mounted) return;
-
+  Future<void> fazerLogin() async {
+    if (_carregando) return;
     setState(() {
-      mensagem = 'Login realizado com sucesso! Redirecionando...';
+      _carregando = true;
+      mensagem = '';
     });
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (_) => const AdminHomeView()),
-    );
+    try {
+      await authController.login(
+        email: email,
+        senha: senha,
+        tipo: TipoUsuario.admin,
+      );
+      if (!mounted) return;
+
+      setState(() {
+        mensagem = 'Login realizado com sucesso! Redirecionando...';
+      });
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (_) => const AdminHomeView()),
+      );
+    } on FirebaseAuthException catch (error) {
+      if (mounted) {
+        setState(() => mensagem = AuthService.mensagemErro(error));
+      }
+    } on FormatException catch (error) {
+      if (mounted) {
+        setState(() => mensagem = AuthService.mensagemErro(error));
+      }
+    } finally {
+      if (mounted) setState(() => _carregando = false);
+    }
+  }
+
+  Future<void> recuperarSenha() async {
+    setState(() {
+      _carregando = true;
+      mensagem = '';
+    });
+    try {
+      await AuthService.instance.sendPasswordResetEmail(email);
+      if (mounted) {
+        setState(
+          () => mensagem = 'Enviamos um link de recuperação para seu e-mail.',
+        );
+      }
+    } on FirebaseAuthException catch (error) {
+      if (mounted) {
+        setState(() => mensagem = AuthService.mensagemErro(error));
+      }
+    } on FormatException catch (error) {
+      if (mounted) {
+        setState(() => mensagem = AuthService.mensagemErro(error));
+      }
+    } finally {
+      if (mounted) setState(() => _carregando = false);
+    }
   }
 
   @override
@@ -246,7 +283,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                         width: double.infinity,
                         height: 52,
                         child: ElevatedButton(
-                          onPressed: fazerLogin,
+                          onPressed: _carregando ? null : fazerLogin,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFFE276F0),
                             foregroundColor: Colors.white,
@@ -255,14 +292,27 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                             ),
                             elevation: 2,
                           ),
-                          child: const Text(
-                            'Entrar',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                          child: _carregando
+                              ? const SizedBox(
+                                  width: 22,
+                                  height: 22,
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                    strokeWidth: 2,
+                                  ),
+                                )
+                              : const Text(
+                                  'Entrar',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                         ),
+                      ),
+                      TextButton(
+                        onPressed: _carregando ? null : recuperarSenha,
+                        child: const Text('Esqueci minha senha'),
                       ),
 
                       // MENSAGEM DE FEEDBACK (exibe erro ou sucesso)
@@ -277,7 +327,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
 
                       const SizedBox(height: 24),
 
-                      // CAIXA COM CREDENCIAIS DE TESTE (apenas informativa)
+                      // CAIXA COM ORIENTAÇÃO DE ACESSO
                       Container(
                         width: double.infinity,
                         padding: const EdgeInsets.all(16),
@@ -289,16 +339,11 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Credenciais de teste:',
+                              'Use o e-mail e a senha cadastrados no Firebase.',
                               style: TextStyle(
                                 color: Color(0xFF333333),
                                 fontWeight: FontWeight.w500,
                               ),
-                            ),
-                            SizedBox(height: 8),
-                            Text(
-                              'E-mail: admin@ong.com  |  Senha: admin123',
-                              style: TextStyle(color: Color(0xFF555555)),
                             ),
                           ],
                         ),

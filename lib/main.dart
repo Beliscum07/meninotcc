@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'database/local_storage.dart';
 import 'services/firebase_service.dart';
 import 'views/auth/login_admin.dart';
 import 'views/auth/login_doador.dart';
@@ -7,6 +8,7 @@ import 'views/auth/login_estudante.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  await LocalStorage.limparSessao();
   await FirebaseService.instance.initialize();
 
   runApp(const OngApp());
@@ -107,7 +109,6 @@ class TelaInicial extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 80),
-
 
                   // ==================================================
                   // ACESSO ADMINISTRADOR

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../controllers/controller/auth_controller.dart';
 import '../../services/api_service.dart';
+import '../../services/auth_service.dart';
 import 'login_doador.dart';
 
 class DoadorCadastroPage extends StatefulWidget {
@@ -25,6 +27,7 @@ class _DoadorCadastroPageState extends State<DoadorCadastroPage> {
 
   bool mostrarSenha = false;
   bool mostrarConfirmarSenha = false;
+  bool carregando = false;
 
   @override
   void dispose() {
@@ -38,12 +41,13 @@ class _DoadorCadastroPageState extends State<DoadorCadastroPage> {
   }
 
   // Função responsável pelo cadastro
-  void cadastrar() async {
+  Future<void> cadastrar() async {
+    if (carregando) return;
     final nome = nomeController.text.trim();
     final email = emailController.text.trim();
     final telefone = telefoneController.text.trim();
-    final senha = senhaController.text.trim();
-    final confirmarSenha = confirmarSenhaController.text.trim();
+    final senha = senhaController.text;
+    final confirmarSenha = confirmarSenhaController.text;
 
     // Verifica se algum campo está vazio
     if (nome.isEmpty ||
@@ -67,18 +71,29 @@ class _DoadorCadastroPageState extends State<DoadorCadastroPage> {
       return;
     }
 
-    final cadastroValido = authController.cadastrarDoador(
-      nome: nome,
-      email: email,
-      telefone: telefone,
-      senha: senha,
-    );
-
-    if (!cadastroValido) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Este e-mail já foi cadastrado.')),
+    setState(() => carregando = true);
+    try {
+      await authController.cadastrarDoador(
+        nome: nome,
+        email: email,
+        telefone: telefone,
+        senha: senha,
       );
+      await authController.logout();
+    } on FirebaseAuthException catch (error) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(AuthService.mensagemErro(error))));
       return;
+    } on FormatException catch (error) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(AuthService.mensagemErro(error))));
+      return;
+    } finally {
+      if (mounted) setState(() => carregando = false);
     }
 
     await gmailService.enviarBoasVindas(
@@ -265,7 +280,7 @@ class _DoadorCadastroPageState extends State<DoadorCadastroPage> {
                         height: 78,
 
                         child: ElevatedButton(
-                          onPressed: cadastrar,
+                          onPressed: carregando ? null : cadastrar,
 
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFFE17BEA),
@@ -277,13 +292,17 @@ class _DoadorCadastroPageState extends State<DoadorCadastroPage> {
                             ),
                           ),
 
-                          child: const Text(
-                            'Criar cadastro',
-                            style: TextStyle(
-                              fontSize: 26,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                          child: carregando
+                              ? const CircularProgressIndicator(
+                                  color: Colors.white,
+                                )
+                              : const Text(
+                                  'Criar cadastro',
+                                  style: TextStyle(
+                                    fontSize: 26,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                         ),
                       ),
 

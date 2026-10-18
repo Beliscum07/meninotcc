@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../../controllers/controller/auth_controller.dart';
 import '../../models/usuario_model.dart';
 import '../../services/aluno_data_service.dart';
+import '../../services/auth_service.dart';
 import '../estudante/aluno_home_view.dart';
 
 class LoginEstudantePage extends StatefulWidget {
@@ -17,38 +19,63 @@ class _LoginEstudantePageState extends State<LoginEstudantePage> {
   final AuthController authController = AuthController();
 
   bool mostrarSenha = false;
+  bool carregando = false;
 
-  void entrar() {
+  Future<void> entrar() async {
+    if (carregando) return;
     final email = emailController.text.trim();
-    final senha = senhaController.text.trim();
+    final senha = senhaController.text;
 
-    final loginValido = authController.login(
-      email: email,
-      senha: senha,
-      tipo: TipoUsuario.aluno,
-    );
-
-    if (!loginValido) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Email ou senha incorretos.')),
+    setState(() => carregando = true);
+    try {
+      await authController.login(
+        email: email,
+        senha: senha,
+        tipo: TipoUsuario.aluno,
       );
-      return;
+      if (!mounted) return;
+
+      final usuario = authController.usuarioLogado;
+      final alunoId = AlunoDataService.instance.idDoAlunoSelecionado(
+        id: usuario?.id,
+        nome: usuario?.nome,
+      );
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => StudentHomeView(alunoId: alunoId),
+        ),
+      );
+    } on FirebaseAuthException catch (error) {
+      _mostrarMensagem(AuthService.mensagemErro(error));
+    } on FormatException catch (error) {
+      _mostrarMensagem(AuthService.mensagemErro(error));
+    } finally {
+      if (mounted) setState(() => carregando = false);
     }
+  }
 
+  Future<void> recuperarSenha() async {
+    final email = emailController.text.trim();
+    setState(() => carregando = true);
+    try {
+      await AuthService.instance.sendPasswordResetEmail(email);
+      _mostrarMensagem('Enviamos um link de recuperação para seu e-mail.');
+    } on FirebaseAuthException catch (error) {
+      _mostrarMensagem(AuthService.mensagemErro(error));
+    } on FormatException catch (error) {
+      _mostrarMensagem(AuthService.mensagemErro(error));
+    } finally {
+      if (mounted) setState(() => carregando = false);
+    }
+  }
+
+  void _mostrarMensagem(String mensagem) {
     if (!mounted) return;
-
-    final usuario = authController.usuarioLogado;
-    final alunoId = AlunoDataService.instance.idDoAlunoSelecionado(
-      id: usuario?.id,
-      nome: usuario?.nome,
-    );
-
-    Navigator.pushReplacement(
+    ScaffoldMessenger.of(
       context,
-      MaterialPageRoute(
-        builder: (context) => StudentHomeView(alunoId: alunoId),
-      ),
-    );
+    ).showSnackBar(SnackBar(content: Text(mensagem)));
   }
 
   @override
@@ -149,7 +176,7 @@ class _LoginEstudantePageState extends State<LoginEstudantePage> {
                         width: double.infinity,
                         height: 78,
                         child: ElevatedButton(
-                          onPressed: entrar,
+                          onPressed: carregando ? null : entrar,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFFE17BEA),
                             foregroundColor: Colors.white,
@@ -158,16 +185,24 @@ class _LoginEstudantePageState extends State<LoginEstudantePage> {
                               borderRadius: BorderRadius.circular(24),
                             ),
                           ),
-                          child: const Text(
-                            'Entrar',
-                            style: TextStyle(
-                              fontSize: 28,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                          child: carregando
+                              ? const CircularProgressIndicator(
+                                  color: Colors.white,
+                                )
+                              : const Text(
+                                  'Entrar',
+                                  style: TextStyle(
+                                    fontSize: 28,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                         ),
                       ),
                       const SizedBox(height: 35),
+                      TextButton(
+                        onPressed: carregando ? null : recuperarSenha,
+                        child: const Text('Esqueci minha senha'),
+                      ),
                       Container(
                         width: double.infinity,
                         padding: const EdgeInsets.all(24),
@@ -179,7 +214,7 @@ class _LoginEstudantePageState extends State<LoginEstudantePage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Credenciais de teste:',
+                              'Acesse com seu e-mail e senha cadastrados.',
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
@@ -187,13 +222,6 @@ class _LoginEstudantePageState extends State<LoginEstudantePage> {
                               ),
                             ),
                             SizedBox(height: 14),
-                            Text(
-                              'E-mail: aluno@ong.com   |   Senha: aluno123',
-                              style: TextStyle(
-                                fontSize: 17,
-                                color: Color(0xFF555555),
-                              ),
-                            ),
                           ],
                         ),
                       ),

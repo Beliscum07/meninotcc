@@ -1,6 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 
+class FirestoreOperationException implements Exception {
+  const FirestoreOperationException({
+    required this.code,
+    required this.message,
+    required this.cause,
+  });
+
+  final String code;
+  final String message;
+  final FirebaseException cause;
+
+  @override
+  String toString() => 'FirestoreOperationException($code): $message';
+}
+
 class FirebaseService {
   FirebaseService._();
 
@@ -20,14 +35,12 @@ class FirebaseService {
     required String id,
     required String nome,
     required String email,
-    required String senha,
     required String tipo,
   }) async {
     await firestore.collection('usuarios').doc(id).set({
       'id': id,
       'nome': nome,
       'email': email,
-      'senha': senha,
       'tipo': tipo,
       'createdAt': FieldValue.serverTimestamp(),
     });
@@ -37,7 +50,6 @@ class FirebaseService {
     required String id,
     required String nome,
     required String email,
-    required String senha,
     required String telefone,
     double totalDoado = 0,
   }) async {
@@ -45,11 +57,55 @@ class FirebaseService {
       'id': id,
       'nome': nome,
       'email': email,
-      'senha': senha,
       'telefone': telefone,
       'totalDoado': totalDoado,
       'createdAt': FieldValue.serverTimestamp(),
     });
+  }
+
+  Future<void> incrementarCampo({
+    required String caminhoDocumento,
+    required String campo,
+    required num valor,
+  }) async {
+    final caminho = caminhoDocumento.trim();
+    final segmentosDocumento = caminho.split('/');
+    if (caminho.isEmpty ||
+        caminho != caminhoDocumento ||
+        segmentosDocumento.length.isOdd ||
+        segmentosDocumento.any((segmento) => segmento.isEmpty)) {
+      throw ArgumentError.value(
+        caminhoDocumento,
+        'caminhoDocumento',
+        'Informe o caminho completo de um documento existente.',
+      );
+    }
+    if (campo.trim().isEmpty ||
+        campo != campo.trim() ||
+        campo.split('.').any((segmento) => segmento.isEmpty)) {
+      throw ArgumentError.value(
+        campo,
+        'campo',
+        'Informe um nome de campo válido.',
+      );
+    }
+    if (!valor.isFinite) {
+      throw ArgumentError.value(
+        valor,
+        'valor',
+        'O incremento deve ser um número finito.',
+      );
+    }
+
+    try {
+      await firestore.doc(caminho).update({campo: FieldValue.increment(valor)});
+    } on FirebaseException catch (error) {
+      throw FirestoreOperationException(
+        code: error.code,
+        message: error.message ?? 'Falha ao incrementar o campo no Firestore.',
+        cause: error,
+      );
+    }
   }
 
   Future<DocumentSnapshot<Map<String, dynamic>>> buscarUsuarioPorId(

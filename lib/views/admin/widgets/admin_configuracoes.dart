@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
+import '../../../controllers/controller/auth_controller.dart';
 import '../../../controllers/controller/admin_controller.dart';
+import '../../../services/auth_service.dart';
 import 'admin_notificacoes.dart';
 import '../../auth/login_admin.dart';
 
 class ConfiguracoesPage extends StatelessWidget {
   final AdminController adminController;
 
-  const ConfiguracoesPage({
-    super.key,
-    required this.adminController,
-  });
+  const ConfiguracoesPage({super.key, required this.adminController});
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +53,7 @@ class ConfiguracoesPage extends StatelessWidget {
                     const SizedBox(height: 22),
 
                     // OPÇÕES
-                   _opcoesConfiguracao(context),
+                    _opcoesConfiguracao(context),
 
                     const SizedBox(height: 22),
 
@@ -115,7 +115,6 @@ class ConfiguracoesPage extends StatelessWidget {
           children: [
             Row(
               children: [
-
                 // Avatar
                 Container(
                   width: 61,
@@ -231,20 +230,19 @@ class ConfiguracoesPage extends StatelessWidget {
 
           _divisor(),
 
-      _itemConfiguracao(
-        icone: Icons.notifications_none,
-        titulo: 'Notificações',
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => AdminNotificacoesView(
-                adminController: adminController,
-              ),
-            ),
-          );
-        },
-      ),
+          _itemConfiguracao(
+            icone: Icons.notifications_none,
+            titulo: 'Notificações',
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      AdminNotificacoesView(adminController: adminController),
+                ),
+              );
+            },
+          ),
 
           _divisor(),
 
@@ -390,13 +388,20 @@ class ConfiguracoesPage extends StatelessWidget {
       width: double.infinity,
 
       child: OutlinedButton.icon(
-        onPressed: () {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const AdminLoginPage(),
-            ),
-          );
+        onPressed: () async {
+          try {
+            await AuthController().logout();
+            if (!context.mounted) return;
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const AdminLoginPage()),
+            );
+          } on FirebaseAuthException catch (error) {
+            if (!context.mounted) return;
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(AuthService.mensagemErro(error))),
+            );
+          }
         },
 
         icon: const Icon(Icons.logout, color: Colors.red, size: 20),

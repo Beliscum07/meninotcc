@@ -23,12 +23,17 @@ void main() {
     expect(tester.widget<TextField>(_field('Responsável')).maxLength, 100);
     expect(tester.widget<TextField>(_field('Telefone')).maxLength, 15);
     expect(tester.widget<TextField>(_field('E-mail')).maxLength, 254);
-    expect(tester.widget<TextField>(_field('Senha')).maxLength, 64);
+    expect(
+      find.byWidgetPredicate(
+        (widget) =>
+            widget is TextField && widget.decoration?.labelText == 'Senha',
+      ),
+      findsNothing,
+    );
 
     await tester.enterText(_field('Nome do aluno'), "Ana O'Connor");
     await tester.enterText(_field('Idade'), '12x');
     await tester.enterText(_field('E-mail'), 'email-invalido');
-    await tester.enterText(_field('Senha'), 'senha123');
     await tester.pump();
     expect(tester.widget<TextField>(_field('Idade')).controller!.text, '12');
 

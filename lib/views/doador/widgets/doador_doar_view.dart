@@ -39,11 +39,7 @@ class _DoadorDoarState extends State<DoadorDoar> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(
-                Icons.qr_code_2,
-                size: 220,
-                color: Colors.black,
-              ),
+              const Icon(Icons.qr_code_2, size: 220, color: Colors.black),
               const SizedBox(height: 15),
               const Text(
                 'Escaneie o QR Code para realizar a doação.',
@@ -64,11 +60,9 @@ class _DoadorDoarState extends State<DoadorDoar> {
 
   void copiarPix() {
     // Aqui você poderá colocar o Clipboard futuramente.
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Chave PIX copiada!'),
-      ),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('Chave PIX copiada!')));
   }
 
   void confirmarDoacao() {
@@ -91,10 +85,7 @@ class _DoadorDoarState extends State<DoadorDoar> {
       appBar: AppBar(
         title: const Text(
           'Fazer Doação',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         backgroundColor: const Color(0xFF5552A6),
         foregroundColor: Colors.white,
@@ -106,7 +97,6 @@ class _DoadorDoarState extends State<DoadorDoar> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
             // =========================
             // BANNER
             // =========================
@@ -115,10 +105,7 @@ class _DoadorDoarState extends State<DoadorDoar> {
               padding: const EdgeInsets.all(18),
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
-                  colors: [
-                    Color(0xFFD477E5),
-                    Color(0xFF5754A8),
-                  ],
+                  colors: [Color(0xFFD477E5), Color(0xFF5754A8)],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
@@ -164,10 +151,7 @@ class _DoadorDoarState extends State<DoadorDoar> {
                   const Text(
                     'Cada doação faz a diferença na vida de uma criança. '
                     'Obrigado por acreditar no nosso trabalho!',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
-                    ),
+                    style: TextStyle(color: Colors.white, fontSize: 12),
                   ),
                 ],
               ),
@@ -184,14 +168,11 @@ class _DoadorDoarState extends State<DoadorDoar> {
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: Colors.black12,
-                ),
+                border: Border.all(color: Colors.black12),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -204,10 +185,7 @@ class _DoadorDoarState extends State<DoadorDoar> {
                         ),
                       ),
 
-                      Icon(
-                        Icons.qr_code_2,
-                        color: Colors.pinkAccent.shade100,
-                      ),
+                      Icon(Icons.qr_code_2, color: Colors.pinkAccent.shade100),
                     ],
                   ),
 
@@ -221,16 +199,12 @@ class _DoadorDoarState extends State<DoadorDoar> {
                       onPressed: mostrarQRCode,
                       style: OutlinedButton.styleFrom(
                         foregroundColor: const Color(0xFF5552A6),
-                        side: const BorderSide(
-                          color: Color(0xFF5552A6),
-                        ),
+                        side: const BorderSide(color: Color(0xFF5552A6)),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      child: const Text(
-                        'Mostrar QR Code',
-                      ),
+                      child: const Text('Mostrar QR Code'),
                     ),
                   ),
 
@@ -238,10 +212,7 @@ class _DoadorDoarState extends State<DoadorDoar> {
 
                   const Text(
                     'Ou copie a chave PIX:',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.black54,
-                    ),
+                    style: TextStyle(fontSize: 12, color: Colors.black54),
                   ),
 
                   const SizedBox(height: 6),
@@ -251,22 +222,16 @@ class _DoadorDoarState extends State<DoadorDoar> {
                       Expanded(
                         child: Container(
                           height: 38,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
                           alignment: Alignment.centerLeft,
                           decoration: BoxDecoration(
                             color: const Color(0xFFF1EEF8),
                             borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                              color: Colors.black12,
-                            ),
+                            border: Border.all(color: Colors.black12),
                           ),
                           child: const Text(
                             'ong.criancas@example.com',
-                            style: TextStyle(
-                              fontSize: 12,
-                            ),
+                            style: TextStyle(fontSize: 12),
                           ),
                         ),
                       ),
@@ -306,18 +271,22 @@ class _DoadorDoarState extends State<DoadorDoar> {
               decoration: BoxDecoration(
                 color: const Color(0xFFF1DDC8),
                 borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                  color: const Color(0xFFE5CDB3),
-                ),
+                border: Border.all(color: const Color(0xFFE5CDB3)),
               ),
-              child: const Text(
-                'ℹ️ Após realizar a transferência PIX, clique no botão '
-                '"Confirmar Doação" abaixo. Sua contribuição será registrada '
-                'e você receberá uma confirmação por email.',
-                style: TextStyle(
-                  fontSize: 11,
-                  color: Colors.black54,
-                ),
+              child: const Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(Icons.info_outline, size: 18, color: Colors.black54),
+                  SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      'Após realizar a transferência PIX, clique no botão '
+                      '"Confirmar Doação" abaixo. Sua contribuição será '
+                      'registrada e você receberá uma confirmação por email.',
+                      style: TextStyle(fontSize: 11, color: Colors.black54),
+                    ),
+                  ),
+                ],
               ),
             ),
 

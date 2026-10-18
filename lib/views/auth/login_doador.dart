@@ -43,18 +43,12 @@ class _LoginDoadorPageState extends State<LoginDoadorPage> {
       if (mounted) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(
-            builder: (context) => const DonorHomeView(),
-          ),
+          MaterialPageRoute(builder: (context) => const DonorHomeView()),
         );
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'Email ou senha incorretos.',
-          ),
-        ),
+        const SnackBar(content: Text('Email ou senha incorretos.')),
       );
     }
   }
@@ -69,15 +63,12 @@ class _LoginDoadorPageState extends State<LoginDoadorPage> {
           padding: const EdgeInsets.all(24),
 
           child: ConstrainedBox(
-            constraints: const BoxConstraints(
-              maxWidth: 670,
-            ),
+            constraints: const BoxConstraints(maxWidth: 670),
 
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
 
               children: [
-
                 // BOTÃO VOLTAR
                 Align(
                   alignment: Alignment.centerLeft,
@@ -93,10 +84,7 @@ class _LoginDoadorPageState extends State<LoginDoadorPage> {
                     label: const Text(
                       'Voltar',
 
-                      style: TextStyle(
-                        color: Color(0xFF4656A3),
-                        fontSize: 16,
-                      ),
+                      style: TextStyle(color: Color(0xFF4656A3), fontSize: 16),
                     ),
                   ),
                 ),
@@ -105,12 +93,7 @@ class _LoginDoadorPageState extends State<LoginDoadorPage> {
 
                 // CARD PRINCIPAL
                 Container(
-                  padding: const EdgeInsets.fromLTRB(
-                    48,
-                    36,
-                    48,
-                    40,
-                  ),
+                  padding: const EdgeInsets.fromLTRB(48, 36, 48, 40),
 
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -119,30 +102,12 @@ class _LoginDoadorPageState extends State<LoginDoadorPage> {
 
                   child: Column(
                     children: [
-
                       // ÍCONE
-                      Container(
-                        width: 96,
-                        height: 96,
-
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: const Color(0xFFE17BEA),
-
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.12),
-                              blurRadius: 15,
-                              offset: const Offset(0, 8),
-                            ),
-                          ],
-                        ),
-
-                        child: const Icon(
-                          Icons.favorite,
-                          color: Colors.white,
-                          size: 52,
-                        ),
+                      Image.asset(
+                        'assets/images/logo_menino_barsanulfo.png',
+                        width: 112,
+                        height: 112,
+                        fit: BoxFit.contain,
                       ),
 
                       const SizedBox(height: 28),
@@ -253,7 +218,6 @@ class _LoginDoadorPageState extends State<LoginDoadorPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
 
                           children: [
-
                             const Text(
                               'Credenciais de teste:',
 
@@ -267,7 +231,7 @@ class _LoginDoadorPageState extends State<LoginDoadorPage> {
                             const SizedBox(height: 14),
 
                             const Text(
-                              '📧 doador@ong.com   |   🔑 doador123',
+                              'E-mail: doador@ong.com   |   Senha: doador123',
 
                               style: TextStyle(
                                 fontSize: 17,
@@ -281,7 +245,6 @@ class _LoginDoadorPageState extends State<LoginDoadorPage> {
                             Center(
                               child: Column(
                                 children: [
-
                                   const Text(
                                     'Não tem cadastro?',
 
@@ -342,7 +305,6 @@ class _LoginDoadorPageState extends State<LoginDoadorPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
 
       children: [
-
         Text(
           titulo,
 
@@ -359,23 +321,14 @@ class _LoginDoadorPageState extends State<LoginDoadorPage> {
           controller: controller,
           obscureText: obscureText,
 
-          style: const TextStyle(
-            fontSize: 21,
-          ),
+          style: const TextStyle(fontSize: 21),
 
           decoration: InputDecoration(
             hintText: hint,
 
-            hintStyle: const TextStyle(
-              color: Color(0xFF999999),
-              fontSize: 21,
-            ),
+            hintStyle: const TextStyle(color: Color(0xFF999999), fontSize: 21),
 
-            prefixIcon: Icon(
-              icone,
-              size: 30,
-              color: Colors.grey,
-            ),
+            prefixIcon: Icon(icone, size: 30, color: Colors.grey),
 
             suffixIcon: suffixIcon,
 
@@ -387,26 +340,19 @@ class _LoginDoadorPageState extends State<LoginDoadorPage> {
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(24),
 
-              borderSide: const BorderSide(
-                color: Color(0xFFDAD9E9),
-              ),
+              borderSide: const BorderSide(color: Color(0xFFDAD9E9)),
             ),
 
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(24),
 
-              borderSide: const BorderSide(
-                color: Color(0xFFDAD9E9),
-              ),
+              borderSide: const BorderSide(color: Color(0xFFDAD9E9)),
             ),
 
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(24),
 
-              borderSide: const BorderSide(
-                color: Color(0xFFE17BEA),
-                width: 2,
-              ),
+              borderSide: const BorderSide(color: Color(0xFFE17BEA), width: 2),
             ),
           ),
         ),

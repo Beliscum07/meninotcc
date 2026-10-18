@@ -45,9 +45,7 @@ class _LoginEstudantePageState extends State<LoginEstudantePage> {
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Email ou senha incorretos.'),
-        ),
+        const SnackBar(content: Text('Email ou senha incorretos.')),
       );
     }
   }
@@ -67,9 +65,7 @@ class _LoginEstudantePageState extends State<LoginEstudantePage> {
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
           child: ConstrainedBox(
-            constraints: const BoxConstraints(
-              maxWidth: 670,
-            ),
+            constraints: const BoxConstraints(maxWidth: 670),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -77,13 +73,13 @@ class _LoginEstudantePageState extends State<LoginEstudantePage> {
                   alignment: Alignment.centerLeft,
                   child: TextButton.icon(
                     onPressed: () => Navigator.pop(context),
-                    icon: const Icon(Icons.arrow_back, color: Color(0xFF4656A3)),
+                    icon: const Icon(
+                      Icons.arrow_back,
+                      color: Color(0xFF4656A3),
+                    ),
                     label: const Text(
                       'Voltar',
-                      style: TextStyle(
-                        color: Color(0xFF4656A3),
-                        fontSize: 16,
-                      ),
+                      style: TextStyle(color: Color(0xFF4656A3), fontSize: 16),
                     ),
                   ),
                 ),
@@ -96,25 +92,11 @@ class _LoginEstudantePageState extends State<LoginEstudantePage> {
                   ),
                   child: Column(
                     children: [
-                      Container(
-                        width: 96,
-                        height: 96,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: const Color(0xFFE17BEA),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.12),
-                              blurRadius: 15,
-                              offset: const Offset(0, 8),
-                            ),
-                          ],
-                        ),
-                        child: const Icon(
-                          Icons.favorite,
-                          color: Colors.white,
-                          size: 52,
-                        ),
+                      Image.asset(
+                        'assets/images/logo_menino_barsanulfo.png',
+                        width: 112,
+                        height: 112,
+                        fit: BoxFit.contain,
                       ),
                       const SizedBox(height: 28),
                       const Text(
@@ -205,7 +187,7 @@ class _LoginEstudantePageState extends State<LoginEstudantePage> {
                             ),
                             SizedBox(height: 14),
                             Text(
-                              '📧  aluno@ong.com   |   🔑  aluno123',
+                              'E-mail: aluno@ong.com   |   Senha: aluno123',
                               style: TextStyle(
                                 fontSize: 17,
                                 color: Color(0xFF555555),
@@ -250,20 +232,11 @@ class _LoginEstudantePageState extends State<LoginEstudantePage> {
         TextField(
           controller: controller,
           obscureText: obscureText,
-          style: const TextStyle(
-            fontSize: 21,
-          ),
+          style: const TextStyle(fontSize: 21),
           decoration: InputDecoration(
             hintText: hint,
-            hintStyle: const TextStyle(
-              color: Color(0xFF999999),
-              fontSize: 21,
-            ),
-            prefixIcon: Icon(
-              icone,
-              size: 30,
-              color: Colors.grey,
-            ),
+            hintStyle: const TextStyle(color: Color(0xFF999999), fontSize: 21),
+            prefixIcon: Icon(icone, size: 30, color: Colors.grey),
             suffixIcon: suffixIcon,
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 20,
@@ -271,22 +244,15 @@ class _LoginEstudantePageState extends State<LoginEstudantePage> {
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(24),
-              borderSide: const BorderSide(
-                color: Color(0xFFDAD9E9),
-              ),
+              borderSide: const BorderSide(color: Color(0xFFDAD9E9)),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(24),
-              borderSide: const BorderSide(
-                color: Color(0xFFDAD9E9),
-              ),
+              borderSide: const BorderSide(color: Color(0xFFDAD9E9)),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(24),
-              borderSide: const BorderSide(
-                color: Color(0xFFE17BEA),
-                width: 2,
-              ),
+              borderSide: const BorderSide(color: Color(0xFFE17BEA), width: 2),
             ),
           ),
         ),

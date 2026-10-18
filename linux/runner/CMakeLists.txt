@@ -12,6 +12,25 @@ add_executable(${BINARY_NAME}
   "${FLUTTER_MANAGED_DIR}/generated_plugin_registrant.cc"
 )
 
+find_program(GLIB_COMPILE_RESOURCES glib-compile-resources)
+if(NOT GLIB_COMPILE_RESOURCES)
+  message(FATAL_ERROR "glib-compile-resources is required to build the application icon.")
+endif()
+
+set(APP_ICON_RESOURCE "${CMAKE_CURRENT_BINARY_DIR}/app_icon.gresource.c")
+add_custom_command(
+  OUTPUT "${APP_ICON_RESOURCE}"
+  COMMAND "${GLIB_COMPILE_RESOURCES}"
+    --target="${APP_ICON_RESOURCE}"
+    --generate-source
+    --sourcedir="${CMAKE_CURRENT_SOURCE_DIR}/resources"
+    "${CMAKE_CURRENT_SOURCE_DIR}/resources/app_icon.gresource.xml"
+  DEPENDS
+    "${CMAKE_CURRENT_SOURCE_DIR}/resources/app_icon.gresource.xml"
+    "${CMAKE_CURRENT_SOURCE_DIR}/resources/app_icon.png"
+)
+target_sources(${BINARY_NAME} PRIVATE "${APP_ICON_RESOURCE}")
+
 # Apply the standard set of build settings. This can be removed for applications
 # that need different build settings.
 apply_standard_settings(${BINARY_NAME})

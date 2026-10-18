@@ -52,9 +52,7 @@ class _DoadorCadastroPageState extends State<DoadorCadastroPage> {
         senha.isEmpty ||
         confirmarSenha.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Preencha todos os campos.'),
-        ),
+        const SnackBar(content: Text('Preencha todos os campos.')),
       );
 
       return;
@@ -63,9 +61,7 @@ class _DoadorCadastroPageState extends State<DoadorCadastroPage> {
     // Verifica se as senhas são iguais
     if (senha != confirmarSenha) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('As senhas não são iguais.'),
-        ),
+        const SnackBar(content: Text('As senhas não são iguais.')),
       );
 
       return;
@@ -80,9 +76,7 @@ class _DoadorCadastroPageState extends State<DoadorCadastroPage> {
 
     if (!cadastroValido) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Este e-mail já foi cadastrado.'),
-        ),
+        const SnackBar(content: Text('Este e-mail já foi cadastrado.')),
       );
       return;
     }
@@ -96,9 +90,7 @@ class _DoadorCadastroPageState extends State<DoadorCadastroPage> {
     // Volta para a tela de login sem empilhar telas extras.
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Cadastro realizado com sucesso!'),
-        ),
+        const SnackBar(content: Text('Cadastro realizado com sucesso!')),
       );
 
       Navigator.of(context).pushAndRemoveUntil(
@@ -118,14 +110,11 @@ class _DoadorCadastroPageState extends State<DoadorCadastroPage> {
           padding: const EdgeInsets.all(24),
 
           child: ConstrainedBox(
-            constraints: const BoxConstraints(
-              maxWidth: 670,
-            ),
+            constraints: const BoxConstraints(maxWidth: 670),
 
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-
                 // BOTÃO VOLTAR
                 Align(
                   alignment: Alignment.centerLeft,
@@ -139,10 +128,7 @@ class _DoadorCadastroPageState extends State<DoadorCadastroPage> {
 
                     label: const Text(
                       'Voltar',
-                      style: TextStyle(
-                        color: Color(0xFF4656A3),
-                        fontSize: 16,
-                      ),
+                      style: TextStyle(color: Color(0xFF4656A3), fontSize: 16),
                     ),
                   ),
                 ),
@@ -151,12 +137,7 @@ class _DoadorCadastroPageState extends State<DoadorCadastroPage> {
 
                 // CARD PRINCIPAL
                 Container(
-                  padding: const EdgeInsets.fromLTRB(
-                    48,
-                    36,
-                    48,
-                    40,
-                  ),
+                  padding: const EdgeInsets.fromLTRB(48, 36, 48, 40),
 
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -165,30 +146,11 @@ class _DoadorCadastroPageState extends State<DoadorCadastroPage> {
 
                   child: Column(
                     children: [
-
-                      // ÍCONE
-                      Container(
-                        width: 96,
-                        height: 96,
-
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: const Color(0xFFE17BEA),
-
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.12),
-                              blurRadius: 15,
-                              offset: const Offset(0, 8),
-                            ),
-                          ],
-                        ),
-
-                        child: const Icon(
-                          Icons.favorite,
-                          color: Colors.white,
-                          size: 52,
-                        ),
+                      Image.asset(
+                        'assets/images/logo_menino_barsanulfo.png',
+                        width: 112,
+                        height: 112,
+                        fit: BoxFit.contain,
                       ),
 
                       const SizedBox(height: 28),
@@ -289,8 +251,7 @@ class _DoadorCadastroPageState extends State<DoadorCadastroPage> {
 
                           onPressed: () {
                             setState(() {
-                              mostrarConfirmarSenha =
-                                  !mostrarConfirmarSenha;
+                              mostrarConfirmarSenha = !mostrarConfirmarSenha;
                             });
                           },
                         ),
@@ -341,7 +302,6 @@ class _DoadorCadastroPageState extends State<DoadorCadastroPage> {
 
                         child: Column(
                           children: [
-
                             const Text(
                               'Já possui cadastro?',
                               style: TextStyle(
@@ -399,7 +359,6 @@ class _DoadorCadastroPageState extends State<DoadorCadastroPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
 
       children: [
-
         Text(
           titulo,
 
@@ -416,23 +375,14 @@ class _DoadorCadastroPageState extends State<DoadorCadastroPage> {
           controller: controller,
           obscureText: obscureText,
 
-          style: const TextStyle(
-            fontSize: 21,
-          ),
+          style: const TextStyle(fontSize: 21),
 
           decoration: InputDecoration(
             hintText: hint,
 
-            hintStyle: const TextStyle(
-              color: Color(0xFF999999),
-              fontSize: 21,
-            ),
+            hintStyle: const TextStyle(color: Color(0xFF999999), fontSize: 21),
 
-            prefixIcon: Icon(
-              icone,
-              size: 30,
-              color: Colors.grey,
-            ),
+            prefixIcon: Icon(icone, size: 30, color: Colors.grey),
 
             suffixIcon: suffixIcon,
 
@@ -444,26 +394,19 @@ class _DoadorCadastroPageState extends State<DoadorCadastroPage> {
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(24),
 
-              borderSide: const BorderSide(
-                color: Color(0xFFDAD9E9),
-              ),
+              borderSide: const BorderSide(color: Color(0xFFDAD9E9)),
             ),
 
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(24),
 
-              borderSide: const BorderSide(
-                color: Color(0xFFDAD9E9),
-              ),
+              borderSide: const BorderSide(color: Color(0xFFDAD9E9)),
             ),
 
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(24),
 
-              borderSide: const BorderSide(
-                color: Color(0xFFE17BEA),
-                width: 2,
-              ),
+              borderSide: const BorderSide(color: Color(0xFFE17BEA), width: 2),
             ),
           ),
         ),

@@ -1,0 +1,5 @@
+<gresources>
+  <gresource prefix="/com/meninobarsanulfo">
+    <file>app_icon.png</file>
+  </gresource>
+</gresources>

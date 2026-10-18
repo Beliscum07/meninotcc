@@ -63,14 +63,19 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-
                 // BOTÃO VOLTAR alinhado à esquerda
                 Align(
                   alignment: Alignment.centerLeft,
                   child: TextButton.icon(
                     onPressed: () => Navigator.pop(context),
-                    icon: const Icon(Icons.arrow_back, color: Color(0xFF4656A3)),
-                    label: const Text('Voltar', style: TextStyle(color: Color(0xFF4656A3), fontSize: 16)),
+                    icon: const Icon(
+                      Icons.arrow_back,
+                      color: Color(0xFF4656A3),
+                    ),
+                    label: const Text(
+                      'Voltar',
+                      style: TextStyle(color: Color(0xFF4656A3), fontSize: 16),
+                    ),
                   ),
                 ),
 
@@ -78,37 +83,67 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
 
                 // CAIXA BRANCA que contém o formulário
                 Container(
-                  width: 450,
-                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 30),
+                  width: MediaQuery.sizeOf(context).width > 498
+                      ? 450
+                      : MediaQuery.sizeOf(context).width - 48,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 32,
+                    vertical: 30,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(25),
                     boxShadow: [
-                      BoxShadow(color: Colors.black.withValues(alpha: 0.15), blurRadius: 20, offset: const Offset(0, 10)),
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.15),
+                        blurRadius: 20,
+                        offset: const Offset(0, 10),
+                      ),
                     ],
                   ),
 
                   child: Column(
                     children: [
-
-                      // ÍCONE DO CORAÇÃO
-                      Container(
-                        width: 64,
-                        height: 64,
-                        decoration: const BoxDecoration(color: Color(0xFFE276F0), shape: BoxShape.circle),
-                        child: const Icon(Icons.favorite, color: Colors.white, size: 34),
+                      Image.asset(
+                        'assets/images/logo_menino_barsanulfo.png',
+                        width: 88,
+                        height: 88,
+                        fit: BoxFit.contain,
                       ),
 
                       const SizedBox(height: 18),
 
                       // TÍTULO
-                      const Text('Bem-vindo!', style: TextStyle(color: Color(0xFF4656A3), fontSize: 25, fontWeight: FontWeight.bold)),
+                      const Text(
+                        'Bem-vindo!',
+                        style: TextStyle(
+                          color: Color(0xFF4656A3),
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                       const SizedBox(height: 4),
-                      const Text('Login - Administrador', style: TextStyle(color: Color(0xFF444444), fontSize: 14)),
+                      const Text(
+                        'Login - Administrador',
+                        style: TextStyle(
+                          color: Color(0xFF444444),
+                          fontSize: 14,
+                        ),
+                      ),
                       const SizedBox(height: 35),
 
                       // LABEL EMAIL
-                      const Align(alignment: Alignment.centerLeft, child: Text('Email', style: TextStyle(color: Color(0xFF4656A3), fontSize: 14, fontWeight: FontWeight.w500))),
+                      const Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'Email',
+                          style: TextStyle(
+                            color: Color(0xFF4656A3),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
                       const SizedBox(height: 8),
 
                       // CAMPO EMAIL — atualiza a variável `email` local
@@ -117,17 +152,46 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                         keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
                           hintText: 'seu@email.com',
-                          prefixIcon: const Icon(Icons.email_outlined, color: Colors.grey),
-                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: Color(0xFFD9DCEB))),
-                          enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: Color(0xFFD9DCEB))),
-                          focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: Color(0xFFE276F0), width: 2)),
+                          prefixIcon: const Icon(
+                            Icons.email_outlined,
+                            color: Colors.grey,
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: const BorderSide(
+                              color: Color(0xFFD9DCEB),
+                            ),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: const BorderSide(
+                              color: Color(0xFFD9DCEB),
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: const BorderSide(
+                              color: Color(0xFFE276F0),
+                              width: 2,
+                            ),
+                          ),
                         ),
                       ),
 
                       const SizedBox(height: 18),
 
                       // LABEL SENHA
-                      const Align(alignment: Alignment.centerLeft, child: Text('Senha', style: TextStyle(color: Color(0xFF4656A3), fontSize: 14, fontWeight: FontWeight.w500))),
+                      const Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'Senha',
+                          style: TextStyle(
+                            color: Color(0xFF4656A3),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
                       const SizedBox(height: 8),
 
                       // CAMPO SENHA — atualiza a variável `senha` local
@@ -136,7 +200,10 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                         obscureText: !_senhaVisivel,
                         decoration: InputDecoration(
                           hintText: '••••••••',
-                          prefixIcon: const Icon(Icons.lock_outline, color: Colors.grey),
+                          prefixIcon: const Icon(
+                            Icons.lock_outline,
+                            color: Colors.grey,
+                          ),
                           suffixIcon: IconButton(
                             onPressed: () {
                               setState(() {
@@ -144,13 +211,31 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                               });
                             },
                             icon: Icon(
-                              _senhaVisivel ? Icons.visibility_off : Icons.visibility,
+                              _senhaVisivel
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
                               color: Colors.grey,
                             ),
                           ),
-                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: Color(0xFFD9DCEB))),
-                          enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: Color(0xFFD9DCEB))),
-                          focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: Color(0xFFE276F0), width: 2)),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: const BorderSide(
+                              color: Color(0xFFD9DCEB),
+                            ),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: const BorderSide(
+                              color: Color(0xFFD9DCEB),
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: const BorderSide(
+                              color: Color(0xFFE276F0),
+                              width: 2,
+                            ),
+                          ),
                         ),
                       ),
 
@@ -162,15 +247,32 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                         height: 52,
                         child: ElevatedButton(
                           onPressed: fazerLogin,
-                          style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFFE276F0), foregroundColor: Colors.white, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)), elevation: 2),
-                          child: const Text('Entrar', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFFE276F0),
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            elevation: 2,
+                          ),
+                          child: const Text(
+                            'Entrar',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
                       ),
 
                       // MENSAGEM DE FEEDBACK (exibe erro ou sucesso)
                       if (mensagem.isNotEmpty) ...[
                         const SizedBox(height: 15),
-                        Text(mensagem, textAlign: TextAlign.center, style: const TextStyle(fontWeight: FontWeight.w500)),
+                        Text(
+                          mensagem,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(fontWeight: FontWeight.w500),
+                        ),
                       ],
 
                       const SizedBox(height: 24),
@@ -179,13 +281,25 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                       Container(
                         width: double.infinity,
                         padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(color: const Color(0xFFE9E6F5), borderRadius: BorderRadius.circular(15)),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFE9E6F5),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
                         child: const Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Credenciais de teste:', style: TextStyle(color: Color(0xFF333333), fontWeight: FontWeight.w500)),
+                            Text(
+                              'Credenciais de teste:',
+                              style: TextStyle(
+                                color: Color(0xFF333333),
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
                             SizedBox(height: 8),
-                            Text('📧 admin@ong.com | 🔑 admin123', style: TextStyle(color: Color(0xFF555555))),
+                            Text(
+                              'E-mail: admin@ong.com  |  Senha: admin123',
+                              style: TextStyle(color: Color(0xFF555555)),
+                            ),
                           ],
                         ),
                       ),

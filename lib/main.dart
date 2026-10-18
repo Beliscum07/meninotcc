@@ -58,7 +58,7 @@ class TelaInicial extends StatelessWidget {
         child: SafeArea(
           child: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 50),
+              padding: const EdgeInsets.symmetric(horizontal: 24),
 
               child: Column(
                 children: [
@@ -68,27 +68,12 @@ class TelaInicial extends StatelessWidget {
 
                   const SizedBox(height: 18),
 
-                  Container(
-                    width: 166,
-                    height: 166,
-
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: const Color(0xFFD969E8),
-
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.15),
-                          blurRadius: 10,
-                          offset: const Offset(0, 5),
-                        ),
-                      ],
-                    ),
-
-                    child: const Icon(
-                      Icons.favorite,
-                      color: Colors.white,
-                      size: 88,
+                  SizedBox(
+                    width: 160,
+                    height: 160,
+                    child: Image.asset(
+                      'assets/images/logo_menino_barsanulfo.png',
+                      fit: BoxFit.contain,
                     ),
                   ),
 
@@ -198,7 +183,6 @@ class TelaInicial extends StatelessWidget {
                   ),
 
                   const SizedBox(height: 150),
-
                 ],
               ),
             ),

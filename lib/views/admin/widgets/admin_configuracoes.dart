@@ -363,7 +363,7 @@ class ConfiguracoesPage extends StatelessWidget {
           const SizedBox(height: 10),
 
           const Text(
-            'Desenvolvido para: ONG Apoio à Infância',
+            'Desenvolvido para: ONG Menino Barsanulfo',
 
             style: TextStyle(fontSize: 13, color: Color(0xFF444444)),
           ),

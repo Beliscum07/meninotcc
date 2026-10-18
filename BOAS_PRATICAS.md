@@ -1,4 +1,4 @@
-# 📚 GUIA DE BOAS PRÁTICAS - ONG Apoio à Infância
+# 📚 GUIA DE BOAS PRÁTICAS - ONG Menino Barsanulfo
 
 ## 1. Estrutura de Pastas
 

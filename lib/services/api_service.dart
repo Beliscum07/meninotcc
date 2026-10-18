@@ -57,12 +57,12 @@ class GmailService {
     required String nome,
     required String tipo,
   }) async {
-    final assunto = 'Bem-vindo(a) à ONG Apoio à Infância';
+    final assunto = 'Bem-vindo(a) à ONG Menino Barsanulfo';
     final corpo = 'Olá, $nome!\n\n'
         'Seu cadastro como $tipo foi realizado com sucesso.\n'
         'Agradecemos muito por fazer parte da nossa comunidade.\n\n'
         'Atenciosamente,\n'
-        'ONG Apoio à Infância';
+        'ONG Menino Barsanulfo';
 
     return enviarEmail(
       destinatario: destinatario,

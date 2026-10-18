@@ -24,7 +24,7 @@ class OngApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
 
-      title: 'ONG Apoio à Infância',
+      title: 'ONG Menino Barsanulfo',
 
       theme: ThemeData(useMaterial3: true, fontFamily: 'Arial'),
 
@@ -98,7 +98,7 @@ class TelaInicial extends StatelessWidget {
                   // TÍTULO
                   // ==================================================
                   const Text(
-                    'ONG Apoio à Infância',
+                    'ONG Menino Barsanulfo',
 
                     textAlign: TextAlign.center,
 
@@ -125,36 +125,6 @@ class TelaInicial extends StatelessWidget {
                       height: 1.35,
                     ),
                   ),
-
-                  const SizedBox(height: 75),
-
-                  // ==================================================
-                  // ESTATÍSTICAS
-                  // ==================================================
-                  const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
-                    children: [
-                      Estatistica(
-                        icone: Icons.people_outline,
-                        numero: '150+',
-                        texto: 'Crianças atendidas',
-                      ),
-
-                      Estatistica(
-                        icone: Icons.trending_up,
-                        numero: '20+',
-                        texto: 'Atividades',
-                      ),
-
-                      Estatistica(
-                        icone: Icons.favorite_border,
-                        numero: '500+',
-                        texto: 'Doadores',
-                      ),
-                    ],
-                  ),
-
                   const SizedBox(height: 80),
 
                   // ==================================================
@@ -229,44 +199,6 @@ class TelaInicial extends StatelessWidget {
 
                   const SizedBox(height: 150),
 
-                  // ==================================================
-                  // RODAPÉ
-                  // ==================================================
-                  const Text(
-                    '© 2026 ONG Apoio à Infância',
-
-                    textAlign: TextAlign.center,
-
-                    style: TextStyle(color: Color(0xFF555555), fontSize: 20),
-                  ),
-
-                  const SizedBox(height: 14),
-
-                  const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-
-                    children: [
-                      Text(
-                        'Feito com ',
-                        style: TextStyle(
-                          color: Color(0xFF555555),
-                          fontSize: 20,
-                        ),
-                      ),
-
-                      Icon(Icons.favorite, color: Color(0xFFFF3B81), size: 25),
-
-                      Text(
-                        ' para transformar vidas',
-                        style: TextStyle(
-                          color: Color(0xFF555555),
-                          fontSize: 20,
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  const SizedBox(height: 30),
                 ],
               ),
             ),

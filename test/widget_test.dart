@@ -11,11 +11,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:app_ong/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build the app with ProviderScope (as in `main`) and trigger a frame.
+  testWidgets('app displays the organization name', (WidgetTester tester) async {
     await tester.pumpWidget(const ProviderScope(child: OngApp()));
 
-    // Verify that the home screen shows the app title.
-    expect(find.text('ONG Apoio à Infância'), findsOneWidget);
+    expect(find.text('ONG Menino Barsanulfo'), findsOneWidget);
   });
 }

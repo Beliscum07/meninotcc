@@ -145,7 +145,7 @@ class _AlunoHomeViewState extends State<AlunoHomeView> {
             'horario': atividade.horario,
             'dias': atividade.dias,
             'professor': atividade.professor,
-            'local': 'ONG Apoio à Infância',
+            'local': 'ONG Menino Barsanulfo',
           },
         )
         .toList();

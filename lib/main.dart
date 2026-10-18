@@ -7,11 +7,7 @@ import 'views/auth/login_estudante.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  try {
-    await FirebaseService.instance.initialize();
-  } catch (e) {
-    debugPrint('Firebase bootstrap skipped: $e');
-  }
+  await FirebaseService.instance.initialize();
 
   runApp(const OngApp());
 }

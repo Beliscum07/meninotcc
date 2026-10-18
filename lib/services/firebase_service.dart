@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart';
 
 class FirebaseService {
   FirebaseService._();
@@ -14,13 +13,7 @@ class FirebaseService {
       return;
     }
 
-    try {
-      await Firebase.initializeApp();
-    } on FirebaseException catch (e) {
-      debugPrint('Firebase initialization failed: ${e.message ?? e.code}');
-    } catch (e) {
-      debugPrint('Firebase initialization unavailable: $e');
-    }
+    await Firebase.initializeApp();
   }
 
   Future<void> salvarUsuario({

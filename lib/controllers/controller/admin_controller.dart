@@ -1,52 +1,84 @@
 import 'package:flutter/foundation.dart';
 
-import '../../database/mock_database.dart';
 import '../../models/notificacao_model.dart';
+import '../../services/sql_connect_service.dart';
 
 class AdminController extends ChangeNotifier {
-  final List<Notificacao> _notificacoes;
-
-  AdminController()
-      : _notificacoes = MockDatabase.notificacoes
-            .where(
-                (item) => item['tipo'] == 'aluno' || item['tipo'] == 'atividade')
-            .map(
-              (item) => Notificacao(
-                id: item['id'] as String,
-                titulo: item['titulo'] as String,
-                descricao: item['descricao'] as String,
-                tempo: item['tempo'] as String,
-                tipo: item['tipo'] as String,
-                lida: item['lida'] as bool? ?? false,
-              ),
-            )
-            .toList();
+  final List<Notificacao> _notificacoes = [];
+  bool carregando = true;
+  Object? erro;
 
   List<Notificacao> get notificacoes => List.unmodifiable(_notificacoes);
 
   int get quantidadeNotificacoesNaoLidas =>
       _notificacoes.where((notificacao) => !notificacao.lida).length;
 
-  void marcarNotificacaoComoLida(String id) {
-    final index = _notificacoes.indexWhere((notificacao) => notificacao.id == id);
-    if (index == -1) {
-      return;
-    }
-
-    _notificacoes[index].marcarComoLida();
+  Future<void> carregarNotificacoes() async {
+    carregando = true;
+    erro = null;
     notifyListeners();
+    try {
+      final registros = await SqlConnectService.instance.minhasNotificacoes();
+      _notificacoes
+        ..clear()
+        ..addAll(
+          registros.map((registro) {
+            final data = registro.dataCriacao.toDateTime().toLocal();
+            return Notificacao(
+              id: registro.id,
+              titulo: registro.titulo,
+              descricao: registro.mensagem,
+              tempo:
+                  '${data.day.toString().padLeft(2, '0')}/${data.month.toString().padLeft(2, '0')}/${data.year} ${data.hour.toString().padLeft(2, '0')}:${data.minute.toString().padLeft(2, '0')}',
+              tipo: 'aviso',
+              lida: registro.lida,
+            );
+          }),
+        );
+    } catch (error, stackTrace) {
+      debugPrint('Falha ao carregar notificações administrativas: $error\n$stackTrace');
+      erro = error;
+    } finally {
+      carregando = false;
+      notifyListeners();
+    }
   }
 
-  void marcarTodasNotificacoesComoLidas() {
-    for (final notificacao in _notificacoes) {
-      notificacao.marcarComoLida();
-    }
+  Future<void> marcarNotificacaoComoLida(String id) async {
+    final index = _notificacoes.indexWhere(
+      (notificacao) => notificacao.id == id,
+    );
+    if (index == -1 || _notificacoes[index].lida) return;
 
-    notifyListeners();
+    try {
+      await SqlConnectService.instance.marcarNotificacaoComoLida(id);
+      _notificacoes[index].marcarComoLida();
+      notifyListeners();
+    } catch (error, stackTrace) {
+      debugPrint('Falha ao marcar notificação administrativa como lida: $error\n$stackTrace');
+      erro = error;
+      notifyListeners();
+    }
   }
 
-  void adicionarNotificacao(Notificacao notificacao) {
-    _notificacoes.insert(0, notificacao);
+  Future<void> marcarTodasNotificacoesComoLidas() async {
+    try {
+      await Future.wait(
+        _notificacoes
+            .where((notificacao) => !notificacao.lida)
+            .map(
+              (notificacao) => SqlConnectService.instance
+                  .marcarNotificacaoComoLida(notificacao.id),
+            ),
+      );
+      for (final notificacao in _notificacoes) {
+        notificacao.marcarComoLida();
+      }
+      erro = null;
+    } catch (error, stackTrace) {
+      debugPrint('Falha ao marcar notificações administrativas como lidas: $error\n$stackTrace');
+      erro = error;
+    }
     notifyListeners();
   }
 }

@@ -1,8 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../models/atividade_model.dart';
 import '../../../services/aluno_data_service.dart';
+import '../../../services/auth_service.dart';
+import '../../../services/sql_connect_service.dart';
 
 // ============================================================
 // PÁGINA
@@ -18,9 +22,60 @@ class AdminAtividadesPage extends StatefulWidget {
 }
 
 class _AdminAtividadesPageState extends State<AdminAtividadesPage> {
-  List<Atividade> get atividades => widget.atividades ?? atividadesMock;
+  final List<Atividade> _atividades = [];
+  bool _carregando = false;
+  Object? _erro;
+
+  List<Atividade> get atividades => widget.atividades ?? _atividades;
 
   String pesquisa = '';
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.atividades == null) {
+      _carregando = true;
+      unawaited(_carregarAtividades());
+    }
+  }
+
+  Future<void> _carregarAtividades() async {
+    try {
+      final registros = await SqlConnectService.instance.listarAtividades();
+      if (!mounted) return;
+      setState(() {
+        _atividades
+          ..clear()
+          ..addAll(
+            registros.map(
+              (registro) => Atividade(
+                id: registro.id,
+                nome: registro.nome,
+                professor: registro.professor,
+                descricao: registro.descricao ?? '',
+                horario: registro.horario ?? '',
+                dias: registro.dias ?? '',
+                inscritos: registro.inscricoes_on_atividade.length,
+                vagas: registro.vagas,
+                categoria: registro.categoria ?? 'Geral',
+                status: registro.status,
+              ),
+            ),
+          );
+        _erro = null;
+        _carregando = false;
+      });
+    } catch (error, stackTrace) {
+      debugPrint('Falha ao carregar atividades SQL: $error');
+      debugPrint(stackTrace.toString());
+      if (mounted) {
+        setState(() {
+          _erro = error;
+          _carregando = false;
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +96,26 @@ class _AdminAtividadesPageState extends State<AdminAtividadesPage> {
           _campoBusca(),
 
           Expanded(
-            child: lista.isEmpty
+            child: _carregando
+                ? const Center(child: CircularProgressIndicator())
+                : _erro != null
+                ? Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Text('Não foi possível carregar as atividades.'),
+                        const SizedBox(height: 8),
+                        FilledButton(
+                          onPressed: () {
+                            setState(() => _carregando = true);
+                            unawaited(_carregarAtividades());
+                          },
+                          child: const Text('Tentar novamente'),
+                        ),
+                      ],
+                    ),
+                  )
+                : lista.isEmpty
                 ? const Center(
                     child: Text(
                       'Nenhuma atividade encontrada.',
@@ -267,6 +341,7 @@ class _AdminAtividadesPageState extends State<AdminAtividadesPage> {
                     tipo: TextInputType.number,
                     maxLength: 4,
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    readOnly: true,
                   ),
 
                   _campo(
@@ -296,7 +371,7 @@ class _AdminAtividadesPageState extends State<AdminAtividadesPage> {
                 backgroundColor: const Color(0xFF5552A6),
               ),
 
-              onPressed: () {
+              onPressed: () async {
                 final nome = nomeController.text.trim();
 
                 final professor = professorController.text.trim();
@@ -306,8 +381,6 @@ class _AdminAtividadesPageState extends State<AdminAtividadesPage> {
                 final horario = horarioController.text.trim();
 
                 final dias = diasController.text.trim();
-
-                final inscritos = int.tryParse(inscritosController.text);
 
                 final vagas = int.tryParse(vagasController.text);
 
@@ -331,13 +404,6 @@ class _AdminAtividadesPageState extends State<AdminAtividadesPage> {
                   return;
                 }
 
-                if (inscritos == null || inscritos < 0 || inscritos > 9999) {
-                  _mensagem(
-                    'Informe uma quantidade válida de inscritos (0 a 9999).',
-                  );
-                  return;
-                }
-
                 if (vagas <= 0 || vagas > 9999) {
                   _mensagem(
                     'Informe uma quantidade válida de vagas (1 a 9999).',
@@ -345,57 +411,72 @@ class _AdminAtividadesPageState extends State<AdminAtividadesPage> {
                   return;
                 }
 
-                if (inscritos > vagas) {
+                if (atividade != null && atividade.inscritos > vagas) {
                   _mensagem('Os inscritos não podem ser maiores que as vagas.');
                   return;
                 }
 
-                setState(() {
-                  if (atividade == null) {
-                    atividades.add(
-                      Atividade(
-                        id: 'atv-${DateTime.now().millisecondsSinceEpoch}',
+                if (widget.atividades == null) {
+                  try {
+                    if (atividade == null) {
+                      await SqlConnectService.instance.criarAtividade(
                         nome: nome,
                         professor: professor,
                         descricao: descricao,
                         horario: horario,
                         dias: dias,
-                        inscritos: inscritos,
                         vagas: vagas,
                         categoria: 'Geral',
-                        cor: const Color(0xFFE778E8),
-                      ),
-                    );
-                  } else {
-                    final nomeAnterior = atividade.nome;
-                    atividade.nome = nome;
-                    atividade.professor = professor;
-                    atividade.descricao = descricao;
-                    atividade.horario = horario;
-                    atividade.dias = dias;
-                    atividade.inscritos = inscritos;
-                    atividade.vagas = vagas;
-
-                    if (nomeAnterior != nome) {
-                      for (final aluno in AlunoDataService.instance.alunos) {
-                        final atividadesDoAluno =
-                            aluno['atividades'] as List<String>;
-                        final indice = atividadesDoAluno.indexOf(nomeAnterior);
-                        if (indice != -1) {
-                          if (atividadesDoAluno.contains(nome)) {
-                            atividadesDoAluno.removeAt(indice);
-                          } else {
-                            atividadesDoAluno[indice] = nome;
-                          }
-                        }
-                      }
+                      );
+                    } else {
+                      await SqlConnectService.instance.atualizarAtividade(
+                        id: atividade.id,
+                        nome: nome,
+                        professor: professor,
+                        descricao: descricao,
+                        horario: horario,
+                        dias: dias,
+                        vagas: vagas,
+                        categoria: atividade.categoria,
+                        status: atividade.status,
+                      );
                     }
+                    await _carregarAtividades();
+                  } catch (error, stackTrace) {
+                    debugPrint('Falha ao salvar atividade SQL: $error');
+                    debugPrint(stackTrace.toString());
+                    _mensagem(AuthService.mensagemErro(error));
+                    return;
                   }
-                });
+                } else {
+                  setState(() {
+                    if (atividade == null) {
+                      atividades.add(
+                        Atividade(
+                          id: 'atv-${DateTime.now().millisecondsSinceEpoch}',
+                          nome: nome,
+                          professor: professor,
+                          descricao: descricao,
+                          horario: horario,
+                          dias: dias,
+                          inscritos: 0,
+                          vagas: vagas,
+                          categoria: 'Geral',
+                        ),
+                      );
+                    } else {
+                      atividade.nome = nome;
+                      atividade.professor = professor;
+                      atividade.descricao = descricao;
+                      atividade.horario = horario;
+                      atividade.dias = dias;
+                      atividade.vagas = vagas;
+                    }
+                  });
+                  AlunoDataService.instance.notificarAlteracao();
+                }
 
-                AlunoDataService.instance.notificarAlteracao();
-
-                Navigator.pop(context);
+                if (context.mounted) Navigator.pop(context);
 
                 _mensagem(
                   atividade == null
@@ -438,22 +519,44 @@ class _AdminAtividadesPageState extends State<AdminAtividadesPage> {
             FilledButton(
               style: FilledButton.styleFrom(backgroundColor: Colors.red),
 
-              onPressed: () {
+              onPressed: () async {
                 setState(() {
-                  atividades.remove(atividade);
-
-                  for (final aluno in AlunoDataService.instance.alunos) {
-                    (aluno['atividades'] as List<String>).remove(
-                      atividade.nome,
-                    );
+                  if (widget.atividades != null) {
+                    atividades.remove(atividade);
                   }
                 });
 
-                AlunoDataService.instance.notificarAlteracao();
+                if (widget.atividades == null) {
+                  try {
+                    await SqlConnectService.instance.atualizarAtividade(
+                      id: atividade.id,
+                      nome: atividade.nome,
+                      professor: atividade.professor,
+                      descricao: atividade.descricao,
+                      horario: atividade.horario,
+                      dias: atividade.dias,
+                      vagas: atividade.vagas,
+                      categoria: atividade.categoria,
+                      status: 'inativa',
+                    );
+                    await _carregarAtividades();
+                  } catch (error, stackTrace) {
+                    debugPrint('Falha ao arquivar atividade SQL: $error');
+                    debugPrint(stackTrace.toString());
+                    _mensagem(AuthService.mensagemErro(error));
+                    return;
+                  }
+                } else {
+                  AlunoDataService.instance.notificarAlteracao();
+                }
 
-                Navigator.pop(context);
+                if (context.mounted) Navigator.pop(context);
 
-                _mensagem('Atividade removida!');
+                _mensagem(
+                  widget.atividades == null
+                      ? 'Atividade arquivada.'
+                      : 'Atividade removida!',
+                );
               },
 
               child: const Text('Remover'),
@@ -530,6 +633,7 @@ class _AdminAtividadesPageState extends State<AdminAtividadesPage> {
     int maxLines = 1,
     int? maxLength,
     List<TextInputFormatter>? inputFormatters,
+    bool readOnly = false,
   }) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
@@ -540,6 +644,7 @@ class _AdminAtividadesPageState extends State<AdminAtividadesPage> {
         maxLines: maxLines,
         maxLength: maxLength,
         inputFormatters: inputFormatters,
+        readOnly: readOnly,
 
         decoration: InputDecoration(
           labelText: label,

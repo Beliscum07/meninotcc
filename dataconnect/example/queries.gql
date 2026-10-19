@@ -1,0 +1,201 @@
+query GetMyProfile @auth(level: USER) {
+  usuario(first: { where: { uid: { eq_expr: "auth.uid" } } }) {
+    uid
+    nome
+    email
+    telefone
+    papel
+    status
+  }
+}
+
+query GetMyStudent @auth(level: USER) {
+  alunos(where: { usuarioUid: { eq_expr: "auth.uid" }, status: { eq: "ativo" } }, limit: 1) {
+    id
+    nome
+    idade
+    responsavel
+    telefone
+    email
+    presenca
+    inscricoes_on_aluno(where: { status: { eq: "ativa" } }) {
+      atividade {
+        id
+        nome
+        professor
+        descricao
+        horario
+        dias
+        vagas
+      }
+    }
+    alunoBolsas_on_aluno(where: { status: { eq: "ativa" } }) {
+      bolsa {
+        id
+        nome
+        descricao
+        valorMensal
+      }
+    }
+  }
+}
+
+query ListStudents @auth(expr: "auth.token.admin == true") {
+  alunos(orderBy: [{ nome: ASC }]) {
+    id
+    nome
+    idade
+    responsavel
+    telefone
+    email
+    presenca
+    status
+    usuarioUid
+    inscricoes_on_aluno {
+      atividade {
+        id
+        nome
+      }
+    }
+    alunoBolsas_on_aluno {
+      bolsa {
+        id
+        nome
+      }
+    }
+  }
+}
+
+query ListActivities
+  @auth(
+    level: USER
+    insecureReason: "A lista de atividades mostra apenas ofertas e horários institucionais públicos."
+  ) {
+  atividades(orderBy: [{ nome: ASC }]) {
+    id
+    nome
+    professor
+    descricao
+    horario
+    dias
+    vagas
+    categoria
+    status
+    inscricoes_on_atividade(where: { status: { eq: "ativa" } }) {
+      status
+    }
+  }
+}
+
+query ListScholarships @auth(expr: "auth.token.admin == true") {
+  bolsas(orderBy: [{ nome: ASC }]) {
+    id
+    nome
+    descricao
+    valorMensal
+    ativa
+    alunoBolsas_on_bolsa(where: { status: { eq: "ativa" } }) {
+      alunoId
+      valorConcedido
+    }
+  }
+}
+
+query ListMyActivities @auth(level: USER) {
+  inscricoes(
+    where: {
+      status: { eq: "ativa" }
+      aluno: { usuarioUid: { eq_expr: "auth.uid" } }
+    }
+  ) {
+    atividade {
+      id
+      nome
+      professor
+      descricao
+      horario
+      dias
+      vagas
+    }
+  }
+}
+
+query ListMyScholarships @auth(level: USER) {
+  alunoBolsas(
+    where: {
+      status: { eq: "ativa" }
+      aluno: { usuarioUid: { eq_expr: "auth.uid" } }
+    }
+  ) {
+    bolsa {
+      id
+      nome
+      descricao
+      valorMensal
+    }
+    valorConcedido
+    dataInicio
+    dataFim
+  }
+}
+
+query ListAgenda
+  @auth(
+    level: USER
+    insecureReason: "A agenda contém somente eventos institucionais publicados."
+  ) {
+  agendas(where: { status: { eq: "ativo" } }, orderBy: [{ inicio: ASC }]) {
+    id
+    titulo
+    descricao
+    inicio
+    fim
+    local
+    atividade {
+      id
+      nome
+    }
+  }
+}
+
+query GetMyNotifications @auth(level: USER) {
+  notificacoes(
+    where: { destinatarioUid: { eq_expr: "auth.uid" } }
+    orderBy: [{ dataCriacao: DESC }]
+  ) {
+    id
+    titulo
+    mensagem
+    lida
+    dataCriacao
+  }
+}
+
+query ListMyDonations @auth(level: USER) {
+  doacoes(
+    where: { doador: { usuarioUid: { eq_expr: "auth.uid" } } }
+    orderBy: [{ data: DESC }]
+  ) {
+    id
+    valor
+    data
+    metodo
+    status
+  }
+}
+
+query ListDonations @auth(expr: "auth.token.admin == true") {
+  doacoes(orderBy: [{ data: DESC }]) {
+    id
+    valor
+    data
+    metodo
+    status
+    doador {
+      usuario {
+        nome
+        email
+      }
+    }
+  }
+}

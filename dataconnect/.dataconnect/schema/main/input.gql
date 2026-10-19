@@ -1,0 +1,3166 @@
+"""
+✨ `Agenda_KeyOutput` returns the primary key fields of table type `Agenda`.
+
+It has the same format as `Agenda_Key`, but is only used as mutation return value.
+"""
+scalar Agenda_KeyOutput
+"""
+✨ `Aluno_KeyOutput` returns the primary key fields of table type `Aluno`.
+
+It has the same format as `Aluno_Key`, but is only used as mutation return value.
+"""
+scalar Aluno_KeyOutput
+"""
+✨ `AlunoBolsa_KeyOutput` returns the primary key fields of table type `AlunoBolsa`.
+
+It has the same format as `AlunoBolsa_Key`, but is only used as mutation return value.
+"""
+scalar AlunoBolsa_KeyOutput
+"""
+✨ `Atividade_KeyOutput` returns the primary key fields of table type `Atividade`.
+
+It has the same format as `Atividade_Key`, but is only used as mutation return value.
+"""
+scalar Atividade_KeyOutput
+"""
+✨ `Bolsa_KeyOutput` returns the primary key fields of table type `Bolsa`.
+
+It has the same format as `Bolsa_Key`, but is only used as mutation return value.
+"""
+scalar Bolsa_KeyOutput
+"""
+✨ `Doacao_KeyOutput` returns the primary key fields of table type `Doacao`.
+
+It has the same format as `Doacao_Key`, but is only used as mutation return value.
+"""
+scalar Doacao_KeyOutput
+"""
+✨ `Doador_KeyOutput` returns the primary key fields of table type `Doador`.
+
+It has the same format as `Doador_Key`, but is only used as mutation return value.
+"""
+scalar Doador_KeyOutput
+"""
+✨ `Inscricao_KeyOutput` returns the primary key fields of table type `Inscricao`.
+
+It has the same format as `Inscricao_Key`, but is only used as mutation return value.
+"""
+scalar Inscricao_KeyOutput
+"""
+✨ `Notificacao_KeyOutput` returns the primary key fields of table type `Notificacao`.
+
+It has the same format as `Notificacao_Key`, but is only used as mutation return value.
+"""
+scalar Notificacao_KeyOutput
+"""
+✨ `Usuario_KeyOutput` returns the primary key fields of table type `Usuario`.
+
+It has the same format as `Usuario_Key`, but is only used as mutation return value.
+"""
+scalar Usuario_KeyOutput
+"""
+✨ Generated data input type for table 'Agenda'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input Agenda_Data {
+  """
+  ✨ Generated from Field `Agenda`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Agenda`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Agenda`.`atividadeId` of type `UUID`
+  """
+  atividadeId: UUID
+  """
+  ✨ `_expr` server value variant of `atividadeId` (✨ Generated from Field `Agenda`.`atividadeId` of type `UUID`)
+  """
+  atividadeId_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Agenda`.`atividade` of type `Atividade`
+  """
+  atividade: Atividade_Key @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Agenda`.`descricao` of type `String`
+  """
+  descricao: String
+  """
+  ✨ `_expr` server value variant of `descricao` (✨ Generated from Field `Agenda`.`descricao` of type `String`)
+  """
+  descricao_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Agenda`.`fim` of type `Timestamp`
+  """
+  fim: Timestamp
+  """
+  ✨ `_expr` server value variant of `fim` (✨ Generated from Field `Agenda`.`fim` of type `Timestamp`)
+  """
+  fim_expr: Timestamp_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_time` server value variant of `fim` (✨ Generated from Field `Agenda`.`fim` of type `Timestamp`)
+  """
+  fim_time: Timestamp_Relative @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `fim` (✨ Generated from Field `Agenda`.`fim` of type `Timestamp`)
+  """
+  fim_update: [Timestamp_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Agenda`.`inicio` of type `Timestamp!`
+  """
+  inicio: Timestamp
+  """
+  ✨ `_expr` server value variant of `inicio` (✨ Generated from Field `Agenda`.`inicio` of type `Timestamp!`)
+  """
+  inicio_expr: Timestamp_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_time` server value variant of `inicio` (✨ Generated from Field `Agenda`.`inicio` of type `Timestamp!`)
+  """
+  inicio_time: Timestamp_Relative @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `inicio` (✨ Generated from Field `Agenda`.`inicio` of type `Timestamp!`)
+  """
+  inicio_update: [Timestamp_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Agenda`.`local` of type `String`
+  """
+  local: String
+  """
+  ✨ `_expr` server value variant of `local` (✨ Generated from Field `Agenda`.`local` of type `String`)
+  """
+  local_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Agenda`.`status` of type `String!`
+  """
+  status: String
+  """
+  ✨ `_expr` server value variant of `status` (✨ Generated from Field `Agenda`.`status` of type `String!`)
+  """
+  status_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Agenda`.`titulo` of type `String!`
+  """
+  titulo: String
+  """
+  ✨ `_expr` server value variant of `titulo` (✨ Generated from Field `Agenda`.`titulo` of type `String!`)
+  """
+  titulo_expr: String_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated filter input type for table 'Agenda'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Agenda_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [Agenda_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: Agenda_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [Agenda_Filter!]
+  """
+  ✨ Generated from Field `Agenda`.`id` of type `UUID!`
+  """
+  id: UUID_Filter
+  """
+  ✨ Generated from Field `Agenda`.`atividadeId` of type `UUID`
+  """
+  atividadeId: UUID_Filter
+  """
+  ✨ Generated from Field `Agenda`.`atividade` of type `Atividade`
+  """
+  atividade: Atividade_Filter
+  """
+  ✨ Generated from Field `Agenda`.`descricao` of type `String`
+  """
+  descricao: String_Filter
+  """
+  ✨ Generated from Field `Agenda`.`fim` of type `Timestamp`
+  """
+  fim: Timestamp_Filter
+  """
+  ✨ Generated from Field `Agenda`.`inicio` of type `Timestamp!`
+  """
+  inicio: Timestamp_Filter
+  """
+  ✨ Generated from Field `Agenda`.`local` of type `String`
+  """
+  local: String_Filter
+  """
+  ✨ Generated from Field `Agenda`.`status` of type `String!`
+  """
+  status: String_Filter
+  """
+  ✨ Generated from Field `Agenda`.`titulo` of type `String!`
+  """
+  titulo: String_Filter
+}
+"""
+✨ Generated first-row input type for table 'Agenda'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input Agenda_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [Agenda_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: Agenda_Filter
+}
+"""
+✨ Generated having input type for table 'Agenda'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Agenda_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [Agenda_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: Agenda_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [Agenda_Having!]
+  """
+  ✨ Generated from Field `Agenda`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `Agenda`.`atividadeId_count` of type `Int!`
+  """
+  atividadeId_count: Int_Filter
+  """
+  ✨ Generated from Field `Agenda`.`descricao_count` of type `Int!`
+  """
+  descricao_count: Int_Filter
+  """
+  ✨ Generated from Field `Agenda`.`fim_count` of type `Int!`
+  """
+  fim_count: Int_Filter
+  """
+  ✨ Generated from Field `Agenda`.`id_count` of type `Int!`
+  """
+  id_count: Int_Filter
+  """
+  ✨ Generated from Field `Agenda`.`inicio_count` of type `Int!`
+  """
+  inicio_count: Int_Filter
+  """
+  ✨ Generated from Field `Agenda`.`local_count` of type `Int!`
+  """
+  local_count: Int_Filter
+  """
+  ✨ Generated from Field `Agenda`.`status_count` of type `Int!`
+  """
+  status_count: Int_Filter
+  """
+  ✨ Generated from Field `Agenda`.`titulo_count` of type `Int!`
+  """
+  titulo_count: Int_Filter
+  """
+  ✨ Generated from Field `Agenda`.`fim_min` of type `Timestamp`
+  """
+  fim_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `Agenda`.`inicio_min` of type `Timestamp`
+  """
+  inicio_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `Agenda`.`fim_max` of type `Timestamp`
+  """
+  fim_max: Timestamp_Filter
+  """
+  ✨ Generated from Field `Agenda`.`inicio_max` of type `Timestamp`
+  """
+  inicio_max: Timestamp_Filter
+}
+"""
+✨ Generated key input type for table 'Agenda'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input Agenda_Key {
+  """
+  ✨ Generated from Field `Agenda`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Agenda`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated list filter input type for table 'Agenda'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input Agenda_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: Agenda_Filter
+}
+"""
+✨ Generated order input type for table 'Agenda'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input Agenda_Order {
+  """
+  ✨ Generated from Field `Agenda`.`id` of type `UUID!`
+  """
+  id: OrderDirection
+  """
+  ✨ Generated from Field `Agenda`.`atividadeId` of type `UUID`
+  """
+  atividadeId: OrderDirection
+  """
+  ✨ Generated from Field `Agenda`.`atividade` of type `Atividade`
+  """
+  atividade: Atividade_Order
+  """
+  ✨ Generated from Field `Agenda`.`descricao` of type `String`
+  """
+  descricao: OrderDirection
+  """
+  ✨ Generated from Field `Agenda`.`fim` of type `Timestamp`
+  """
+  fim: OrderDirection
+  """
+  ✨ Generated from Field `Agenda`.`inicio` of type `Timestamp!`
+  """
+  inicio: OrderDirection
+  """
+  ✨ Generated from Field `Agenda`.`local` of type `String`
+  """
+  local: OrderDirection
+  """
+  ✨ Generated from Field `Agenda`.`status` of type `String!`
+  """
+  status: OrderDirection
+  """
+  ✨ Generated from Field `Agenda`.`titulo` of type `String!`
+  """
+  titulo: OrderDirection
+  """
+  ✨ Generated from Field `Agenda`.`_count` of type `Int!`
+  """
+  _count: OrderDirection
+  """
+  ✨ Generated from Field `Agenda`.`atividadeId_count` of type `Int!`
+  """
+  atividadeId_count: OrderDirection
+  """
+  ✨ Generated from Field `Agenda`.`descricao_count` of type `Int!`
+  """
+  descricao_count: OrderDirection
+  """
+  ✨ Generated from Field `Agenda`.`fim_count` of type `Int!`
+  """
+  fim_count: OrderDirection
+  """
+  ✨ Generated from Field `Agenda`.`id_count` of type `Int!`
+  """
+  id_count: OrderDirection
+  """
+  ✨ Generated from Field `Agenda`.`inicio_count` of type `Int!`
+  """
+  inicio_count: OrderDirection
+  """
+  ✨ Generated from Field `Agenda`.`local_count` of type `Int!`
+  """
+  local_count: OrderDirection
+  """
+  ✨ Generated from Field `Agenda`.`status_count` of type `Int!`
+  """
+  status_count: OrderDirection
+  """
+  ✨ Generated from Field `Agenda`.`titulo_count` of type `Int!`
+  """
+  titulo_count: OrderDirection
+  """
+  ✨ Generated from Field `Agenda`.`fim_min` of type `Timestamp`
+  """
+  fim_min: OrderDirection
+  """
+  ✨ Generated from Field `Agenda`.`inicio_min` of type `Timestamp`
+  """
+  inicio_min: OrderDirection
+  """
+  ✨ Generated from Field `Agenda`.`fim_max` of type `Timestamp`
+  """
+  fim_max: OrderDirection
+  """
+  ✨ Generated from Field `Agenda`.`inicio_max` of type `Timestamp`
+  """
+  inicio_max: OrderDirection
+}
+"""
+✨ Generated data input type for table 'Aluno'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input Aluno_Data {
+  """
+  ✨ Generated from Field `Aluno`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Aluno`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Aluno`.`usuarioUid` of type `String`
+  """
+  usuarioUid: String
+  """
+  ✨ `_expr` server value variant of `usuarioUid` (✨ Generated from Field `Aluno`.`usuarioUid` of type `String`)
+  """
+  usuarioUid_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Aluno`.`usuario` of type `Usuario`
+  """
+  usuario: Usuario_Key @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Aluno`.`email` of type `String`
+  """
+  email: String
+  """
+  ✨ `_expr` server value variant of `email` (✨ Generated from Field `Aluno`.`email` of type `String`)
+  """
+  email_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Aluno`.`idade` of type `Int!`
+  """
+  idade: Int
+  """
+  ✨ `_expr` server value variant of `idade` (✨ Generated from Field `Aluno`.`idade` of type `Int!`)
+  """
+  idade_expr: Int_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `idade` (✨ Generated from Field `Aluno`.`idade` of type `Int!`)
+  """
+  idade_update: [Int_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Aluno`.`nome` of type `String!`
+  """
+  nome: String
+  """
+  ✨ `_expr` server value variant of `nome` (✨ Generated from Field `Aluno`.`nome` of type `String!`)
+  """
+  nome_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Aluno`.`presenca` of type `Int!`
+  """
+  presenca: Int
+  """
+  ✨ `_expr` server value variant of `presenca` (✨ Generated from Field `Aluno`.`presenca` of type `Int!`)
+  """
+  presenca_expr: Int_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `presenca` (✨ Generated from Field `Aluno`.`presenca` of type `Int!`)
+  """
+  presenca_update: [Int_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Aluno`.`responsavel` of type `String!`
+  """
+  responsavel: String
+  """
+  ✨ `_expr` server value variant of `responsavel` (✨ Generated from Field `Aluno`.`responsavel` of type `String!`)
+  """
+  responsavel_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Aluno`.`status` of type `String!`
+  """
+  status: String
+  """
+  ✨ `_expr` server value variant of `status` (✨ Generated from Field `Aluno`.`status` of type `String!`)
+  """
+  status_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Aluno`.`telefone` of type `String!`
+  """
+  telefone: String
+  """
+  ✨ `_expr` server value variant of `telefone` (✨ Generated from Field `Aluno`.`telefone` of type `String!`)
+  """
+  telefone_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Aluno`.`alunoBolsas_on_aluno` of type `[AlunoBolsa!]!`
+  """
+  alunoBolsas_on_aluno: [AlunoBolsa_Data!]
+  """
+  ✨ Generated from Field `Aluno`.`inscricoes_on_aluno` of type `[Inscricao!]!`
+  """
+  inscricoes_on_aluno: [Inscricao_Data!]
+}
+"""
+✨ Generated filter input type for table 'Aluno'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Aluno_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [Aluno_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: Aluno_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [Aluno_Filter!]
+  """
+  ✨ Generated from Field `Aluno`.`id` of type `UUID!`
+  """
+  id: UUID_Filter
+  """
+  ✨ Generated from Field `Aluno`.`usuarioUid` of type `String`
+  """
+  usuarioUid: String_Filter
+  """
+  ✨ Generated from Field `Aluno`.`usuario` of type `Usuario`
+  """
+  usuario: Usuario_Filter
+  """
+  ✨ Generated from Field `Aluno`.`email` of type `String`
+  """
+  email: String_Filter
+  """
+  ✨ Generated from Field `Aluno`.`idade` of type `Int!`
+  """
+  idade: Int_Filter
+  """
+  ✨ Generated from Field `Aluno`.`nome` of type `String!`
+  """
+  nome: String_Filter
+  """
+  ✨ Generated from Field `Aluno`.`presenca` of type `Int!`
+  """
+  presenca: Int_Filter
+  """
+  ✨ Generated from Field `Aluno`.`responsavel` of type `String!`
+  """
+  responsavel: String_Filter
+  """
+  ✨ Generated from Field `Aluno`.`status` of type `String!`
+  """
+  status: String_Filter
+  """
+  ✨ Generated from Field `Aluno`.`telefone` of type `String!`
+  """
+  telefone: String_Filter
+  """
+  ✨ Generated from Field `Aluno`.`alunoBolsas_on_aluno` of type `[AlunoBolsa!]!`
+  """
+  alunoBolsas_on_aluno: AlunoBolsa_ListFilter
+  """
+  ✨ Generated from Field `Aluno`.`inscricoes_on_aluno` of type `[Inscricao!]!`
+  """
+  inscricoes_on_aluno: Inscricao_ListFilter
+  """
+  ✨ Generated from Field `Aluno`.`atividades_via_Inscricao` of type `[Atividade!]!`
+  """
+  atividades_via_Inscricao: Atividade_ListFilter
+  """
+  ✨ Generated from Field `Aluno`.`bolsas_via_AlunoBolsa` of type `[Bolsa!]!`
+  """
+  bolsas_via_AlunoBolsa: Bolsa_ListFilter
+}
+"""
+✨ Generated first-row input type for table 'Aluno'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input Aluno_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [Aluno_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: Aluno_Filter
+}
+"""
+✨ Generated having input type for table 'Aluno'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Aluno_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [Aluno_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: Aluno_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [Aluno_Having!]
+  """
+  ✨ Generated from Field `Aluno`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `Aluno`.`email_count` of type `Int!`
+  """
+  email_count: Int_Filter
+  """
+  ✨ Generated from Field `Aluno`.`id_count` of type `Int!`
+  """
+  id_count: Int_Filter
+  """
+  ✨ Generated from Field `Aluno`.`idade_count` of type `Int!`
+  """
+  idade_count: Int_Filter
+  """
+  ✨ Generated from Field `Aluno`.`nome_count` of type `Int!`
+  """
+  nome_count: Int_Filter
+  """
+  ✨ Generated from Field `Aluno`.`presenca_count` of type `Int!`
+  """
+  presenca_count: Int_Filter
+  """
+  ✨ Generated from Field `Aluno`.`responsavel_count` of type `Int!`
+  """
+  responsavel_count: Int_Filter
+  """
+  ✨ Generated from Field `Aluno`.`status_count` of type `Int!`
+  """
+  status_count: Int_Filter
+  """
+  ✨ Generated from Field `Aluno`.`telefone_count` of type `Int!`
+  """
+  telefone_count: Int_Filter
+  """
+  ✨ Generated from Field `Aluno`.`usuarioUid_count` of type `Int!`
+  """
+  usuarioUid_count: Int_Filter
+  """
+  ✨ Generated from Field `Aluno`.`idade_sum` of type `Int`
+  """
+  idade_sum: Int_Filter
+  """
+  ✨ Generated from Field `Aluno`.`presenca_sum` of type `Int`
+  """
+  presenca_sum: Int_Filter
+  """
+  ✨ Generated from Field `Aluno`.`idade_avg` of type `Float`
+  """
+  idade_avg: Float_Filter
+  """
+  ✨ Generated from Field `Aluno`.`presenca_avg` of type `Float`
+  """
+  presenca_avg: Float_Filter
+  """
+  ✨ Generated from Field `Aluno`.`idade_min` of type `Int`
+  """
+  idade_min: Int_Filter
+  """
+  ✨ Generated from Field `Aluno`.`presenca_min` of type `Int`
+  """
+  presenca_min: Int_Filter
+  """
+  ✨ Generated from Field `Aluno`.`idade_max` of type `Int`
+  """
+  idade_max: Int_Filter
+  """
+  ✨ Generated from Field `Aluno`.`presenca_max` of type `Int`
+  """
+  presenca_max: Int_Filter
+}
+"""
+✨ Generated key input type for table 'Aluno'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input Aluno_Key {
+  """
+  ✨ Generated from Field `Aluno`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Aluno`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated list filter input type for table 'Aluno'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input Aluno_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: Aluno_Filter
+}
+"""
+✨ Generated order input type for table 'Aluno'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input Aluno_Order {
+  """
+  ✨ Generated from Field `Aluno`.`id` of type `UUID!`
+  """
+  id: OrderDirection
+  """
+  ✨ Generated from Field `Aluno`.`usuarioUid` of type `String`
+  """
+  usuarioUid: OrderDirection
+  """
+  ✨ Generated from Field `Aluno`.`usuario` of type `Usuario`
+  """
+  usuario: Usuario_Order
+  """
+  ✨ Generated from Field `Aluno`.`email` of type `String`
+  """
+  email: OrderDirection
+  """
+  ✨ Generated from Field `Aluno`.`idade` of type `Int!`
+  """
+  idade: OrderDirection
+  """
+  ✨ Generated from Field `Aluno`.`nome` of type `String!`
+  """
+  nome: OrderDirection
+  """
+  ✨ Generated from Field `Aluno`.`presenca` of type `Int!`
+  """
+  presenca: OrderDirection
+  """
+  ✨ Generated from Field `Aluno`.`responsavel` of type `String!`
+  """
+  responsavel: OrderDirection
+  """
+  ✨ Generated from Field `Aluno`.`status` of type `String!`
+  """
+  status: OrderDirection
+  """
+  ✨ Generated from Field `Aluno`.`telefone` of type `String!`
+  """
+  telefone: OrderDirection
+  """
+  ✨ Generated from Field `Aluno`.`_count` of type `Int!`
+  """
+  _count: OrderDirection
+  """
+  ✨ Generated from Field `Aluno`.`email_count` of type `Int!`
+  """
+  email_count: OrderDirection
+  """
+  ✨ Generated from Field `Aluno`.`id_count` of type `Int!`
+  """
+  id_count: OrderDirection
+  """
+  ✨ Generated from Field `Aluno`.`idade_count` of type `Int!`
+  """
+  idade_count: OrderDirection
+  """
+  ✨ Generated from Field `Aluno`.`nome_count` of type `Int!`
+  """
+  nome_count: OrderDirection
+  """
+  ✨ Generated from Field `Aluno`.`presenca_count` of type `Int!`
+  """
+  presenca_count: OrderDirection
+  """
+  ✨ Generated from Field `Aluno`.`responsavel_count` of type `Int!`
+  """
+  responsavel_count: OrderDirection
+  """
+  ✨ Generated from Field `Aluno`.`status_count` of type `Int!`
+  """
+  status_count: OrderDirection
+  """
+  ✨ Generated from Field `Aluno`.`telefone_count` of type `Int!`
+  """
+  telefone_count: OrderDirection
+  """
+  ✨ Generated from Field `Aluno`.`usuarioUid_count` of type `Int!`
+  """
+  usuarioUid_count: OrderDirection
+  """
+  ✨ Generated from Field `Aluno`.`idade_sum` of type `Int`
+  """
+  idade_sum: OrderDirection
+  """
+  ✨ Generated from Field `Aluno`.`presenca_sum` of type `Int`
+  """
+  presenca_sum: OrderDirection
+  """
+  ✨ Generated from Field `Aluno`.`idade_avg` of type `Float`
+  """
+  idade_avg: OrderDirection
+  """
+  ✨ Generated from Field `Aluno`.`presenca_avg` of type `Float`
+  """
+  presenca_avg: OrderDirection
+  """
+  ✨ Generated from Field `Aluno`.`idade_min` of type `Int`
+  """
+  idade_min: OrderDirection
+  """
+  ✨ Generated from Field `Aluno`.`presenca_min` of type `Int`
+  """
+  presenca_min: OrderDirection
+  """
+  ✨ Generated from Field `Aluno`.`idade_max` of type `Int`
+  """
+  idade_max: OrderDirection
+  """
+  ✨ Generated from Field `Aluno`.`presenca_max` of type `Int`
+  """
+  presenca_max: OrderDirection
+}
+"""
+✨ Generated data input type for table 'AlunoBolsa'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input AlunoBolsa_Data {
+  """
+  ✨ Generated from Field `AlunoBolsa`.`alunoId` of type `UUID!`
+  """
+  alunoId: UUID
+  """
+  ✨ `_expr` server value variant of `alunoId` (✨ Generated from Field `AlunoBolsa`.`alunoId` of type `UUID!`)
+  """
+  alunoId_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `AlunoBolsa`.`bolsaId` of type `UUID!`
+  """
+  bolsaId: UUID
+  """
+  ✨ `_expr` server value variant of `bolsaId` (✨ Generated from Field `AlunoBolsa`.`bolsaId` of type `UUID!`)
+  """
+  bolsaId_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `AlunoBolsa`.`aluno` of type `Aluno!`
+  """
+  aluno: Aluno_Key @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `AlunoBolsa`.`bolsa` of type `Bolsa!`
+  """
+  bolsa: Bolsa_Key @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `AlunoBolsa`.`dataFim` of type `Timestamp`
+  """
+  dataFim: Timestamp
+  """
+  ✨ `_expr` server value variant of `dataFim` (✨ Generated from Field `AlunoBolsa`.`dataFim` of type `Timestamp`)
+  """
+  dataFim_expr: Timestamp_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_time` server value variant of `dataFim` (✨ Generated from Field `AlunoBolsa`.`dataFim` of type `Timestamp`)
+  """
+  dataFim_time: Timestamp_Relative @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `dataFim` (✨ Generated from Field `AlunoBolsa`.`dataFim` of type `Timestamp`)
+  """
+  dataFim_update: [Timestamp_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `AlunoBolsa`.`dataInicio` of type `Timestamp!`
+  """
+  dataInicio: Timestamp
+  """
+  ✨ `_expr` server value variant of `dataInicio` (✨ Generated from Field `AlunoBolsa`.`dataInicio` of type `Timestamp!`)
+  """
+  dataInicio_expr: Timestamp_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_time` server value variant of `dataInicio` (✨ Generated from Field `AlunoBolsa`.`dataInicio` of type `Timestamp!`)
+  """
+  dataInicio_time: Timestamp_Relative @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `dataInicio` (✨ Generated from Field `AlunoBolsa`.`dataInicio` of type `Timestamp!`)
+  """
+  dataInicio_update: [Timestamp_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `AlunoBolsa`.`status` of type `String!`
+  """
+  status: String
+  """
+  ✨ `_expr` server value variant of `status` (✨ Generated from Field `AlunoBolsa`.`status` of type `String!`)
+  """
+  status_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `AlunoBolsa`.`valorConcedido` of type `Float!`
+  """
+  valorConcedido: Float
+  """
+  ✨ `_expr` server value variant of `valorConcedido` (✨ Generated from Field `AlunoBolsa`.`valorConcedido` of type `Float!`)
+  """
+  valorConcedido_expr: Float_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `valorConcedido` (✨ Generated from Field `AlunoBolsa`.`valorConcedido` of type `Float!`)
+  """
+  valorConcedido_update: [Float_Update!] @fdc_forbiddenInVariables
+}
+"""
+✨ Generated filter input type for table 'AlunoBolsa'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input AlunoBolsa_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [AlunoBolsa_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: AlunoBolsa_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [AlunoBolsa_Filter!]
+  """
+  ✨ Generated from Field `AlunoBolsa`.`alunoId` of type `UUID!`
+  """
+  alunoId: UUID_Filter
+  """
+  ✨ Generated from Field `AlunoBolsa`.`bolsaId` of type `UUID!`
+  """
+  bolsaId: UUID_Filter
+  """
+  ✨ Generated from Field `AlunoBolsa`.`aluno` of type `Aluno!`
+  """
+  aluno: Aluno_Filter
+  """
+  ✨ Generated from Field `AlunoBolsa`.`bolsa` of type `Bolsa!`
+  """
+  bolsa: Bolsa_Filter
+  """
+  ✨ Generated from Field `AlunoBolsa`.`dataFim` of type `Timestamp`
+  """
+  dataFim: Timestamp_Filter
+  """
+  ✨ Generated from Field `AlunoBolsa`.`dataInicio` of type `Timestamp!`
+  """
+  dataInicio: Timestamp_Filter
+  """
+  ✨ Generated from Field `AlunoBolsa`.`status` of type `String!`
+  """
+  status: String_Filter
+  """
+  ✨ Generated from Field `AlunoBolsa`.`valorConcedido` of type `Float!`
+  """
+  valorConcedido: Float_Filter
+}
+"""
+✨ Generated first-row input type for table 'AlunoBolsa'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input AlunoBolsa_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [AlunoBolsa_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: AlunoBolsa_Filter
+}
+"""
+✨ Generated having input type for table 'AlunoBolsa'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input AlunoBolsa_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [AlunoBolsa_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: AlunoBolsa_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [AlunoBolsa_Having!]
+  """
+  ✨ Generated from Field `AlunoBolsa`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `AlunoBolsa`.`alunoId_count` of type `Int!`
+  """
+  alunoId_count: Int_Filter
+  """
+  ✨ Generated from Field `AlunoBolsa`.`bolsaId_count` of type `Int!`
+  """
+  bolsaId_count: Int_Filter
+  """
+  ✨ Generated from Field `AlunoBolsa`.`dataFim_count` of type `Int!`
+  """
+  dataFim_count: Int_Filter
+  """
+  ✨ Generated from Field `AlunoBolsa`.`dataInicio_count` of type `Int!`
+  """
+  dataInicio_count: Int_Filter
+  """
+  ✨ Generated from Field `AlunoBolsa`.`status_count` of type `Int!`
+  """
+  status_count: Int_Filter
+  """
+  ✨ Generated from Field `AlunoBolsa`.`valorConcedido_count` of type `Int!`
+  """
+  valorConcedido_count: Int_Filter
+  """
+  ✨ Generated from Field `AlunoBolsa`.`valorConcedido_sum` of type `Float`
+  """
+  valorConcedido_sum: Float_Filter
+  """
+  ✨ Generated from Field `AlunoBolsa`.`valorConcedido_avg` of type `Float`
+  """
+  valorConcedido_avg: Float_Filter
+  """
+  ✨ Generated from Field `AlunoBolsa`.`dataFim_min` of type `Timestamp`
+  """
+  dataFim_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `AlunoBolsa`.`dataInicio_min` of type `Timestamp`
+  """
+  dataInicio_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `AlunoBolsa`.`valorConcedido_min` of type `Float`
+  """
+  valorConcedido_min: Float_Filter
+  """
+  ✨ Generated from Field `AlunoBolsa`.`dataFim_max` of type `Timestamp`
+  """
+  dataFim_max: Timestamp_Filter
+  """
+  ✨ Generated from Field `AlunoBolsa`.`dataInicio_max` of type `Timestamp`
+  """
+  dataInicio_max: Timestamp_Filter
+  """
+  ✨ Generated from Field `AlunoBolsa`.`valorConcedido_max` of type `Float`
+  """
+  valorConcedido_max: Float_Filter
+}
+"""
+✨ Generated key input type for table 'AlunoBolsa'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input AlunoBolsa_Key {
+  """
+  ✨ Generated from Field `AlunoBolsa`.`alunoId` of type `UUID!`
+  """
+  alunoId: UUID
+  """
+  ✨ `_expr` server value variant of `alunoId` (✨ Generated from Field `AlunoBolsa`.`alunoId` of type `UUID!`)
+  """
+  alunoId_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `AlunoBolsa`.`bolsaId` of type `UUID!`
+  """
+  bolsaId: UUID
+  """
+  ✨ `_expr` server value variant of `bolsaId` (✨ Generated from Field `AlunoBolsa`.`bolsaId` of type `UUID!`)
+  """
+  bolsaId_expr: UUID_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated list filter input type for table 'AlunoBolsa'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input AlunoBolsa_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: AlunoBolsa_Filter
+}
+"""
+✨ Generated order input type for table 'AlunoBolsa'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input AlunoBolsa_Order {
+  """
+  ✨ Generated from Field `AlunoBolsa`.`alunoId` of type `UUID!`
+  """
+  alunoId: OrderDirection
+  """
+  ✨ Generated from Field `AlunoBolsa`.`bolsaId` of type `UUID!`
+  """
+  bolsaId: OrderDirection
+  """
+  ✨ Generated from Field `AlunoBolsa`.`aluno` of type `Aluno!`
+  """
+  aluno: Aluno_Order
+  """
+  ✨ Generated from Field `AlunoBolsa`.`bolsa` of type `Bolsa!`
+  """
+  bolsa: Bolsa_Order
+  """
+  ✨ Generated from Field `AlunoBolsa`.`dataFim` of type `Timestamp`
+  """
+  dataFim: OrderDirection
+  """
+  ✨ Generated from Field `AlunoBolsa`.`dataInicio` of type `Timestamp!`
+  """
+  dataInicio: OrderDirection
+  """
+  ✨ Generated from Field `AlunoBolsa`.`status` of type `String!`
+  """
+  status: OrderDirection
+  """
+  ✨ Generated from Field `AlunoBolsa`.`valorConcedido` of type `Float!`
+  """
+  valorConcedido: OrderDirection
+  """
+  ✨ Generated from Field `AlunoBolsa`.`_count` of type `Int!`
+  """
+  _count: OrderDirection
+  """
+  ✨ Generated from Field `AlunoBolsa`.`alunoId_count` of type `Int!`
+  """
+  alunoId_count: OrderDirection
+  """
+  ✨ Generated from Field `AlunoBolsa`.`bolsaId_count` of type `Int!`
+  """
+  bolsaId_count: OrderDirection
+  """
+  ✨ Generated from Field `AlunoBolsa`.`dataFim_count` of type `Int!`
+  """
+  dataFim_count: OrderDirection
+  """
+  ✨ Generated from Field `AlunoBolsa`.`dataInicio_count` of type `Int!`
+  """
+  dataInicio_count: OrderDirection
+  """
+  ✨ Generated from Field `AlunoBolsa`.`status_count` of type `Int!`
+  """
+  status_count: OrderDirection
+  """
+  ✨ Generated from Field `AlunoBolsa`.`valorConcedido_count` of type `Int!`
+  """
+  valorConcedido_count: OrderDirection
+  """
+  ✨ Generated from Field `AlunoBolsa`.`valorConcedido_sum` of type `Float`
+  """
+  valorConcedido_sum: OrderDirection
+  """
+  ✨ Generated from Field `AlunoBolsa`.`valorConcedido_avg` of type `Float`
+  """
+  valorConcedido_avg: OrderDirection
+  """
+  ✨ Generated from Field `AlunoBolsa`.`dataFim_min` of type `Timestamp`
+  """
+  dataFim_min: OrderDirection
+  """
+  ✨ Generated from Field `AlunoBolsa`.`dataInicio_min` of type `Timestamp`
+  """
+  dataInicio_min: OrderDirection
+  """
+  ✨ Generated from Field `AlunoBolsa`.`valorConcedido_min` of type `Float`
+  """
+  valorConcedido_min: OrderDirection
+  """
+  ✨ Generated from Field `AlunoBolsa`.`dataFim_max` of type `Timestamp`
+  """
+  dataFim_max: OrderDirection
+  """
+  ✨ Generated from Field `AlunoBolsa`.`dataInicio_max` of type `Timestamp`
+  """
+  dataInicio_max: OrderDirection
+  """
+  ✨ Generated from Field `AlunoBolsa`.`valorConcedido_max` of type `Float`
+  """
+  valorConcedido_max: OrderDirection
+}
+"""
+✨ Generated data input type for table 'Atividade'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input Atividade_Data {
+  """
+  ✨ Generated from Field `Atividade`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Atividade`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Atividade`.`categoria` of type `String`
+  """
+  categoria: String
+  """
+  ✨ `_expr` server value variant of `categoria` (✨ Generated from Field `Atividade`.`categoria` of type `String`)
+  """
+  categoria_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Atividade`.`criadoEm` of type `Timestamp!`
+  """
+  criadoEm: Timestamp
+  """
+  ✨ `_expr` server value variant of `criadoEm` (✨ Generated from Field `Atividade`.`criadoEm` of type `Timestamp!`)
+  """
+  criadoEm_expr: Timestamp_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_time` server value variant of `criadoEm` (✨ Generated from Field `Atividade`.`criadoEm` of type `Timestamp!`)
+  """
+  criadoEm_time: Timestamp_Relative @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `criadoEm` (✨ Generated from Field `Atividade`.`criadoEm` of type `Timestamp!`)
+  """
+  criadoEm_update: [Timestamp_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Atividade`.`descricao` of type `String`
+  """
+  descricao: String
+  """
+  ✨ `_expr` server value variant of `descricao` (✨ Generated from Field `Atividade`.`descricao` of type `String`)
+  """
+  descricao_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Atividade`.`dias` of type `String`
+  """
+  dias: String
+  """
+  ✨ `_expr` server value variant of `dias` (✨ Generated from Field `Atividade`.`dias` of type `String`)
+  """
+  dias_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Atividade`.`horario` of type `String`
+  """
+  horario: String
+  """
+  ✨ `_expr` server value variant of `horario` (✨ Generated from Field `Atividade`.`horario` of type `String`)
+  """
+  horario_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Atividade`.`nome` of type `String!`
+  """
+  nome: String
+  """
+  ✨ `_expr` server value variant of `nome` (✨ Generated from Field `Atividade`.`nome` of type `String!`)
+  """
+  nome_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Atividade`.`professor` of type `String!`
+  """
+  professor: String
+  """
+  ✨ `_expr` server value variant of `professor` (✨ Generated from Field `Atividade`.`professor` of type `String!`)
+  """
+  professor_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Atividade`.`status` of type `String!`
+  """
+  status: String
+  """
+  ✨ `_expr` server value variant of `status` (✨ Generated from Field `Atividade`.`status` of type `String!`)
+  """
+  status_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Atividade`.`vagas` of type `Int!`
+  """
+  vagas: Int
+  """
+  ✨ `_expr` server value variant of `vagas` (✨ Generated from Field `Atividade`.`vagas` of type `Int!`)
+  """
+  vagas_expr: Int_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `vagas` (✨ Generated from Field `Atividade`.`vagas` of type `Int!`)
+  """
+  vagas_update: [Int_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Atividade`.`agendas_on_atividade` of type `[Agenda!]!`
+  """
+  agendas_on_atividade: [Agenda_Data!]
+  """
+  ✨ Generated from Field `Atividade`.`inscricoes_on_atividade` of type `[Inscricao!]!`
+  """
+  inscricoes_on_atividade: [Inscricao_Data!]
+}
+"""
+✨ Generated filter input type for table 'Atividade'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Atividade_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [Atividade_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: Atividade_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [Atividade_Filter!]
+  """
+  ✨ Generated from Field `Atividade`.`id` of type `UUID!`
+  """
+  id: UUID_Filter
+  """
+  ✨ Generated from Field `Atividade`.`categoria` of type `String`
+  """
+  categoria: String_Filter
+  """
+  ✨ Generated from Field `Atividade`.`criadoEm` of type `Timestamp!`
+  """
+  criadoEm: Timestamp_Filter
+  """
+  ✨ Generated from Field `Atividade`.`descricao` of type `String`
+  """
+  descricao: String_Filter
+  """
+  ✨ Generated from Field `Atividade`.`dias` of type `String`
+  """
+  dias: String_Filter
+  """
+  ✨ Generated from Field `Atividade`.`horario` of type `String`
+  """
+  horario: String_Filter
+  """
+  ✨ Generated from Field `Atividade`.`nome` of type `String!`
+  """
+  nome: String_Filter
+  """
+  ✨ Generated from Field `Atividade`.`professor` of type `String!`
+  """
+  professor: String_Filter
+  """
+  ✨ Generated from Field `Atividade`.`status` of type `String!`
+  """
+  status: String_Filter
+  """
+  ✨ Generated from Field `Atividade`.`vagas` of type `Int!`
+  """
+  vagas: Int_Filter
+  """
+  ✨ Generated from Field `Atividade`.`agendas_on_atividade` of type `[Agenda!]!`
+  """
+  agendas_on_atividade: Agenda_ListFilter
+  """
+  ✨ Generated from Field `Atividade`.`inscricoes_on_atividade` of type `[Inscricao!]!`
+  """
+  inscricoes_on_atividade: Inscricao_ListFilter
+  """
+  ✨ Generated from Field `Atividade`.`alunos_via_Inscricao` of type `[Aluno!]!`
+  """
+  alunos_via_Inscricao: Aluno_ListFilter
+}
+"""
+✨ Generated first-row input type for table 'Atividade'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input Atividade_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [Atividade_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: Atividade_Filter
+}
+"""
+✨ Generated having input type for table 'Atividade'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Atividade_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [Atividade_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: Atividade_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [Atividade_Having!]
+  """
+  ✨ Generated from Field `Atividade`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `Atividade`.`categoria_count` of type `Int!`
+  """
+  categoria_count: Int_Filter
+  """
+  ✨ Generated from Field `Atividade`.`criadoEm_count` of type `Int!`
+  """
+  criadoEm_count: Int_Filter
+  """
+  ✨ Generated from Field `Atividade`.`descricao_count` of type `Int!`
+  """
+  descricao_count: Int_Filter
+  """
+  ✨ Generated from Field `Atividade`.`dias_count` of type `Int!`
+  """
+  dias_count: Int_Filter
+  """
+  ✨ Generated from Field `Atividade`.`horario_count` of type `Int!`
+  """
+  horario_count: Int_Filter
+  """
+  ✨ Generated from Field `Atividade`.`id_count` of type `Int!`
+  """
+  id_count: Int_Filter
+  """
+  ✨ Generated from Field `Atividade`.`nome_count` of type `Int!`
+  """
+  nome_count: Int_Filter
+  """
+  ✨ Generated from Field `Atividade`.`professor_count` of type `Int!`
+  """
+  professor_count: Int_Filter
+  """
+  ✨ Generated from Field `Atividade`.`status_count` of type `Int!`
+  """
+  status_count: Int_Filter
+  """
+  ✨ Generated from Field `Atividade`.`vagas_count` of type `Int!`
+  """
+  vagas_count: Int_Filter
+  """
+  ✨ Generated from Field `Atividade`.`vagas_sum` of type `Int`
+  """
+  vagas_sum: Int_Filter
+  """
+  ✨ Generated from Field `Atividade`.`vagas_avg` of type `Float`
+  """
+  vagas_avg: Float_Filter
+  """
+  ✨ Generated from Field `Atividade`.`criadoEm_min` of type `Timestamp`
+  """
+  criadoEm_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `Atividade`.`vagas_min` of type `Int`
+  """
+  vagas_min: Int_Filter
+  """
+  ✨ Generated from Field `Atividade`.`criadoEm_max` of type `Timestamp`
+  """
+  criadoEm_max: Timestamp_Filter
+  """
+  ✨ Generated from Field `Atividade`.`vagas_max` of type `Int`
+  """
+  vagas_max: Int_Filter
+}
+"""
+✨ Generated key input type for table 'Atividade'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input Atividade_Key {
+  """
+  ✨ Generated from Field `Atividade`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Atividade`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated list filter input type for table 'Atividade'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input Atividade_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: Atividade_Filter
+}
+"""
+✨ Generated order input type for table 'Atividade'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input Atividade_Order {
+  """
+  ✨ Generated from Field `Atividade`.`id` of type `UUID!`
+  """
+  id: OrderDirection
+  """
+  ✨ Generated from Field `Atividade`.`categoria` of type `String`
+  """
+  categoria: OrderDirection
+  """
+  ✨ Generated from Field `Atividade`.`criadoEm` of type `Timestamp!`
+  """
+  criadoEm: OrderDirection
+  """
+  ✨ Generated from Field `Atividade`.`descricao` of type `String`
+  """
+  descricao: OrderDirection
+  """
+  ✨ Generated from Field `Atividade`.`dias` of type `String`
+  """
+  dias: OrderDirection
+  """
+  ✨ Generated from Field `Atividade`.`horario` of type `String`
+  """
+  horario: OrderDirection
+  """
+  ✨ Generated from Field `Atividade`.`nome` of type `String!`
+  """
+  nome: OrderDirection
+  """
+  ✨ Generated from Field `Atividade`.`professor` of type `String!`
+  """
+  professor: OrderDirection
+  """
+  ✨ Generated from Field `Atividade`.`status` of type `String!`
+  """
+  status: OrderDirection
+  """
+  ✨ Generated from Field `Atividade`.`vagas` of type `Int!`
+  """
+  vagas: OrderDirection
+  """
+  ✨ Generated from Field `Atividade`.`_count` of type `Int!`
+  """
+  _count: OrderDirection
+  """
+  ✨ Generated from Field `Atividade`.`categoria_count` of type `Int!`
+  """
+  categoria_count: OrderDirection
+  """
+  ✨ Generated from Field `Atividade`.`criadoEm_count` of type `Int!`
+  """
+  criadoEm_count: OrderDirection
+  """
+  ✨ Generated from Field `Atividade`.`descricao_count` of type `Int!`
+  """
+  descricao_count: OrderDirection
+  """
+  ✨ Generated from Field `Atividade`.`dias_count` of type `Int!`
+  """
+  dias_count: OrderDirection
+  """
+  ✨ Generated from Field `Atividade`.`horario_count` of type `Int!`
+  """
+  horario_count: OrderDirection
+  """
+  ✨ Generated from Field `Atividade`.`id_count` of type `Int!`
+  """
+  id_count: OrderDirection
+  """
+  ✨ Generated from Field `Atividade`.`nome_count` of type `Int!`
+  """
+  nome_count: OrderDirection
+  """
+  ✨ Generated from Field `Atividade`.`professor_count` of type `Int!`
+  """
+  professor_count: OrderDirection
+  """
+  ✨ Generated from Field `Atividade`.`status_count` of type `Int!`
+  """
+  status_count: OrderDirection
+  """
+  ✨ Generated from Field `Atividade`.`vagas_count` of type `Int!`
+  """
+  vagas_count: OrderDirection
+  """
+  ✨ Generated from Field `Atividade`.`vagas_sum` of type `Int`
+  """
+  vagas_sum: OrderDirection
+  """
+  ✨ Generated from Field `Atividade`.`vagas_avg` of type `Float`
+  """
+  vagas_avg: OrderDirection
+  """
+  ✨ Generated from Field `Atividade`.`criadoEm_min` of type `Timestamp`
+  """
+  criadoEm_min: OrderDirection
+  """
+  ✨ Generated from Field `Atividade`.`vagas_min` of type `Int`
+  """
+  vagas_min: OrderDirection
+  """
+  ✨ Generated from Field `Atividade`.`criadoEm_max` of type `Timestamp`
+  """
+  criadoEm_max: OrderDirection
+  """
+  ✨ Generated from Field `Atividade`.`vagas_max` of type `Int`
+  """
+  vagas_max: OrderDirection
+}
+"""
+✨ Generated data input type for table 'Bolsa'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input Bolsa_Data {
+  """
+  ✨ Generated from Field `Bolsa`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Bolsa`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Bolsa`.`ativa` of type `Boolean!`
+  """
+  ativa: Boolean
+  """
+  ✨ `_expr` server value variant of `ativa` (✨ Generated from Field `Bolsa`.`ativa` of type `Boolean!`)
+  """
+  ativa_expr: Boolean_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Bolsa`.`descricao` of type `String`
+  """
+  descricao: String
+  """
+  ✨ `_expr` server value variant of `descricao` (✨ Generated from Field `Bolsa`.`descricao` of type `String`)
+  """
+  descricao_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Bolsa`.`nome` of type `String!`
+  """
+  nome: String
+  """
+  ✨ `_expr` server value variant of `nome` (✨ Generated from Field `Bolsa`.`nome` of type `String!`)
+  """
+  nome_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Bolsa`.`valorMensal` of type `Float!`
+  """
+  valorMensal: Float
+  """
+  ✨ `_expr` server value variant of `valorMensal` (✨ Generated from Field `Bolsa`.`valorMensal` of type `Float!`)
+  """
+  valorMensal_expr: Float_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `valorMensal` (✨ Generated from Field `Bolsa`.`valorMensal` of type `Float!`)
+  """
+  valorMensal_update: [Float_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Bolsa`.`alunoBolsas_on_bolsa` of type `[AlunoBolsa!]!`
+  """
+  alunoBolsas_on_bolsa: [AlunoBolsa_Data!]
+}
+"""
+✨ Generated filter input type for table 'Bolsa'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Bolsa_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [Bolsa_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: Bolsa_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [Bolsa_Filter!]
+  """
+  ✨ Generated from Field `Bolsa`.`id` of type `UUID!`
+  """
+  id: UUID_Filter
+  """
+  ✨ Generated from Field `Bolsa`.`ativa` of type `Boolean!`
+  """
+  ativa: Boolean_Filter
+  """
+  ✨ Generated from Field `Bolsa`.`descricao` of type `String`
+  """
+  descricao: String_Filter
+  """
+  ✨ Generated from Field `Bolsa`.`nome` of type `String!`
+  """
+  nome: String_Filter
+  """
+  ✨ Generated from Field `Bolsa`.`valorMensal` of type `Float!`
+  """
+  valorMensal: Float_Filter
+  """
+  ✨ Generated from Field `Bolsa`.`alunoBolsas_on_bolsa` of type `[AlunoBolsa!]!`
+  """
+  alunoBolsas_on_bolsa: AlunoBolsa_ListFilter
+  """
+  ✨ Generated from Field `Bolsa`.`alunos_via_AlunoBolsa` of type `[Aluno!]!`
+  """
+  alunos_via_AlunoBolsa: Aluno_ListFilter
+}
+"""
+✨ Generated first-row input type for table 'Bolsa'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input Bolsa_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [Bolsa_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: Bolsa_Filter
+}
+"""
+✨ Generated having input type for table 'Bolsa'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Bolsa_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [Bolsa_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: Bolsa_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [Bolsa_Having!]
+  """
+  ✨ Generated from Field `Bolsa`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `Bolsa`.`ativa_count` of type `Int!`
+  """
+  ativa_count: Int_Filter
+  """
+  ✨ Generated from Field `Bolsa`.`descricao_count` of type `Int!`
+  """
+  descricao_count: Int_Filter
+  """
+  ✨ Generated from Field `Bolsa`.`id_count` of type `Int!`
+  """
+  id_count: Int_Filter
+  """
+  ✨ Generated from Field `Bolsa`.`nome_count` of type `Int!`
+  """
+  nome_count: Int_Filter
+  """
+  ✨ Generated from Field `Bolsa`.`valorMensal_count` of type `Int!`
+  """
+  valorMensal_count: Int_Filter
+  """
+  ✨ Generated from Field `Bolsa`.`valorMensal_sum` of type `Float`
+  """
+  valorMensal_sum: Float_Filter
+  """
+  ✨ Generated from Field `Bolsa`.`valorMensal_avg` of type `Float`
+  """
+  valorMensal_avg: Float_Filter
+  """
+  ✨ Generated from Field `Bolsa`.`valorMensal_min` of type `Float`
+  """
+  valorMensal_min: Float_Filter
+  """
+  ✨ Generated from Field `Bolsa`.`valorMensal_max` of type `Float`
+  """
+  valorMensal_max: Float_Filter
+}
+"""
+✨ Generated key input type for table 'Bolsa'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input Bolsa_Key {
+  """
+  ✨ Generated from Field `Bolsa`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Bolsa`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated list filter input type for table 'Bolsa'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input Bolsa_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: Bolsa_Filter
+}
+"""
+✨ Generated order input type for table 'Bolsa'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input Bolsa_Order {
+  """
+  ✨ Generated from Field `Bolsa`.`id` of type `UUID!`
+  """
+  id: OrderDirection
+  """
+  ✨ Generated from Field `Bolsa`.`ativa` of type `Boolean!`
+  """
+  ativa: OrderDirection
+  """
+  ✨ Generated from Field `Bolsa`.`descricao` of type `String`
+  """
+  descricao: OrderDirection
+  """
+  ✨ Generated from Field `Bolsa`.`nome` of type `String!`
+  """
+  nome: OrderDirection
+  """
+  ✨ Generated from Field `Bolsa`.`valorMensal` of type `Float!`
+  """
+  valorMensal: OrderDirection
+  """
+  ✨ Generated from Field `Bolsa`.`_count` of type `Int!`
+  """
+  _count: OrderDirection
+  """
+  ✨ Generated from Field `Bolsa`.`ativa_count` of type `Int!`
+  """
+  ativa_count: OrderDirection
+  """
+  ✨ Generated from Field `Bolsa`.`descricao_count` of type `Int!`
+  """
+  descricao_count: OrderDirection
+  """
+  ✨ Generated from Field `Bolsa`.`id_count` of type `Int!`
+  """
+  id_count: OrderDirection
+  """
+  ✨ Generated from Field `Bolsa`.`nome_count` of type `Int!`
+  """
+  nome_count: OrderDirection
+  """
+  ✨ Generated from Field `Bolsa`.`valorMensal_count` of type `Int!`
+  """
+  valorMensal_count: OrderDirection
+  """
+  ✨ Generated from Field `Bolsa`.`valorMensal_sum` of type `Float`
+  """
+  valorMensal_sum: OrderDirection
+  """
+  ✨ Generated from Field `Bolsa`.`valorMensal_avg` of type `Float`
+  """
+  valorMensal_avg: OrderDirection
+  """
+  ✨ Generated from Field `Bolsa`.`valorMensal_min` of type `Float`
+  """
+  valorMensal_min: OrderDirection
+  """
+  ✨ Generated from Field `Bolsa`.`valorMensal_max` of type `Float`
+  """
+  valorMensal_max: OrderDirection
+}
+"""
+✨ Generated data input type for table 'Doacao'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input Doacao_Data {
+  """
+  ✨ Generated from Field `Doacao`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Doacao`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Doacao`.`doadorId` of type `UUID!`
+  """
+  doadorId: UUID
+  """
+  ✨ `_expr` server value variant of `doadorId` (✨ Generated from Field `Doacao`.`doadorId` of type `UUID!`)
+  """
+  doadorId_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Doacao`.`doador` of type `Doador!`
+  """
+  doador: Doador_Key @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Doacao`.`data` of type `Timestamp!`
+  """
+  data: Timestamp
+  """
+  ✨ `_expr` server value variant of `data` (✨ Generated from Field `Doacao`.`data` of type `Timestamp!`)
+  """
+  data_expr: Timestamp_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_time` server value variant of `data` (✨ Generated from Field `Doacao`.`data` of type `Timestamp!`)
+  """
+  data_time: Timestamp_Relative @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `data` (✨ Generated from Field `Doacao`.`data` of type `Timestamp!`)
+  """
+  data_update: [Timestamp_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Doacao`.`metodo` of type `String`
+  """
+  metodo: String
+  """
+  ✨ `_expr` server value variant of `metodo` (✨ Generated from Field `Doacao`.`metodo` of type `String`)
+  """
+  metodo_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Doacao`.`status` of type `String!`
+  """
+  status: String
+  """
+  ✨ `_expr` server value variant of `status` (✨ Generated from Field `Doacao`.`status` of type `String!`)
+  """
+  status_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Doacao`.`valor` of type `Float!`
+  """
+  valor: Float
+  """
+  ✨ `_expr` server value variant of `valor` (✨ Generated from Field `Doacao`.`valor` of type `Float!`)
+  """
+  valor_expr: Float_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `valor` (✨ Generated from Field `Doacao`.`valor` of type `Float!`)
+  """
+  valor_update: [Float_Update!] @fdc_forbiddenInVariables
+}
+"""
+✨ Generated filter input type for table 'Doacao'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Doacao_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [Doacao_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: Doacao_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [Doacao_Filter!]
+  """
+  ✨ Generated from Field `Doacao`.`id` of type `UUID!`
+  """
+  id: UUID_Filter
+  """
+  ✨ Generated from Field `Doacao`.`doadorId` of type `UUID!`
+  """
+  doadorId: UUID_Filter
+  """
+  ✨ Generated from Field `Doacao`.`doador` of type `Doador!`
+  """
+  doador: Doador_Filter
+  """
+  ✨ Generated from Field `Doacao`.`data` of type `Timestamp!`
+  """
+  data: Timestamp_Filter
+  """
+  ✨ Generated from Field `Doacao`.`metodo` of type `String`
+  """
+  metodo: String_Filter
+  """
+  ✨ Generated from Field `Doacao`.`status` of type `String!`
+  """
+  status: String_Filter
+  """
+  ✨ Generated from Field `Doacao`.`valor` of type `Float!`
+  """
+  valor: Float_Filter
+}
+"""
+✨ Generated first-row input type for table 'Doacao'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input Doacao_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [Doacao_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: Doacao_Filter
+}
+"""
+✨ Generated having input type for table 'Doacao'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Doacao_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [Doacao_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: Doacao_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [Doacao_Having!]
+  """
+  ✨ Generated from Field `Doacao`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `Doacao`.`data_count` of type `Int!`
+  """
+  data_count: Int_Filter
+  """
+  ✨ Generated from Field `Doacao`.`doadorId_count` of type `Int!`
+  """
+  doadorId_count: Int_Filter
+  """
+  ✨ Generated from Field `Doacao`.`id_count` of type `Int!`
+  """
+  id_count: Int_Filter
+  """
+  ✨ Generated from Field `Doacao`.`metodo_count` of type `Int!`
+  """
+  metodo_count: Int_Filter
+  """
+  ✨ Generated from Field `Doacao`.`status_count` of type `Int!`
+  """
+  status_count: Int_Filter
+  """
+  ✨ Generated from Field `Doacao`.`valor_count` of type `Int!`
+  """
+  valor_count: Int_Filter
+  """
+  ✨ Generated from Field `Doacao`.`valor_sum` of type `Float`
+  """
+  valor_sum: Float_Filter
+  """
+  ✨ Generated from Field `Doacao`.`valor_avg` of type `Float`
+  """
+  valor_avg: Float_Filter
+  """
+  ✨ Generated from Field `Doacao`.`data_min` of type `Timestamp`
+  """
+  data_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `Doacao`.`valor_min` of type `Float`
+  """
+  valor_min: Float_Filter
+  """
+  ✨ Generated from Field `Doacao`.`data_max` of type `Timestamp`
+  """
+  data_max: Timestamp_Filter
+  """
+  ✨ Generated from Field `Doacao`.`valor_max` of type `Float`
+  """
+  valor_max: Float_Filter
+}
+"""
+✨ Generated key input type for table 'Doacao'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input Doacao_Key {
+  """
+  ✨ Generated from Field `Doacao`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Doacao`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated list filter input type for table 'Doacao'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input Doacao_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: Doacao_Filter
+}
+"""
+✨ Generated order input type for table 'Doacao'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input Doacao_Order {
+  """
+  ✨ Generated from Field `Doacao`.`id` of type `UUID!`
+  """
+  id: OrderDirection
+  """
+  ✨ Generated from Field `Doacao`.`doadorId` of type `UUID!`
+  """
+  doadorId: OrderDirection
+  """
+  ✨ Generated from Field `Doacao`.`doador` of type `Doador!`
+  """
+  doador: Doador_Order
+  """
+  ✨ Generated from Field `Doacao`.`data` of type `Timestamp!`
+  """
+  data: OrderDirection
+  """
+  ✨ Generated from Field `Doacao`.`metodo` of type `String`
+  """
+  metodo: OrderDirection
+  """
+  ✨ Generated from Field `Doacao`.`status` of type `String!`
+  """
+  status: OrderDirection
+  """
+  ✨ Generated from Field `Doacao`.`valor` of type `Float!`
+  """
+  valor: OrderDirection
+  """
+  ✨ Generated from Field `Doacao`.`_count` of type `Int!`
+  """
+  _count: OrderDirection
+  """
+  ✨ Generated from Field `Doacao`.`data_count` of type `Int!`
+  """
+  data_count: OrderDirection
+  """
+  ✨ Generated from Field `Doacao`.`doadorId_count` of type `Int!`
+  """
+  doadorId_count: OrderDirection
+  """
+  ✨ Generated from Field `Doacao`.`id_count` of type `Int!`
+  """
+  id_count: OrderDirection
+  """
+  ✨ Generated from Field `Doacao`.`metodo_count` of type `Int!`
+  """
+  metodo_count: OrderDirection
+  """
+  ✨ Generated from Field `Doacao`.`status_count` of type `Int!`
+  """
+  status_count: OrderDirection
+  """
+  ✨ Generated from Field `Doacao`.`valor_count` of type `Int!`
+  """
+  valor_count: OrderDirection
+  """
+  ✨ Generated from Field `Doacao`.`valor_sum` of type `Float`
+  """
+  valor_sum: OrderDirection
+  """
+  ✨ Generated from Field `Doacao`.`valor_avg` of type `Float`
+  """
+  valor_avg: OrderDirection
+  """
+  ✨ Generated from Field `Doacao`.`data_min` of type `Timestamp`
+  """
+  data_min: OrderDirection
+  """
+  ✨ Generated from Field `Doacao`.`valor_min` of type `Float`
+  """
+  valor_min: OrderDirection
+  """
+  ✨ Generated from Field `Doacao`.`data_max` of type `Timestamp`
+  """
+  data_max: OrderDirection
+  """
+  ✨ Generated from Field `Doacao`.`valor_max` of type `Float`
+  """
+  valor_max: OrderDirection
+}
+"""
+✨ Generated data input type for table 'Doador'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input Doador_Data {
+  """
+  ✨ Generated from Field `Doador`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Doador`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Doador`.`usuarioUid` of type `String!`
+  """
+  usuarioUid: String
+  """
+  ✨ `_expr` server value variant of `usuarioUid` (✨ Generated from Field `Doador`.`usuarioUid` of type `String!`)
+  """
+  usuarioUid_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Doador`.`usuario` of type `Usuario!`
+  """
+  usuario: Usuario_Key @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Doador`.`doacoes_on_doador` of type `[Doacao!]!`
+  """
+  doacoes_on_doador: [Doacao_Data!]
+}
+"""
+✨ Generated filter input type for table 'Doador'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Doador_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [Doador_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: Doador_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [Doador_Filter!]
+  """
+  ✨ Generated from Field `Doador`.`id` of type `UUID!`
+  """
+  id: UUID_Filter
+  """
+  ✨ Generated from Field `Doador`.`usuarioUid` of type `String!`
+  """
+  usuarioUid: String_Filter
+  """
+  ✨ Generated from Field `Doador`.`usuario` of type `Usuario!`
+  """
+  usuario: Usuario_Filter
+  """
+  ✨ Generated from Field `Doador`.`doacoes_on_doador` of type `[Doacao!]!`
+  """
+  doacoes_on_doador: Doacao_ListFilter
+}
+"""
+✨ Generated first-row input type for table 'Doador'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input Doador_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [Doador_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: Doador_Filter
+}
+"""
+✨ Generated having input type for table 'Doador'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Doador_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [Doador_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: Doador_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [Doador_Having!]
+  """
+  ✨ Generated from Field `Doador`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `Doador`.`id_count` of type `Int!`
+  """
+  id_count: Int_Filter
+  """
+  ✨ Generated from Field `Doador`.`usuarioUid_count` of type `Int!`
+  """
+  usuarioUid_count: Int_Filter
+}
+"""
+✨ Generated key input type for table 'Doador'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input Doador_Key {
+  """
+  ✨ Generated from Field `Doador`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Doador`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated list filter input type for table 'Doador'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input Doador_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: Doador_Filter
+}
+"""
+✨ Generated order input type for table 'Doador'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input Doador_Order {
+  """
+  ✨ Generated from Field `Doador`.`id` of type `UUID!`
+  """
+  id: OrderDirection
+  """
+  ✨ Generated from Field `Doador`.`usuarioUid` of type `String!`
+  """
+  usuarioUid: OrderDirection
+  """
+  ✨ Generated from Field `Doador`.`usuario` of type `Usuario!`
+  """
+  usuario: Usuario_Order
+  """
+  ✨ Generated from Field `Doador`.`_count` of type `Int!`
+  """
+  _count: OrderDirection
+  """
+  ✨ Generated from Field `Doador`.`id_count` of type `Int!`
+  """
+  id_count: OrderDirection
+  """
+  ✨ Generated from Field `Doador`.`usuarioUid_count` of type `Int!`
+  """
+  usuarioUid_count: OrderDirection
+}
+"""
+✨ Generated data input type for table 'Inscricao'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input Inscricao_Data {
+  """
+  ✨ Generated from Field `Inscricao`.`alunoId` of type `UUID!`
+  """
+  alunoId: UUID
+  """
+  ✨ `_expr` server value variant of `alunoId` (✨ Generated from Field `Inscricao`.`alunoId` of type `UUID!`)
+  """
+  alunoId_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Inscricao`.`atividadeId` of type `UUID!`
+  """
+  atividadeId: UUID
+  """
+  ✨ `_expr` server value variant of `atividadeId` (✨ Generated from Field `Inscricao`.`atividadeId` of type `UUID!`)
+  """
+  atividadeId_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Inscricao`.`aluno` of type `Aluno!`
+  """
+  aluno: Aluno_Key @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Inscricao`.`atividade` of type `Atividade!`
+  """
+  atividade: Atividade_Key @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Inscricao`.`dataInscricao` of type `Timestamp!`
+  """
+  dataInscricao: Timestamp
+  """
+  ✨ `_expr` server value variant of `dataInscricao` (✨ Generated from Field `Inscricao`.`dataInscricao` of type `Timestamp!`)
+  """
+  dataInscricao_expr: Timestamp_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_time` server value variant of `dataInscricao` (✨ Generated from Field `Inscricao`.`dataInscricao` of type `Timestamp!`)
+  """
+  dataInscricao_time: Timestamp_Relative @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `dataInscricao` (✨ Generated from Field `Inscricao`.`dataInscricao` of type `Timestamp!`)
+  """
+  dataInscricao_update: [Timestamp_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Inscricao`.`status` of type `String!`
+  """
+  status: String
+  """
+  ✨ `_expr` server value variant of `status` (✨ Generated from Field `Inscricao`.`status` of type `String!`)
+  """
+  status_expr: String_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated filter input type for table 'Inscricao'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Inscricao_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [Inscricao_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: Inscricao_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [Inscricao_Filter!]
+  """
+  ✨ Generated from Field `Inscricao`.`alunoId` of type `UUID!`
+  """
+  alunoId: UUID_Filter
+  """
+  ✨ Generated from Field `Inscricao`.`atividadeId` of type `UUID!`
+  """
+  atividadeId: UUID_Filter
+  """
+  ✨ Generated from Field `Inscricao`.`aluno` of type `Aluno!`
+  """
+  aluno: Aluno_Filter
+  """
+  ✨ Generated from Field `Inscricao`.`atividade` of type `Atividade!`
+  """
+  atividade: Atividade_Filter
+  """
+  ✨ Generated from Field `Inscricao`.`dataInscricao` of type `Timestamp!`
+  """
+  dataInscricao: Timestamp_Filter
+  """
+  ✨ Generated from Field `Inscricao`.`status` of type `String!`
+  """
+  status: String_Filter
+}
+"""
+✨ Generated first-row input type for table 'Inscricao'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input Inscricao_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [Inscricao_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: Inscricao_Filter
+}
+"""
+✨ Generated having input type for table 'Inscricao'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Inscricao_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [Inscricao_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: Inscricao_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [Inscricao_Having!]
+  """
+  ✨ Generated from Field `Inscricao`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `Inscricao`.`alunoId_count` of type `Int!`
+  """
+  alunoId_count: Int_Filter
+  """
+  ✨ Generated from Field `Inscricao`.`atividadeId_count` of type `Int!`
+  """
+  atividadeId_count: Int_Filter
+  """
+  ✨ Generated from Field `Inscricao`.`dataInscricao_count` of type `Int!`
+  """
+  dataInscricao_count: Int_Filter
+  """
+  ✨ Generated from Field `Inscricao`.`status_count` of type `Int!`
+  """
+  status_count: Int_Filter
+  """
+  ✨ Generated from Field `Inscricao`.`dataInscricao_min` of type `Timestamp`
+  """
+  dataInscricao_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `Inscricao`.`dataInscricao_max` of type `Timestamp`
+  """
+  dataInscricao_max: Timestamp_Filter
+}
+"""
+✨ Generated key input type for table 'Inscricao'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input Inscricao_Key {
+  """
+  ✨ Generated from Field `Inscricao`.`alunoId` of type `UUID!`
+  """
+  alunoId: UUID
+  """
+  ✨ `_expr` server value variant of `alunoId` (✨ Generated from Field `Inscricao`.`alunoId` of type `UUID!`)
+  """
+  alunoId_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Inscricao`.`atividadeId` of type `UUID!`
+  """
+  atividadeId: UUID
+  """
+  ✨ `_expr` server value variant of `atividadeId` (✨ Generated from Field `Inscricao`.`atividadeId` of type `UUID!`)
+  """
+  atividadeId_expr: UUID_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated list filter input type for table 'Inscricao'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input Inscricao_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: Inscricao_Filter
+}
+"""
+✨ Generated order input type for table 'Inscricao'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input Inscricao_Order {
+  """
+  ✨ Generated from Field `Inscricao`.`alunoId` of type `UUID!`
+  """
+  alunoId: OrderDirection
+  """
+  ✨ Generated from Field `Inscricao`.`atividadeId` of type `UUID!`
+  """
+  atividadeId: OrderDirection
+  """
+  ✨ Generated from Field `Inscricao`.`aluno` of type `Aluno!`
+  """
+  aluno: Aluno_Order
+  """
+  ✨ Generated from Field `Inscricao`.`atividade` of type `Atividade!`
+  """
+  atividade: Atividade_Order
+  """
+  ✨ Generated from Field `Inscricao`.`dataInscricao` of type `Timestamp!`
+  """
+  dataInscricao: OrderDirection
+  """
+  ✨ Generated from Field `Inscricao`.`status` of type `String!`
+  """
+  status: OrderDirection
+  """
+  ✨ Generated from Field `Inscricao`.`_count` of type `Int!`
+  """
+  _count: OrderDirection
+  """
+  ✨ Generated from Field `Inscricao`.`alunoId_count` of type `Int!`
+  """
+  alunoId_count: OrderDirection
+  """
+  ✨ Generated from Field `Inscricao`.`atividadeId_count` of type `Int!`
+  """
+  atividadeId_count: OrderDirection
+  """
+  ✨ Generated from Field `Inscricao`.`dataInscricao_count` of type `Int!`
+  """
+  dataInscricao_count: OrderDirection
+  """
+  ✨ Generated from Field `Inscricao`.`status_count` of type `Int!`
+  """
+  status_count: OrderDirection
+  """
+  ✨ Generated from Field `Inscricao`.`dataInscricao_min` of type `Timestamp`
+  """
+  dataInscricao_min: OrderDirection
+  """
+  ✨ Generated from Field `Inscricao`.`dataInscricao_max` of type `Timestamp`
+  """
+  dataInscricao_max: OrderDirection
+}
+"""
+✨ Generated data input type for table 'Notificacao'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input Notificacao_Data {
+  """
+  ✨ Generated from Field `Notificacao`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Notificacao`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Notificacao`.`destinatarioUid` of type `String!`
+  """
+  destinatarioUid: String
+  """
+  ✨ `_expr` server value variant of `destinatarioUid` (✨ Generated from Field `Notificacao`.`destinatarioUid` of type `String!`)
+  """
+  destinatarioUid_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Notificacao`.`destinatario` of type `Usuario!`
+  """
+  destinatario: Usuario_Key @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Notificacao`.`dataCriacao` of type `Timestamp!`
+  """
+  dataCriacao: Timestamp
+  """
+  ✨ `_expr` server value variant of `dataCriacao` (✨ Generated from Field `Notificacao`.`dataCriacao` of type `Timestamp!`)
+  """
+  dataCriacao_expr: Timestamp_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_time` server value variant of `dataCriacao` (✨ Generated from Field `Notificacao`.`dataCriacao` of type `Timestamp!`)
+  """
+  dataCriacao_time: Timestamp_Relative @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `dataCriacao` (✨ Generated from Field `Notificacao`.`dataCriacao` of type `Timestamp!`)
+  """
+  dataCriacao_update: [Timestamp_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Notificacao`.`lida` of type `Boolean!`
+  """
+  lida: Boolean
+  """
+  ✨ `_expr` server value variant of `lida` (✨ Generated from Field `Notificacao`.`lida` of type `Boolean!`)
+  """
+  lida_expr: Boolean_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Notificacao`.`mensagem` of type `String!`
+  """
+  mensagem: String
+  """
+  ✨ `_expr` server value variant of `mensagem` (✨ Generated from Field `Notificacao`.`mensagem` of type `String!`)
+  """
+  mensagem_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Notificacao`.`titulo` of type `String!`
+  """
+  titulo: String
+  """
+  ✨ `_expr` server value variant of `titulo` (✨ Generated from Field `Notificacao`.`titulo` of type `String!`)
+  """
+  titulo_expr: String_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated filter input type for table 'Notificacao'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Notificacao_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [Notificacao_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: Notificacao_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [Notificacao_Filter!]
+  """
+  ✨ Generated from Field `Notificacao`.`id` of type `UUID!`
+  """
+  id: UUID_Filter
+  """
+  ✨ Generated from Field `Notificacao`.`destinatarioUid` of type `String!`
+  """
+  destinatarioUid: String_Filter
+  """
+  ✨ Generated from Field `Notificacao`.`destinatario` of type `Usuario!`
+  """
+  destinatario: Usuario_Filter
+  """
+  ✨ Generated from Field `Notificacao`.`dataCriacao` of type `Timestamp!`
+  """
+  dataCriacao: Timestamp_Filter
+  """
+  ✨ Generated from Field `Notificacao`.`lida` of type `Boolean!`
+  """
+  lida: Boolean_Filter
+  """
+  ✨ Generated from Field `Notificacao`.`mensagem` of type `String!`
+  """
+  mensagem: String_Filter
+  """
+  ✨ Generated from Field `Notificacao`.`titulo` of type `String!`
+  """
+  titulo: String_Filter
+}
+"""
+✨ Generated first-row input type for table 'Notificacao'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input Notificacao_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [Notificacao_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: Notificacao_Filter
+}
+"""
+✨ Generated having input type for table 'Notificacao'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Notificacao_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [Notificacao_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: Notificacao_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [Notificacao_Having!]
+  """
+  ✨ Generated from Field `Notificacao`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `Notificacao`.`dataCriacao_count` of type `Int!`
+  """
+  dataCriacao_count: Int_Filter
+  """
+  ✨ Generated from Field `Notificacao`.`destinatarioUid_count` of type `Int!`
+  """
+  destinatarioUid_count: Int_Filter
+  """
+  ✨ Generated from Field `Notificacao`.`id_count` of type `Int!`
+  """
+  id_count: Int_Filter
+  """
+  ✨ Generated from Field `Notificacao`.`lida_count` of type `Int!`
+  """
+  lida_count: Int_Filter
+  """
+  ✨ Generated from Field `Notificacao`.`mensagem_count` of type `Int!`
+  """
+  mensagem_count: Int_Filter
+  """
+  ✨ Generated from Field `Notificacao`.`titulo_count` of type `Int!`
+  """
+  titulo_count: Int_Filter
+  """
+  ✨ Generated from Field `Notificacao`.`dataCriacao_min` of type `Timestamp`
+  """
+  dataCriacao_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `Notificacao`.`dataCriacao_max` of type `Timestamp`
+  """
+  dataCriacao_max: Timestamp_Filter
+}
+"""
+✨ Generated key input type for table 'Notificacao'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input Notificacao_Key {
+  """
+  ✨ Generated from Field `Notificacao`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Notificacao`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated list filter input type for table 'Notificacao'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input Notificacao_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: Notificacao_Filter
+}
+"""
+✨ Generated order input type for table 'Notificacao'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input Notificacao_Order {
+  """
+  ✨ Generated from Field `Notificacao`.`id` of type `UUID!`
+  """
+  id: OrderDirection
+  """
+  ✨ Generated from Field `Notificacao`.`destinatarioUid` of type `String!`
+  """
+  destinatarioUid: OrderDirection
+  """
+  ✨ Generated from Field `Notificacao`.`destinatario` of type `Usuario!`
+  """
+  destinatario: Usuario_Order
+  """
+  ✨ Generated from Field `Notificacao`.`dataCriacao` of type `Timestamp!`
+  """
+  dataCriacao: OrderDirection
+  """
+  ✨ Generated from Field `Notificacao`.`lida` of type `Boolean!`
+  """
+  lida: OrderDirection
+  """
+  ✨ Generated from Field `Notificacao`.`mensagem` of type `String!`
+  """
+  mensagem: OrderDirection
+  """
+  ✨ Generated from Field `Notificacao`.`titulo` of type `String!`
+  """
+  titulo: OrderDirection
+  """
+  ✨ Generated from Field `Notificacao`.`_count` of type `Int!`
+  """
+  _count: OrderDirection
+  """
+  ✨ Generated from Field `Notificacao`.`dataCriacao_count` of type `Int!`
+  """
+  dataCriacao_count: OrderDirection
+  """
+  ✨ Generated from Field `Notificacao`.`destinatarioUid_count` of type `Int!`
+  """
+  destinatarioUid_count: OrderDirection
+  """
+  ✨ Generated from Field `Notificacao`.`id_count` of type `Int!`
+  """
+  id_count: OrderDirection
+  """
+  ✨ Generated from Field `Notificacao`.`lida_count` of type `Int!`
+  """
+  lida_count: OrderDirection
+  """
+  ✨ Generated from Field `Notificacao`.`mensagem_count` of type `Int!`
+  """
+  mensagem_count: OrderDirection
+  """
+  ✨ Generated from Field `Notificacao`.`titulo_count` of type `Int!`
+  """
+  titulo_count: OrderDirection
+  """
+  ✨ Generated from Field `Notificacao`.`dataCriacao_min` of type `Timestamp`
+  """
+  dataCriacao_min: OrderDirection
+  """
+  ✨ Generated from Field `Notificacao`.`dataCriacao_max` of type `Timestamp`
+  """
+  dataCriacao_max: OrderDirection
+}
+"""
+✨ Generated data input type for table 'Usuario'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input Usuario_Data {
+  """
+  ✨ Generated from Field `Usuario`.`uid` of type `String!`
+  """
+  uid: String
+  """
+  ✨ `_expr` server value variant of `uid` (✨ Generated from Field `Usuario`.`uid` of type `String!`)
+  """
+  uid_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Usuario`.`criadoEm` of type `Timestamp!`
+  """
+  criadoEm: Timestamp
+  """
+  ✨ `_expr` server value variant of `criadoEm` (✨ Generated from Field `Usuario`.`criadoEm` of type `Timestamp!`)
+  """
+  criadoEm_expr: Timestamp_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_time` server value variant of `criadoEm` (✨ Generated from Field `Usuario`.`criadoEm` of type `Timestamp!`)
+  """
+  criadoEm_time: Timestamp_Relative @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `criadoEm` (✨ Generated from Field `Usuario`.`criadoEm` of type `Timestamp!`)
+  """
+  criadoEm_update: [Timestamp_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Usuario`.`email` of type `String!`
+  """
+  email: String
+  """
+  ✨ `_expr` server value variant of `email` (✨ Generated from Field `Usuario`.`email` of type `String!`)
+  """
+  email_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Usuario`.`nome` of type `String!`
+  """
+  nome: String
+  """
+  ✨ `_expr` server value variant of `nome` (✨ Generated from Field `Usuario`.`nome` of type `String!`)
+  """
+  nome_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Usuario`.`papel` of type `String!`
+  """
+  papel: String
+  """
+  ✨ `_expr` server value variant of `papel` (✨ Generated from Field `Usuario`.`papel` of type `String!`)
+  """
+  papel_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Usuario`.`status` of type `String!`
+  """
+  status: String
+  """
+  ✨ `_expr` server value variant of `status` (✨ Generated from Field `Usuario`.`status` of type `String!`)
+  """
+  status_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Usuario`.`telefone` of type `String`
+  """
+  telefone: String
+  """
+  ✨ `_expr` server value variant of `telefone` (✨ Generated from Field `Usuario`.`telefone` of type `String`)
+  """
+  telefone_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Usuario`.`notificacoes_on_destinatario` of type `[Notificacao!]!`
+  """
+  notificacoes_on_destinatario: [Notificacao_Data!]
+  """
+  ✨ Generated from Field `Usuario`.`aluno_on_usuario` of type `Aluno`
+  """
+  aluno_on_usuario: Aluno_Data
+  """
+  ✨ Generated from Field `Usuario`.`doador_on_usuario` of type `Doador`
+  """
+  doador_on_usuario: Doador_Data
+}
+"""
+✨ Generated filter input type for table 'Usuario'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Usuario_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [Usuario_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: Usuario_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [Usuario_Filter!]
+  """
+  ✨ Generated from Field `Usuario`.`uid` of type `String!`
+  """
+  uid: String_Filter
+  """
+  ✨ Generated from Field `Usuario`.`criadoEm` of type `Timestamp!`
+  """
+  criadoEm: Timestamp_Filter
+  """
+  ✨ Generated from Field `Usuario`.`email` of type `String!`
+  """
+  email: String_Filter
+  """
+  ✨ Generated from Field `Usuario`.`nome` of type `String!`
+  """
+  nome: String_Filter
+  """
+  ✨ Generated from Field `Usuario`.`papel` of type `String!`
+  """
+  papel: String_Filter
+  """
+  ✨ Generated from Field `Usuario`.`status` of type `String!`
+  """
+  status: String_Filter
+  """
+  ✨ Generated from Field `Usuario`.`telefone` of type `String`
+  """
+  telefone: String_Filter
+  """
+  ✨ Generated from Field `Usuario`.`notificacoes_on_destinatario` of type `[Notificacao!]!`
+  """
+  notificacoes_on_destinatario: Notificacao_ListFilter
+  """
+  ✨ Generated from Field `Usuario`.`aluno_on_usuario` of type `Aluno`
+  """
+  aluno_on_usuario: Aluno_Filter
+  """
+  ✨ Generated from Field `Usuario`.`doador_on_usuario` of type `Doador`
+  """
+  doador_on_usuario: Doador_Filter
+}
+"""
+✨ Generated first-row input type for table 'Usuario'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input Usuario_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [Usuario_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: Usuario_Filter
+}
+"""
+✨ Generated having input type for table 'Usuario'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Usuario_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [Usuario_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: Usuario_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [Usuario_Having!]
+  """
+  ✨ Generated from Field `Usuario`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `Usuario`.`criadoEm_count` of type `Int!`
+  """
+  criadoEm_count: Int_Filter
+  """
+  ✨ Generated from Field `Usuario`.`email_count` of type `Int!`
+  """
+  email_count: Int_Filter
+  """
+  ✨ Generated from Field `Usuario`.`nome_count` of type `Int!`
+  """
+  nome_count: Int_Filter
+  """
+  ✨ Generated from Field `Usuario`.`papel_count` of type `Int!`
+  """
+  papel_count: Int_Filter
+  """
+  ✨ Generated from Field `Usuario`.`status_count` of type `Int!`
+  """
+  status_count: Int_Filter
+  """
+  ✨ Generated from Field `Usuario`.`telefone_count` of type `Int!`
+  """
+  telefone_count: Int_Filter
+  """
+  ✨ Generated from Field `Usuario`.`uid_count` of type `Int!`
+  """
+  uid_count: Int_Filter
+  """
+  ✨ Generated from Field `Usuario`.`criadoEm_min` of type `Timestamp`
+  """
+  criadoEm_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `Usuario`.`criadoEm_max` of type `Timestamp`
+  """
+  criadoEm_max: Timestamp_Filter
+}
+"""
+✨ Generated key input type for table 'Usuario'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input Usuario_Key {
+  """
+  ✨ Generated from Field `Usuario`.`uid` of type `String!`
+  """
+  uid: String
+  """
+  ✨ `_expr` server value variant of `uid` (✨ Generated from Field `Usuario`.`uid` of type `String!`)
+  """
+  uid_expr: String_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated list filter input type for table 'Usuario'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input Usuario_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: Usuario_Filter
+}
+"""
+✨ Generated order input type for table 'Usuario'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input Usuario_Order {
+  """
+  ✨ Generated from Field `Usuario`.`uid` of type `String!`
+  """
+  uid: OrderDirection
+  """
+  ✨ Generated from Field `Usuario`.`criadoEm` of type `Timestamp!`
+  """
+  criadoEm: OrderDirection
+  """
+  ✨ Generated from Field `Usuario`.`email` of type `String!`
+  """
+  email: OrderDirection
+  """
+  ✨ Generated from Field `Usuario`.`nome` of type `String!`
+  """
+  nome: OrderDirection
+  """
+  ✨ Generated from Field `Usuario`.`papel` of type `String!`
+  """
+  papel: OrderDirection
+  """
+  ✨ Generated from Field `Usuario`.`status` of type `String!`
+  """
+  status: OrderDirection
+  """
+  ✨ Generated from Field `Usuario`.`telefone` of type `String`
+  """
+  telefone: OrderDirection
+  """
+  ✨ Generated from Field `Usuario`.`_count` of type `Int!`
+  """
+  _count: OrderDirection
+  """
+  ✨ Generated from Field `Usuario`.`criadoEm_count` of type `Int!`
+  """
+  criadoEm_count: OrderDirection
+  """
+  ✨ Generated from Field `Usuario`.`email_count` of type `Int!`
+  """
+  email_count: OrderDirection
+  """
+  ✨ Generated from Field `Usuario`.`nome_count` of type `Int!`
+  """
+  nome_count: OrderDirection
+  """
+  ✨ Generated from Field `Usuario`.`papel_count` of type `Int!`
+  """
+  papel_count: OrderDirection
+  """
+  ✨ Generated from Field `Usuario`.`status_count` of type `Int!`
+  """
+  status_count: OrderDirection
+  """
+  ✨ Generated from Field `Usuario`.`telefone_count` of type `Int!`
+  """
+  telefone_count: OrderDirection
+  """
+  ✨ Generated from Field `Usuario`.`uid_count` of type `Int!`
+  """
+  uid_count: OrderDirection
+  """
+  ✨ Generated from Field `Usuario`.`criadoEm_min` of type `Timestamp`
+  """
+  criadoEm_min: OrderDirection
+  """
+  ✨ Generated from Field `Usuario`.`criadoEm_max` of type `Timestamp`
+  """
+  criadoEm_max: OrderDirection
+}

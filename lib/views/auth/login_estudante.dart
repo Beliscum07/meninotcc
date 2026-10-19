@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../controllers/controller/auth_controller.dart';
 import '../../models/usuario_model.dart';
-import '../../services/aluno_data_service.dart';
 import '../../services/auth_service.dart';
 import '../estudante/aluno_home_view.dart';
 
@@ -35,11 +34,12 @@ class _LoginEstudantePageState extends State<LoginEstudantePage> {
       );
       if (!mounted) return;
 
-      final usuario = authController.usuarioLogado;
-      final alunoId = AlunoDataService.instance.idDoAlunoSelecionado(
-        id: usuario?.id,
-        nome: usuario?.nome,
-      );
+      final alunoId = authController.alunoIdLogado;
+      if (alunoId == null) {
+        throw const AuthProfileException(
+          'O cadastro de estudante ainda não foi vinculado a esta conta.',
+        );
+      }
 
       Navigator.pushReplacement(
         context,
@@ -50,6 +50,10 @@ class _LoginEstudantePageState extends State<LoginEstudantePage> {
     } on FirebaseAuthException catch (error) {
       _mostrarMensagem(AuthService.mensagemErro(error));
     } on FormatException catch (error) {
+      _mostrarMensagem(AuthService.mensagemErro(error));
+    } catch (error, stackTrace) {
+      debugPrint('Falha no login do estudante: $error');
+      debugPrint(stackTrace.toString());
       _mostrarMensagem(AuthService.mensagemErro(error));
     } finally {
       if (mounted) setState(() => carregando = false);

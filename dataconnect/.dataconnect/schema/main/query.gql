@@ -1,0 +1,517 @@
+extend type Query {
+  """
+  ✨ Look up a single `Agenda` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  agenda(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Agenda_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Agenda_FirstRow
+  ): Agenda @fdc_generated(from: "Agenda", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `Aluno` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  aluno(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Aluno_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Aluno_FirstRow
+  ): Aluno @fdc_generated(from: "Aluno", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `AlunoBolsa` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  alunoBolsa(
+    """
+    The key used to identify the object.
+    """
+    key: AlunoBolsa_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: AlunoBolsa_FirstRow
+  ): AlunoBolsa @fdc_generated(from: "AlunoBolsa", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `Atividade` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  atividade(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Atividade_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Atividade_FirstRow
+  ): Atividade @fdc_generated(from: "Atividade", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `Bolsa` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  bolsa(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Bolsa_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Bolsa_FirstRow
+  ): Bolsa @fdc_generated(from: "Bolsa", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `Doacao` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  doacao(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Doacao_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Doacao_FirstRow
+  ): Doacao @fdc_generated(from: "Doacao", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `Doador` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  doador(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Doador_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Doador_FirstRow
+  ): Doador @fdc_generated(from: "Doador", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `Inscricao` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  inscricao(
+    """
+    The key used to identify the object.
+    """
+    key: Inscricao_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Inscricao_FirstRow
+  ): Inscricao @fdc_generated(from: "Inscricao", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `Notificacao` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  notificacao(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Notificacao_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Notificacao_FirstRow
+  ): Notificacao @fdc_generated(from: "Notificacao", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `Usuario` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  usuario(
+    """
+    The key used to identify the object.
+    """
+    key: Usuario_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Usuario_FirstRow
+  ): Usuario @fdc_generated(from: "Usuario", purpose: QUERY_SINGLE)
+  """
+  ✨ List `Agenda` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  agendas(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Agenda_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Agenda_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Agenda_Having
+  ): [Agenda!]! @fdc_generated(from: "Agenda", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `Aluno` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  alunos(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Aluno_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Aluno_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Aluno_Having
+  ): [Aluno!]! @fdc_generated(from: "Aluno", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `AlunoBolsa` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  alunoBolsas(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: AlunoBolsa_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [AlunoBolsa_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: AlunoBolsa_Having
+  ): [AlunoBolsa!]! @fdc_generated(from: "AlunoBolsa", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `Atividade` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  atividades(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Atividade_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Atividade_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Atividade_Having
+  ): [Atividade!]! @fdc_generated(from: "Atividade", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `Bolsa` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  bolsas(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Bolsa_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Bolsa_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Bolsa_Having
+  ): [Bolsa!]! @fdc_generated(from: "Bolsa", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `Doacao` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  doacoes(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Doacao_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Doacao_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Doacao_Having
+  ): [Doacao!]! @fdc_generated(from: "Doacao", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `Doador` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  doadors(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Doador_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Doador_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Doador_Having
+  ): [Doador!]! @fdc_generated(from: "Doador", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `Inscricao` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  inscricoes(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Inscricao_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Inscricao_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Inscricao_Having
+  ): [Inscricao!]! @fdc_generated(from: "Inscricao", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `Notificacao` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  notificacoes(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Notificacao_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Notificacao_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Notificacao_Having
+  ): [Notificacao!]! @fdc_generated(from: "Notificacao", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `Usuario` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  usuarios(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Usuario_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Usuario_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Usuario_Having
+  ): [Usuario!]! @fdc_generated(from: "Usuario", purpose: QUERY_MULTIPLE)
+}

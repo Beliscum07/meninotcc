@@ -1,0 +1,337 @@
+mutation RegisterDonorProfile($nome: String!, $telefone: String!)
+  @auth(level: USER)
+  @transaction {
+  usuario_insert(
+    data: {
+      uid_expr: "auth.uid"
+      nome: $nome
+      email_expr: "auth.token.email"
+      telefone: $telefone
+      papel: "doador"
+    }
+  )
+  doador_insert(data: { usuarioUid_expr: "auth.uid" })
+}
+
+mutation UpdateMyProfile($nome: String!, $telefone: String)
+  @auth(expr: "auth != null && vars.nome != ''") {
+  usuario_update(
+    first: { where: { uid: { eq_expr: "auth.uid" } } }
+    data: {
+      nome: $nome
+      email_expr: "auth.token.email"
+      telefone: $telefone
+    }
+  )
+}
+
+mutation AdminCreateStudent(
+  $nome: String!
+  $idade: Int!
+  $responsavel: String!
+  $telefone: String!
+  $email: String
+  $presenca: Int!
+) @auth(
+  expr: "auth.token.admin == true && vars.idade >= 0 && vars.idade <= 120 && vars.presenca >= 0 && vars.presenca <= 100"
+) {
+  aluno_insert(
+    data: {
+      nome: $nome
+      idade: $idade
+      responsavel: $responsavel
+      telefone: $telefone
+      email: $email
+      presenca: $presenca
+    }
+  )
+}
+
+mutation AdminUpdateStudent(
+  $id: UUID!
+  $nome: String!
+  $idade: Int!
+  $responsavel: String!
+  $telefone: String!
+  $email: String
+  $presenca: Int!
+) @auth(
+  expr: "auth.token.admin == true && vars.idade >= 0 && vars.idade <= 120 && vars.presenca >= 0 && vars.presenca <= 100"
+) {
+  aluno_update(
+    id: $id
+    data: {
+      nome: $nome
+      idade: $idade
+      responsavel: $responsavel
+      telefone: $telefone
+      email: $email
+      presenca: $presenca
+    }
+  )
+}
+
+mutation AdminLinkStudentAccount(
+  $studentId: UUID!
+  $authUid: String!
+  $authEmail: String!
+) @auth(expr: "auth.token.admin == true") @transaction {
+  query @redact {
+    aluno(id: $studentId) @check(expr: "this != null", message: "Aluno não encontrado.") {
+      usuarioUid @check(expr: "this == null", message: "Aluno já possui uma conta vinculada.")
+      email @check(expr: "this == vars.authEmail", message: "O e-mail deve corresponder ao cadastro do aluno.")
+      nome
+      telefone
+    }
+    usuario(key: { uid: $authUid }) @check(expr: "this == null", message: "Esta conta já possui um perfil.") {
+      uid
+    }
+  }
+  usuario_insert(
+    data: {
+      uid: $authUid
+      nome_expr: "response.query.aluno.nome"
+      email: $authEmail
+      telefone_expr: "response.query.aluno.telefone"
+      papel: "aluno"
+    }
+  )
+  aluno_update(id: $studentId, data: { usuarioUid: $authUid })
+}
+
+mutation AdminSetStudentStatus($id: UUID!, $status: String!)
+  @auth(
+    expr: "auth.token.admin == true && vars.status in ['ativo', 'inativo']"
+  ) {
+  aluno_update(id: $id, data: { status: $status })
+}
+
+mutation AdminCreateActivity(
+  $nome: String!
+  $professor: String!
+  $descricao: String
+  $horario: String
+  $dias: String
+  $vagas: Int!
+  $categoria: String
+) @auth(
+  expr: "auth.token.admin == true && vars.vagas > 0 && vars.vagas <= 9999"
+) {
+  atividade_insert(
+    data: {
+      nome: $nome
+      professor: $professor
+      descricao: $descricao
+      horario: $horario
+      dias: $dias
+      vagas: $vagas
+      categoria: $categoria
+    }
+  )
+}
+
+mutation AdminUpdateActivity(
+  $id: UUID!
+  $nome: String!
+  $professor: String!
+  $descricao: String
+  $horario: String
+  $dias: String
+  $vagas: Int!
+  $categoria: String
+  $status: String!
+) @auth(
+  expr: "auth.token.admin == true && vars.vagas > 0 && vars.vagas <= 9999 && vars.status in ['ativa', 'inativa']"
+) {
+  atividade_update(
+    id: $id
+    data: {
+      nome: $nome
+      professor: $professor
+      descricao: $descricao
+      horario: $horario
+      dias: $dias
+      vagas: $vagas
+      categoria: $categoria
+      status: $status
+    }
+  )
+}
+
+mutation AdminAssignActivity($alunoId: UUID!, $atividadeId: UUID!)
+  @auth(expr: "auth.token.admin == true")
+  @transaction {
+  query @redact {
+    aluno(id: $alunoId) @check(expr: "this != null", message: "Aluno não encontrado.") {
+      status @check(expr: "this == 'ativo'", message: "O cadastro do aluno está inativo.")
+    }
+    atividade(id: $atividadeId)
+      @check(
+        expr: "this != null && this.status == 'ativa' && this.inscricoes_on_atividade.size() < this.vagas",
+        message: "Atividade indisponível ou sem vagas."
+      ) {
+      status @check(expr: "this == 'ativa'", message: "A atividade não está ativa.")
+      vagas
+      inscricoes_on_atividade(where: { status: { eq: "ativa" } }) {
+        status
+      }
+    }
+    inscricao(key: { alunoId: $alunoId, atividadeId: $atividadeId })
+      @check(expr: "this == null", message: "O aluno já está inscrito nesta atividade.") {
+      status
+    }
+  }
+  inscricao_insert(
+    data: { alunoId: $alunoId, atividadeId: $atividadeId, status: "ativa" }
+  )
+}
+
+mutation AdminCreateScholarship(
+  $nome: String!
+  $descricao: String
+  $valorMensal: Float!
+) @auth(expr: "auth.token.admin == true && vars.valorMensal >= 0") {
+  bolsa_insert(
+    data: { nome: $nome, descricao: $descricao, valorMensal: $valorMensal }
+  )
+}
+
+mutation AdminUpdateScholarship(
+  $id: UUID!
+  $nome: String!
+  $descricao: String
+  $valorMensal: Float!
+  $ativa: Boolean!
+) @auth(expr: "auth.token.admin == true && vars.valorMensal >= 0") {
+  bolsa_update(
+    id: $id
+    data: {
+      nome: $nome
+      descricao: $descricao
+      valorMensal: $valorMensal
+      ativa: $ativa
+    }
+  )
+}
+
+mutation AdminAssignScholarship(
+  $alunoId: UUID!
+  $bolsaId: UUID!
+  $valorConcedido: Float!
+) @auth(
+  expr: "auth.token.admin == true && vars.valorConcedido >= 0"
+) @transaction {
+  query @redact {
+    aluno(id: $alunoId) @check(expr: "this != null", message: "Aluno não encontrado.") {
+      status @check(expr: "this == 'ativo'", message: "O cadastro do aluno está inativo.")
+    }
+    bolsa(id: $bolsaId) @check(expr: "this != null", message: "Bolsa não encontrada.") {
+      ativa @check(expr: "this == true", message: "A bolsa está inativa.")
+    }
+  }
+  alunoBolsa_upsert(
+    data: {
+      alunoId: $alunoId
+      bolsaId: $bolsaId
+      valorConcedido: $valorConcedido
+      status: "ativa"
+    }
+  )
+}
+
+mutation AdminCreateAgendaEntry(
+  $titulo: String!
+  $descricao: String
+  $inicio: Timestamp!
+  $fim: Timestamp
+  $local: String
+  $atividadeId: UUID
+) @auth(expr: "auth.token.admin == true") {
+  agenda_insert(
+    data: {
+      titulo: $titulo
+      descricao: $descricao
+      inicio: $inicio
+      fim: $fim
+      local: $local
+      atividadeId: $atividadeId
+    }
+  )
+}
+
+mutation AdminUpdateAgendaEntry(
+  $id: UUID!
+  $titulo: String!
+  $descricao: String
+  $inicio: Timestamp!
+  $fim: Timestamp
+  $local: String
+  $atividadeId: UUID
+  $status: String!
+) @auth(expr: "auth.token.admin == true && vars.status in ['ativo', 'inativo']") {
+  agenda_update(
+    id: $id
+    data: {
+      titulo: $titulo
+      descricao: $descricao
+      inicio: $inicio
+      fim: $fim
+      local: $local
+      atividadeId: $atividadeId
+      status: $status
+    }
+  )
+}
+
+mutation AdminCreateNotification(
+  $destinatarioUid: String!
+  $titulo: String!
+  $mensagem: String!
+) @auth(expr: "auth.token.admin == true") {
+  notificacao_insert(
+    data: {
+      destinatarioUid: $destinatarioUid
+      titulo: $titulo
+      mensagem: $mensagem
+    }
+  )
+}
+
+mutation MarkMyNotificationRead($id: UUID!) @auth(level: USER) {
+  notificacao_update(
+    first: {
+      where: {
+        id: { eq: $id }
+        destinatarioUid: { eq_expr: "auth.uid" }
+      }
+    }
+    data: { lida: true }
+  )
+}
+
+mutation RegisterMyDonation($valor: Float!, $metodo: String)
+  @auth(expr: "auth != null && vars.valor > 0")
+  @transaction {
+  query @redact {
+    doadorParaDoacao: doador(
+      first: { where: { usuarioUid: { eq_expr: "auth.uid" } } }
+    ) @check(expr: "this != null", message: "Perfil de doador não encontrado.") {
+      id
+    }
+  }
+  doacao_insert(
+    data: {
+      doadorId_expr: "response.query.doadorParaDoacao.id"
+      valor: $valor
+      metodo: $metodo
+      status: "pendente"
+    }
+  )
+}
+
+mutation AdminSetDonationStatus($id: UUID!, $status: String!)
+  @auth(
+    expr: "auth.token.admin == true && vars.status in ['pendente', 'recebida', 'cancelada']"
+  ) {
+  doacao_update(id: $id, data: { status: $status })
+}

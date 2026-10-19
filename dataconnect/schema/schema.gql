@@ -1,0 +1,117 @@
+type Usuario @table(key: "uid") {
+  uid: String! @unique
+  nome: String!
+  email: String! @unique
+  telefone: String
+  papel: String!
+  status: String! @default(value: "ativo")
+  criadoEm: Timestamp! @default(expr: "request.time")
+}
+
+type Aluno
+  @table
+  @index(fields: ["nome"])
+  @index(fields: ["status"]) {
+  id: UUID! @default(expr: "uuidV4()")
+  usuarioUid: String @unique
+  usuario: Usuario @ref(fields: "usuarioUid", references: "uid")
+  nome: String!
+  idade: Int!
+  responsavel: String!
+  telefone: String!
+  email: String
+  presenca: Int! @default(value: 0)
+  status: String! @default(value: "ativo")
+}
+
+type Doador @table {
+  id: UUID! @default(expr: "uuidV4()")
+  usuarioUid: String! @unique
+  usuario: Usuario! @ref(fields: "usuarioUid", references: "uid")
+}
+
+type Atividade
+  @table
+  @index(fields: ["status", "nome"]) {
+  id: UUID! @default(expr: "uuidV4()")
+  nome: String!
+  professor: String!
+  descricao: String
+  horario: String
+  dias: String
+  vagas: Int!
+  categoria: String
+  status: String! @default(value: "ativa")
+  criadoEm: Timestamp! @default(expr: "request.time")
+}
+
+type Inscricao
+  @table(
+    key: ["alunoId", "atividadeId"]
+    singular: "inscricao"
+    plural: "inscricoes"
+  ) {
+  alunoId: UUID!
+  aluno: Aluno! @ref(fields: "alunoId", references: "id")
+  atividadeId: UUID!
+  atividade: Atividade! @ref(fields: "atividadeId", references: "id")
+  dataInscricao: Timestamp! @default(expr: "request.time")
+  status: String! @default(value: "ativa")
+}
+
+type Bolsa @table @index(fields: ["ativa", "nome"]) {
+  id: UUID! @default(expr: "uuidV4()")
+  nome: String!
+  descricao: String
+  valorMensal: Float! @col(dataType: "numeric(12,2)")
+  ativa: Boolean! @default(value: true)
+}
+
+type AlunoBolsa @table(key: ["alunoId", "bolsaId"]) {
+  alunoId: UUID!
+  aluno: Aluno! @ref(fields: "alunoId", references: "id")
+  bolsaId: UUID!
+  bolsa: Bolsa! @ref(fields: "bolsaId", references: "id")
+  dataInicio: Timestamp! @default(expr: "request.time")
+  dataFim: Timestamp
+  valorConcedido: Float! @col(dataType: "numeric(12,2)")
+  status: String! @default(value: "ativa")
+}
+
+type Agenda
+  @table
+  @index(fields: ["inicio"]) {
+  id: UUID! @default(expr: "uuidV4()")
+  titulo: String!
+  descricao: String
+  inicio: Timestamp!
+  fim: Timestamp
+  local: String
+  atividadeId: UUID
+  atividade: Atividade @ref(fields: "atividadeId", references: "id")
+  status: String! @default(value: "ativo")
+}
+
+type Notificacao
+  @table(singular: "notificacao", plural: "notificacoes")
+  @index(fields: ["destinatarioUid", "lida"]) {
+  id: UUID! @default(expr: "uuidV4()")
+  destinatarioUid: String!
+  destinatario: Usuario! @ref(fields: "destinatarioUid", references: "uid")
+  titulo: String!
+  mensagem: String!
+  lida: Boolean! @default(value: false)
+  dataCriacao: Timestamp! @default(expr: "request.time")
+}
+
+type Doacao
+  @table(singular: "doacao", plural: "doacoes")
+  @index(fields: ["doadorId", "data"]) {
+  id: UUID! @default(expr: "uuidV4()")
+  doadorId: UUID!
+  doador: Doador! @ref(fields: "doadorId", references: "id")
+  valor: Float! @col(dataType: "numeric(12,2)")
+  data: Timestamp! @default(expr: "request.time")
+  metodo: String
+  status: String! @default(value: "pendente")
+}

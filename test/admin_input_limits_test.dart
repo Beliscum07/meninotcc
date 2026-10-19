@@ -73,15 +73,13 @@ void main() {
     expect(tester.widget<TextField>(_field('Descrição')).maxLength, 500);
     expect(tester.widget<TextField>(_field('Horário')).maxLength, 20);
     expect(tester.widget<TextField>(_field('Dias')).maxLength, 50);
-    expect(tester.widget<TextField>(_field('Inscritos')).maxLength, 4);
+    expect(tester.widget<TextField>(_field('Inscritos')).readOnly, isTrue);
+    expect(tester.widget<TextField>(_field('Inscritos')).controller!.text, '0');
     expect(tester.widget<TextField>(_field('Vagas')).maxLength, 4);
 
     await tester.enterText(_field('Nome da atividade'), 'Teatro');
     await tester.enterText(_field('Professor'), 'João da Silva');
-    await tester.enterText(_field('Inscritos'), '3x');
     await tester.enterText(_field('Vagas'), '20');
-    await tester.pump();
-    expect(tester.widget<TextField>(_field('Inscritos')).controller!.text, '3');
 
     await tester.tap(find.text('Criar'));
     await tester.pumpAndSettle();
@@ -91,8 +89,11 @@ void main() {
   testWidgets(
     'bolsa aceita centavos e não transforma valor negativo em positivo',
     (tester) async {
+      final bolsas = <Bolsa>[];
       await tester.pumpWidget(
-        const MaterialApp(home: Scaffold(body: AdminBolsas())),
+        MaterialApp(
+          home: Scaffold(body: AdminBolsas(bolsas: bolsas)),
+        ),
       );
       expect(
         tester.widgetList<TextField>(find.byType(TextField)).first.maxLength,
@@ -103,11 +104,17 @@ void main() {
       await tester.pumpAndSettle();
       expect(tester.widget<TextField>(_field('Nome da bolsa')).maxLength, 50);
       expect(tester.widget<TextField>(_field('Descrição')).maxLength, 500);
-      expect(tester.widget<TextField>(_field('Beneficiários')).maxLength, 4);
+      expect(
+        tester.widget<TextField>(_field('Beneficiários')).readOnly,
+        isTrue,
+      );
+      expect(
+        tester.widget<TextField>(_field('Beneficiários')).controller!.text,
+        '0',
+      );
       expect(tester.widget<TextField>(_field('Valor mensal')).maxLength, 15);
 
       await tester.enterText(_field('Nome da bolsa'), 'Bolsa de apoio');
-      await tester.enterText(_field('Beneficiários'), '4');
       await tester.enterText(_field('Valor mensal'), '-125,75');
       await tester.pump();
       expect(
@@ -119,36 +126,22 @@ void main() {
       await tester.tap(find.text('Adicionar').last);
       await tester.pumpAndSettle();
       expect(find.text('Bolsa adicionada!'), findsOneWidget);
+      expect(bolsas.single.beneficiarios, 0);
     },
   );
 
-  testWidgets('dashboard aceita decimal e mantém valor negativo inválido', (
+  testWidgets('dashboard mostra doações relacionais sem dados fictícios', (
     tester,
   ) async {
     await tester.pumpWidget(
-      const MaterialApp(home: Scaffold(body: AdminDashboard())),
+      const MaterialApp(
+        home: Scaffold(body: AdminDashboard(doacoes: [])),
+      ),
     );
-    await tester.tap(find.byTooltip('Editar Dashboard'));
-    await tester.pumpAndSettle();
-
-    expect(tester.widget<TextField>(_field('Total do mês')).maxLength, 15);
-    expect(tester.widget<TextField>(_field('Doadores ativos')).maxLength, 4);
-    await tester.enterText(_field('Total do mês'), '-250,75');
-    await tester.pump();
-    expect(
-      tester.widget<TextField>(_field('Total do mês')).controller!.text,
-      '12.500',
-    );
-
-    await tester.enterText(_field('Total do mês'), '1250,75');
-    await tester.enterText(_field('Doadores ativos'), '12x');
-    await tester.pump();
-    expect(
-      tester.widget<TextField>(_field('Doadores ativos')).controller!.text,
-      '12',
-    );
-    await tester.tap(find.text('Salvar'));
-    await tester.pumpAndSettle();
-    expect(find.text('R\$ 1250,75'), findsOneWidget);
+    expect(find.text('Doações recentes'), findsOneWidget);
+    expect(find.text('Ainda não há doações cadastradas.'), findsOneWidget);
+    expect(find.text('R\$ 0,00'), findsOneWidget);
+    expect(find.text('0'), findsOneWidget);
+    expect(find.byTooltip('Editar Dashboard'), findsNothing);
   });
 }

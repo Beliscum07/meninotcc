@@ -66,6 +66,26 @@ class AlunoNotificacoesView extends StatelessWidget {
         builder: (context, child) {
           final notificacoes = alunoController.notificacoes;
 
+          if (alunoController.carregando) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (alunoController.erro != null) {
+            return Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text('Não foi possível carregar as notificações.'),
+                  const SizedBox(height: 8),
+                  FilledButton(
+                    onPressed: alunoController.carregarNotificacoes,
+                    child: const Text('Tentar novamente'),
+                  ),
+                ],
+              ),
+            );
+          }
+
           if (notificacoes.isEmpty) {
             return const Center(
               child: Text(

@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+import '../../../services/auth_service.dart';
+import '../../../services/sql_connect_service.dart';
 
 class DoadorDoar extends StatefulWidget {
   const DoadorDoar({super.key});
@@ -11,6 +15,7 @@ class _DoadorDoarState extends State<DoadorDoar> {
   final TextEditingController _valorController = TextEditingController();
 
   double valorDoacao = 0.0;
+  bool _salvandoDoacao = false;
 
   @override
   void dispose() {
@@ -65,16 +70,36 @@ class _DoadorDoarState extends State<DoadorDoar> {
     ).showSnackBar(const SnackBar(content: Text('Chave PIX copiada!')));
   }
 
-  void confirmarDoacao() {
-    if (valorDoacao <= 0) return;
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          'Doação de R\$ ${formatarValor(valorDoacao)} confirmada!',
+  Future<void> confirmarDoacao() async {
+    if (_salvandoDoacao || valorDoacao <= 0) return;
+    setState(() => _salvandoDoacao = true);
+    try {
+      await SqlConnectService.instance.registrarDoacao(
+        valor: valorDoacao,
+        metodo: 'PIX',
+      );
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Doação de R\$ ${formatarValor(valorDoacao)} registrada como pendente. '
+            'A equipe confirmará o recebimento.',
+          ),
         ),
-      ),
-    );
+      );
+      _valorController.clear();
+      setState(() => valorDoacao = 0);
+    } catch (error, stackTrace) {
+      debugPrint('Falha ao registrar a doação: $error');
+      debugPrint(stackTrace.toString());
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(AuthService.mensagemErro(error))),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _salvandoDoacao = false);
+    }
   }
 
   @override
@@ -262,6 +287,40 @@ class _DoadorDoarState extends State<DoadorDoar> {
 
             const SizedBox(height: 16),
 
+            TextField(
+              controller: _valorController,
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'[\d,.]')),
+              ],
+              onChanged: atualizarValor,
+              decoration: const InputDecoration(
+                labelText: 'Valor da doação',
+                prefixText: 'R\$ ',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 12),
+            SizedBox(
+              width: double.infinity,
+              child: FilledButton(
+                onPressed: _salvandoDoacao || valorDoacao <= 0
+                    ? null
+                    : confirmarDoacao,
+                child: _salvandoDoacao
+                    ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : const Text('Registrar doação'),
+              ),
+            ),
+
+            const SizedBox(height: 16),
+
             // =========================
             // AVISO
             // =========================
@@ -280,9 +339,10 @@ class _DoadorDoarState extends State<DoadorDoar> {
                   SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      'Após realizar a transferência PIX, clique no botão '
-                      '"Confirmar Doação" abaixo. Sua contribuição será '
-                      'registrada e você receberá uma confirmação por email.',
+                      'Após realizar a transferência PIX, registre o valor '
+                      'para que a equipe possa confirmar o recebimento. '
+                      'Este aplicativo ainda não valida pagamentos PIX '
+                      'automaticamente.',
                       style: TextStyle(fontSize: 11, color: Colors.black54),
                     ),
                   ),

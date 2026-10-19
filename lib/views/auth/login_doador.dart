@@ -54,6 +54,10 @@ class _LoginDoadorPageState extends State<LoginDoadorPage> {
       _mostrarMensagem(AuthService.mensagemErro(error));
     } on FormatException catch (error) {
       _mostrarMensagem(AuthService.mensagemErro(error));
+    } catch (error, stackTrace) {
+      debugPrint('Falha no login do doador: $error');
+      debugPrint(stackTrace.toString());
+      _mostrarMensagem(AuthService.mensagemErro(error));
     } finally {
       if (mounted) setState(() => carregando = false);
     }

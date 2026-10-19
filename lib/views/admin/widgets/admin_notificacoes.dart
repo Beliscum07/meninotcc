@@ -6,10 +6,7 @@ import '../../../models/notificacao_model.dart';
 class AdminNotificacoesView extends StatelessWidget {
   final AdminController adminController;
 
-  const AdminNotificacoesView({
-    super.key,
-    required this.adminController,
-  });
+  const AdminNotificacoesView({super.key, required this.adminController});
 
   @override
   Widget build(BuildContext context) {
@@ -22,9 +19,7 @@ class AdminNotificacoesView extends StatelessWidget {
 
         title: const Text(
           'Notificações',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(fontWeight: FontWeight.bold),
         ),
 
         actions: [
@@ -44,9 +39,7 @@ class AdminNotificacoesView extends StatelessWidget {
                   'Marcar todas',
 
                   style: TextStyle(
-                    color: temNaoLidas
-                        ? Colors.white
-                        : Colors.white54,
+                    color: temNaoLidas ? Colors.white : Colors.white54,
                   ),
                 ),
               );
@@ -59,17 +52,33 @@ class AdminNotificacoesView extends StatelessWidget {
         listenable: adminController,
 
         builder: (context, child) {
-          final notificacoes =
-              adminController.notificacoes;
+          final notificacoes = adminController.notificacoes;
+
+          if (adminController.carregando) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (adminController.erro != null) {
+            return Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text('Não foi possível carregar as notificações.'),
+                  const SizedBox(height: 8),
+                  FilledButton(
+                    onPressed: adminController.carregarNotificacoes,
+                    child: const Text('Tentar novamente'),
+                  ),
+                ],
+              ),
+            );
+          }
 
           if (notificacoes.isEmpty) {
             return const Center(
               child: Text(
                 'Nenhuma notificação.',
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.black54,
-                ),
+                style: TextStyle(fontSize: 18, color: Colors.black54),
               ),
             );
           }
@@ -80,9 +89,7 @@ class AdminNotificacoesView extends StatelessWidget {
             itemCount: notificacoes.length,
 
             itemBuilder: (context, index) {
-              return _card(
-                notificacoes[index],
-              );
+              return _card(notificacoes[index]);
             },
           );
         },
@@ -95,9 +102,7 @@ class AdminNotificacoesView extends StatelessWidget {
       borderRadius: BorderRadius.circular(16),
 
       onTap: () {
-        adminController.marcarNotificacaoComoLida(
-          notificacao.id,
-        );
+        adminController.marcarNotificacaoComoLida(notificacao.id);
       },
 
       child: Container(
@@ -106,9 +111,7 @@ class AdminNotificacoesView extends StatelessWidget {
         padding: const EdgeInsets.all(18),
 
         decoration: BoxDecoration(
-          color: notificacao.lida
-              ? Colors.white
-              : const Color(0xFFFFF9FF),
+          color: notificacao.lida ? Colors.white : const Color(0xFFFFF9FF),
 
           borderRadius: BorderRadius.circular(16),
 
@@ -128,8 +131,7 @@ class AdminNotificacoesView extends StatelessWidget {
               height: 48,
 
               decoration: BoxDecoration(
-                color: const Color(0xFFC56BE0)
-                    .withValues(alpha: 0.12),
+                color: const Color(0xFFC56BE0).withValues(alpha: 0.12),
 
                 shape: BoxShape.circle,
               ),
@@ -144,8 +146,7 @@ class AdminNotificacoesView extends StatelessWidget {
 
             Expanded(
               child: Column(
-                crossAxisAlignment:
-                    CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
 
                 children: [
                   Row(
@@ -181,10 +182,7 @@ class AdminNotificacoesView extends StatelessWidget {
                   Text(
                     notificacao.descricao,
 
-                    style: const TextStyle(
-                      fontSize: 14,
-                      color: Colors.black87,
-                    ),
+                    style: const TextStyle(fontSize: 14, color: Colors.black87),
                   ),
 
                   const SizedBox(height: 8),
@@ -192,10 +190,7 @@ class AdminNotificacoesView extends StatelessWidget {
                   Text(
                     notificacao.tempo,
 
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: Colors.black54,
-                    ),
+                    style: const TextStyle(fontSize: 12, color: Colors.black54),
                   ),
                 ],
               ),

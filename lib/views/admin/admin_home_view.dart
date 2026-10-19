@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../../controllers/controller/admin_controller.dart';
@@ -26,6 +28,7 @@ class _AdminHomeViewState extends State<AdminHomeView> {
     super.initState();
 
     adminController = AdminController();
+    unawaited(adminController.carregarNotificacoes());
   }
 
   @override

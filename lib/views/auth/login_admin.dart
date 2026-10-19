@@ -56,6 +56,12 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
       if (mounted) {
         setState(() => mensagem = AuthService.mensagemErro(error));
       }
+    } catch (error, stackTrace) {
+      debugPrint('Falha no login do administrador: $error');
+      debugPrint(stackTrace.toString());
+      if (mounted) {
+        setState(() => mensagem = AuthService.mensagemErro(error));
+      }
     } finally {
       if (mounted) setState(() => _carregando = false);
     }

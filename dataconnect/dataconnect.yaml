@@ -1,0 +1,13 @@
+specVersion: "v1"
+serviceId: "mb-tcc-3-service"
+location: "southamerica-east1"
+schemas:
+  - source: "./schema"
+    datasource:
+      postgresql:
+        database: "mb-tcc-3-database"
+        cloudSql:
+          instanceId: "mb-tcc-instance"
+          # schemaValidation: "STRICT"     # STRICT mode makes Postgres schema match Data Connect exactly.
+          # schemaValidation: "COMPATIBLE" # COMPATIBLE mode makes Postgres schema compatible with Data Connect.
+connectorDirs: ["./example"]

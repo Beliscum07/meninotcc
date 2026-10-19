@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 
+import '../firebase_options.dart';
+
 class FirestoreOperationException implements Exception {
   const FirestoreOperationException({
     required this.code,
@@ -30,7 +32,9 @@ class FirebaseService {
     }
 
     try {
-      await Firebase.initializeApp();
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
     } catch (error, stackTrace) {
       debugPrint('FirebaseService.initialize falhou: $error');
       debugPrint(stackTrace.toString());

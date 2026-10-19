@@ -1,64 +1,84 @@
 import 'package:flutter/foundation.dart';
 
-import '../../database/mock_database.dart';
 import '../../models/notificacao_model.dart';
+import '../../services/sql_connect_service.dart';
 
 class AlunoController extends ChangeNotifier {
-  final List<Notificacao> _notificacoes;
+  final List<Notificacao> _notificacoes = [];
+  bool carregando = true;
+  Object? erro;
 
-  AlunoController()
-      : _notificacoes = MockDatabase.notificacoes
-            .where((item) => item['tipo'] != 'aluno')
-            .map(
-              (item) => Notificacao(
-                id: item['id'] as String,
-                titulo: item['titulo'] as String,
-                descricao: item['descricao'] as String,
-                tempo: item['tempo'] as String,
-                tipo: item['tipo'] as String,
-                lida: item['lida'] as bool? ?? false,
-              ),
-            )
-            .toList();
+  List<Notificacao> get notificacoes => List.unmodifiable(_notificacoes);
 
-  // Retorna todas as notificações.
-  List<Notificacao> get notificacoes {
-    return List.unmodifiable(_notificacoes);
+  int get quantidadeNotificacoesNaoLidas =>
+      _notificacoes.where((notificacao) => !notificacao.lida).length;
+
+  Future<void> carregarNotificacoes() async {
+    carregando = true;
+    erro = null;
+    notifyListeners();
+    try {
+      final registros = await SqlConnectService.instance.minhasNotificacoes();
+      _notificacoes
+        ..clear()
+        ..addAll(
+          registros.map((registro) {
+            final data = registro.dataCriacao.toDateTime().toLocal();
+            return Notificacao(
+              id: registro.id,
+              titulo: registro.titulo,
+              descricao: registro.mensagem,
+              tempo:
+                  '${data.day.toString().padLeft(2, '0')}/${data.month.toString().padLeft(2, '0')}/${data.year} ${data.hour.toString().padLeft(2, '0')}:${data.minute.toString().padLeft(2, '0')}',
+              tipo: 'aviso',
+              lida: registro.lida,
+            );
+          }),
+        );
+    } catch (error, stackTrace) {
+      debugPrint('Falha ao carregar notificações do aluno: $error\n$stackTrace');
+      erro = error;
+    } finally {
+      carregando = false;
+      notifyListeners();
+    }
   }
 
-  // Retorna a quantidade de notificações ainda não lidas.
-  int get quantidadeNotificacoesNaoLidas {
-    return _notificacoes.where((notificacao) => !notificacao.lida).length;
-  }
-
-  // Marca uma notificação específica como lida.
-  void marcarNotificacaoComoLida(String id) {
+  Future<void> marcarNotificacaoComoLida(String id) async {
     final index = _notificacoes.indexWhere(
       (notificacao) => notificacao.id == id,
     );
+    if (index == -1 || _notificacoes[index].lida) return;
 
-    if (index == -1) {
-      return;
+    try {
+      await SqlConnectService.instance.marcarNotificacaoComoLida(id);
+      _notificacoes[index].marcarComoLida();
+      notifyListeners();
+    } catch (error, stackTrace) {
+      debugPrint('Falha ao marcar notificação do aluno como lida: $error\n$stackTrace');
+      erro = error;
+      notifyListeners();
     }
-
-    _notificacoes[index].marcarComoLida();
-
-    notifyListeners();
   }
 
-  // Marca todas as notificações como lidas.
-  void marcarTodasNotificacoesComoLidas() {
-    for (final notificacao in _notificacoes) {
-      notificacao.marcarComoLida();
+  Future<void> marcarTodasNotificacoesComoLidas() async {
+    try {
+      await Future.wait(
+        _notificacoes
+            .where((notificacao) => !notificacao.lida)
+            .map(
+              (notificacao) => SqlConnectService.instance
+                  .marcarNotificacaoComoLida(notificacao.id),
+            ),
+      );
+      for (final notificacao in _notificacoes) {
+        notificacao.marcarComoLida();
+      }
+      erro = null;
+    } catch (error, stackTrace) {
+      debugPrint('Falha ao marcar notificações do aluno como lidas: $error\n$stackTrace');
+      erro = error;
     }
-
-    notifyListeners();
-  }
-
-  // Adiciona uma nova notificação.
-  void adicionarNotificacao(Notificacao notificacao) {
-    _notificacoes.insert(0, notificacao);
-
     notifyListeners();
   }
 }

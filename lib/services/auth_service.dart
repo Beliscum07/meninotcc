@@ -1,5 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
+class AuthProfileException implements Exception {
+  const AuthProfileException(this.message);
+
+  final String message;
+
+  @override
+  String toString() => message;
+}
+
 class AuthService {
   AuthService._();
 
@@ -118,6 +127,9 @@ class AuthService {
   }
 
   static String mensagemErro(Object error) {
+    if (error is AuthProfileException) {
+      return error.message;
+    }
     if (error is FormatException) {
       return error.message;
     }

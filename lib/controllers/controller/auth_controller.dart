@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import '../../models/doador_model.dart';
 import '../../models/usuario_model.dart';
 import '../../services/auth_service.dart';
+import '../../services/sql_connect_service.dart';
 
 class AuthController extends ChangeNotifier {
   static final AuthController _instance = AuthController._internal();
@@ -13,20 +14,27 @@ class AuthController extends ChangeNotifier {
   factory AuthController() => _instance;
 
   AuthController._internal() {
-    _atualizarSessao(_authService.currentUser);
+    unawaited(_sincronizarSessao(_authService.currentUser));
     _authStateSubscription = _authService.authStateChanges.listen(
-      _atualizarSessao,
+      (user) => unawaited(_sincronizarSessao(user)),
+      onError: (Object error, StackTrace stackTrace) {
+        debugPrint('Falha ao observar a sessão Firebase: $error');
+        debugPrint(stackTrace.toString());
+        _limparSessao();
+      },
     );
   }
 
   final AuthService _authService = AuthService.instance;
+  final SqlConnectService _sqlConnectService = SqlConnectService.instance;
   late final StreamSubscription<User?> _authStateSubscription;
-  TipoUsuario _tipoSessao = TipoUsuario.aluno;
   Usuario? _usuarioLogado;
   Doador? _doadorLogado;
+  String? _alunoIdLogado;
 
   Usuario? get usuarioLogado => _usuarioLogado;
   Doador? get doadorLogado => _doadorLogado;
+  String? get alunoIdLogado => _alunoIdLogado;
   bool get estaLogado => _usuarioLogado != null || _doadorLogado != null;
 
   Future<void> login({
@@ -34,9 +42,14 @@ class AuthController extends ChangeNotifier {
     required String senha,
     required TipoUsuario tipo,
   }) async {
-    _tipoSessao = tipo;
     final credential = await _authService.signIn(email: email, password: senha);
-    _atualizarSessao(credential.user);
+    try {
+      await _carregarPerfil(credential.user, tipoEsperado: tipo);
+    } catch (_) {
+      await _authService.signOut();
+      _limparSessao();
+      rethrow;
+    }
   }
 
   Future<void> cadastrarDoador({
@@ -48,13 +61,45 @@ class AuthController extends ChangeNotifier {
     if (nome.trim().isEmpty || telefone.trim().isEmpty) {
       throw const FormatException('Preencha todos os campos.');
     }
-    final credential = await _authService.createAccount(
-      name: nome,
-      email: email,
-      password: senha,
-    );
-    _tipoSessao = TipoUsuario.doador;
-    _atualizarSessao(credential.user, telefone: telefone.trim());
+
+    final emailNormalizado = email.trim().toLowerCase();
+    final sessaoAtual = _authService.currentUser;
+    final User user;
+    if (sessaoAtual != null) {
+      if (sessaoAtual.email?.toLowerCase() != emailNormalizado) {
+        throw const AuthProfileException(
+          'Saia da conta atual antes de cadastrar outro doador.',
+        );
+      }
+      user = sessaoAtual;
+    } else {
+      final credential = await _authService.createAccount(
+        name: nome,
+        email: emailNormalizado,
+        password: senha,
+      );
+      final novoUsuario = credential.user;
+      if (novoUsuario == null) {
+        throw const AuthProfileException(
+          'O Firebase não retornou a conta recém-criada.',
+        );
+      }
+      user = novoUsuario;
+    }
+
+    final perfilExistente = await _sqlConnectService.buscarMeuPerfil();
+    if (perfilExistente == null) {
+      await _sqlConnectService.cadastrarPerfilDoador(
+        nome: nome,
+        telefone: telefone,
+      );
+    } else if (_tipoDoPerfil(perfilExistente.papel) != TipoUsuario.doador) {
+      throw const AuthProfileException(
+        'Esta conta já está vinculada a outro perfil da ONG.',
+      );
+    }
+
+    await _carregarPerfil(user, tipoEsperado: TipoUsuario.doador);
   }
 
   Future<bool> atualizarDoadorPerfil({
@@ -77,11 +122,16 @@ class AuthController extends ChangeNotifier {
       return false;
     }
 
-    await _authService.updateCurrentUser(
+    final emailAlterado = await _authService.updateCurrentUser(
       name: nomeFinal,
       email: emailFinal,
       currentPassword: senhaAtual,
       newPassword: novaSenha,
+    );
+
+    await _sqlConnectService.atualizarMeuPerfil(
+      nome: nomeFinal,
+      telefone: telefoneFinal,
     );
 
     final atualizado = Doador(
@@ -92,8 +142,8 @@ class AuthController extends ChangeNotifier {
       totalDoado: atual.totalDoado,
     );
     _doadorLogado = atualizado;
-    _atualizarSessao(_authService.currentUser, telefone: telefoneFinal);
-    return true;
+    notifyListeners();
+    return emailAlterado;
   }
 
   void registrarDoacao(double valor) {
@@ -107,42 +157,120 @@ class AuthController extends ChangeNotifier {
 
   Future<void> logout() async {
     await _authService.signOut();
-    _atualizarSessao(null);
+    _limparSessao();
   }
 
-  void _atualizarSessao(User? user, {String? telefone}) {
+  Future<void> _sincronizarSessao(User? user) async {
     if (user == null) {
-      _usuarioLogado = null;
-      _doadorLogado = null;
-      notifyListeners();
+      _limparSessao();
       return;
     }
 
-    final nome = user.displayName ?? user.email?.split('@').first ?? '';
-    final email = user.email ?? '';
-    if (_tipoSessao == TipoUsuario.doador) {
-      final doadorAnterior = _doadorLogado;
+    try {
+      await _carregarPerfil(user);
+    } catch (error, stackTrace) {
+      debugPrint('Não foi possível carregar o perfil SQL do usuário: $error');
+      debugPrint(stackTrace.toString());
+      _limparSessao();
+    }
+  }
+
+  Future<void> _carregarPerfil(
+    User? user, {
+    TipoUsuario? tipoEsperado,
+  }) async {
+    if (user == null) {
+      throw const AuthProfileException(
+        'O Firebase não retornou uma sessão autenticada.',
+      );
+    }
+
+    final perfil = await _sqlConnectService.buscarMeuPerfil();
+    if (perfil == null || perfil.uid != user.uid) {
+      throw const AuthProfileException(
+        'Esta conta ainda não possui um perfil ativo na ONG.',
+      );
+    }
+    if (perfil.status.toLowerCase() != 'ativo') {
+      throw const AuthProfileException(
+        'O perfil desta conta está inativo. Entre em contato com a ONG.',
+      );
+    }
+
+    final tipo = _tipoDoPerfil(perfil.papel);
+    if (tipoEsperado != null && tipo != tipoEsperado) {
+      throw const AuthProfileException(
+        'Esta conta não possui o perfil selecionado.',
+      );
+    }
+
+    if (tipo == TipoUsuario.admin) {
+      final token = await user.getIdTokenResult(true);
+      if (token.claims?['admin'] != true) {
+        throw const AuthProfileException(
+          'Esta conta não possui autorização administrativa.',
+        );
+      }
+    }
+
+    String? alunoId;
+    if (tipo == TipoUsuario.aluno) {
+      final aluno = await _sqlConnectService.buscarMeuPerfilAluno();
+      if (aluno == null) {
+        throw const AuthProfileException(
+          'O cadastro de estudante ainda não foi vinculado a esta conta.',
+        );
+      }
+      alunoId = aluno.id;
+    }
+
+    await _sqlConnectService.atualizarMeuPerfil(
+      nome: perfil.nome,
+      telefone: perfil.telefone,
+    );
+
+    if (tipo == TipoUsuario.doador) {
       _usuarioLogado = null;
       _doadorLogado = Doador(
         id: user.uid,
-        nome: nome,
-        email: email,
-        telefone:
-            telefone ??
-            (doadorAnterior?.id == user.uid ? doadorAnterior!.telefone : ''),
-        totalDoado: doadorAnterior?.id == user.uid
-            ? doadorAnterior!.totalDoado
-            : 0,
+        nome: perfil.nome,
+        email: user.email ?? perfil.email,
+        telefone: perfil.telefone ?? '',
       );
     } else {
       _doadorLogado = null;
       _usuarioLogado = Usuario(
         id: user.uid,
-        nome: nome,
-        email: email,
-        tipo: _tipoSessao,
+        nome: perfil.nome,
+        email: user.email ?? perfil.email,
+        tipo: tipo,
       );
     }
+    _alunoIdLogado = alunoId;
+    notifyListeners();
+  }
+
+  TipoUsuario _tipoDoPerfil(String papel) {
+    switch (papel.trim().toLowerCase()) {
+      case 'admin':
+      case 'administrador':
+        return TipoUsuario.admin;
+      case 'aluno':
+      case 'estudante':
+        return TipoUsuario.aluno;
+      case 'doador':
+        return TipoUsuario.doador;
+      default:
+        throw const AuthProfileException(
+          'O perfil desta conta não possui um papel válido.',
+        );
+    }
+  }
+
+  void _limparSessao() {
+    _usuarioLogado = null;
+    _doadorLogado = null;
+    _alunoIdLogado = null;
     notifyListeners();
   }
 

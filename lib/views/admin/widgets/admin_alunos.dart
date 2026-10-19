@@ -1,9 +1,14 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../models/atividade_model.dart';
+import '../../../generated/example.dart';
 import '../../../services/aluno_data_service.dart';
 import '../../../services/api_service.dart';
+import '../../../services/auth_service.dart';
+import '../../../services/sql_connect_service.dart';
 
 class AdminAlunosPage extends StatefulWidget {
   const AdminAlunosPage({super.key});
@@ -16,24 +21,82 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
   final TextEditingController buscaController = TextEditingController();
   final GmailService gmailService = GmailService();
 
-  final List<String> bolsasDisponiveis = [
-    'Bolsa Educação Integral',
-    'Bolsa Esporte e Cultura',
-    'Bolsa Alimentação',
-  ];
+  final List<Atividade> _atividades = [];
+  final List<ListScholarshipsBolsas> _bolsas = [];
+  bool _carregando = true;
+  Object? _erro;
 
-  List<Atividade> get atividades => atividadesMock;
+  List<Atividade> get atividades =>
+      _atividades.where((atividade) => atividade.status == 'ativa').toList();
 
   List<String> get atividadesDisponiveis =>
       atividades.map((atividade) => atividade.nome).toList();
+
+  List<String> get bolsasDisponiveis =>
+      _bolsas.map((bolsa) => bolsa.nome).toList();
 
   List<Map<String, dynamic>> get alunos => AlunoDataService.instance.alunos;
 
   String busca = '';
 
-  void _atualizarDados(VoidCallback alteracao) {
-    setState(alteracao);
-    AlunoDataService.instance.notificarAlteracao();
+  @override
+  void initState() {
+    super.initState();
+    unawaited(_carregarDados());
+  }
+
+  Future<void> _carregarDados() async {
+    try {
+      await Future.wait([
+        AlunoDataService.instance.carregarAlunosAdministrativos(),
+        _carregarAtividades(),
+        _carregarBolsas(),
+      ]);
+      if (mounted) {
+        setState(() {
+          _erro = null;
+          _carregando = false;
+        });
+      }
+    } catch (error, stackTrace) {
+      debugPrint('Falha ao carregar dados administrativos de alunos: $error');
+      debugPrint(stackTrace.toString());
+      if (mounted) {
+        setState(() {
+          _erro = error;
+          _carregando = false;
+        });
+      }
+    }
+  }
+
+  Future<void> _carregarAtividades() async {
+    final registros = await SqlConnectService.instance.listarAtividades();
+    _atividades
+      ..clear()
+      ..addAll(
+        registros.map(
+          (registro) => Atividade(
+            id: registro.id,
+            nome: registro.nome,
+            professor: registro.professor,
+            descricao: registro.descricao ?? '',
+            horario: registro.horario ?? '',
+            dias: registro.dias ?? '',
+            inscritos: registro.inscricoes_on_atividade.length,
+            vagas: registro.vagas,
+            categoria: registro.categoria ?? 'Geral',
+            status: registro.status,
+          ),
+        ),
+      );
+  }
+
+  Future<void> _carregarBolsas() async {
+    final registros = await SqlConnectService.instance.listarBolsas();
+    _bolsas
+      ..clear()
+      ..addAll(registros.where((bolsa) => bolsa.ativa));
   }
 
   @override
@@ -56,7 +119,28 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
           _buildHeader(),
           _buildBusca(),
           Expanded(
-            child: alunosFiltrados.isEmpty
+            child: _carregando
+                ? const Center(child: CircularProgressIndicator())
+                : _erro != null
+                ? Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Text(
+                          'Não foi possível carregar os dados dos alunos.',
+                        ),
+                        const SizedBox(height: 8),
+                        FilledButton(
+                          onPressed: () {
+                            setState(() => _carregando = true);
+                            unawaited(_carregarDados());
+                          },
+                          child: const Text('Tentar novamente'),
+                        ),
+                      ],
+                    ),
+                  )
+                : alunosFiltrados.isEmpty
                 ? _buildSemResultados()
                 : ListView.builder(
                     padding: const EdgeInsets.all(12),
@@ -253,9 +337,6 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
                     color: Color(0xFFC56BE0),
                   ),
                   label: Text(atividade),
-                  onDeleted: () {
-                    _atualizarDados(() => atividades.remove(atividade));
-                  },
                 );
               }).toList(),
             ),
@@ -295,9 +376,6 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
                     color: Color(0xFF565A9A),
                   ),
                   label: Text(bolsa),
-                  onDeleted: () {
-                    _atualizarDados(() => bolsas.remove(bolsa));
-                  },
                 );
               }).toList(),
             ),
@@ -311,6 +389,18 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
             'E-mail: ${aluno['email'] ?? 'Não cadastrado'}',
             style: const TextStyle(fontSize: 13),
           ),
+          if (aluno['usuarioUid'] == null &&
+              (aluno['email'] as String).isNotEmpty) ...[
+            const SizedBox(height: 8),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                onPressed: () => _vincularContaAluno(aluno),
+                icon: const Icon(Icons.link),
+                label: const Text('Vincular conta Firebase'),
+              ),
+            ),
+          ],
           const SizedBox(height: 12),
           Row(
             children: [
@@ -348,6 +438,52 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
     );
   }
 
+  Future<void> _vincularContaAluno(Map<String, dynamic> aluno) async {
+    final uidController = TextEditingController();
+    final uid = await showDialog<String>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text('Vincular conta de ${aluno['nome']}'),
+        content: TextField(
+          controller: uidController,
+          autofocus: true,
+          decoration: const InputDecoration(
+            labelText: 'UID do Firebase Authentication',
+            border: OutlineInputBorder(),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: const Text('Cancelar'),
+          ),
+          FilledButton(
+            onPressed: () =>
+                Navigator.pop(dialogContext, uidController.text.trim()),
+            child: const Text('Vincular'),
+          ),
+        ],
+      ),
+    );
+    uidController.dispose();
+    if (uid == null || uid.isEmpty) return;
+
+    try {
+      await SqlConnectService.instance.vincularContaAluno(
+        studentId: aluno['id'] as String,
+        authUid: uid,
+        authEmail: aluno['email'] as String,
+      );
+      await _carregarDados();
+      if (mounted) _mensagem('Conta vinculada ao cadastro do aluno.');
+    } catch (error, stackTrace) {
+      debugPrint('Erro ao vincular conta do aluno: $error\n$stackTrace');
+      if (mounted) {
+        _mensagem('Não foi possível vincular a conta do aluno.');
+      }
+    }
+  }
+
   void _delegarAluno(Map<String, dynamic> aluno) {
     String? atividadeSelecionada;
 
@@ -382,15 +518,24 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
                 ElevatedButton(
                   onPressed: atividadeSelecionada == null
                       ? null
-                      : () {
-                          final atividades =
-                              aluno['atividades'] as List<String>;
-                          if (!atividades.contains(atividadeSelecionada)) {
-                            _atualizarDados(() {
-                              atividades.add(atividadeSelecionada!);
-                            });
+                      : () async {
+                          final atividade = _atividades.firstWhere(
+                            (item) => item.nome == atividadeSelecionada,
+                          );
+                          try {
+                            await SqlConnectService.instance.atribuirAtividade(
+                              alunoId: aluno['id'].toString(),
+                              atividadeId: atividade.id,
+                            );
+                            await _carregarDados();
+                            if (dialogContext.mounted) {
+                              Navigator.pop(dialogContext);
+                            }
+                          } catch (error, stackTrace) {
+                            debugPrint('Falha ao inscrever aluno: $error');
+                            debugPrint(stackTrace.toString());
+                            _mensagem(AuthService.mensagemErro(error));
                           }
-                          Navigator.pop(dialogContext);
                         },
                   child: const Text('Adicionar'),
                 ),
@@ -445,11 +590,25 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
                 ElevatedButton(
                   onPressed: bolsaSelecionada == null
                       ? null
-                      : () {
-                          _atualizarDados(() {
-                            bolsasDoAluno.add(bolsaSelecionada!);
-                          });
-                          Navigator.pop(dialogContext);
+                      : () async {
+                          final bolsa = _bolsas.firstWhere(
+                            (item) => item.nome == bolsaSelecionada,
+                          );
+                          try {
+                            await SqlConnectService.instance.atribuirBolsa(
+                              alunoId: aluno['id'].toString(),
+                              bolsaId: bolsa.id,
+                              valorConcedido: bolsa.valorMensal,
+                            );
+                            await _carregarDados();
+                            if (dialogContext.mounted) {
+                              Navigator.pop(dialogContext);
+                            }
+                          } catch (error, stackTrace) {
+                            debugPrint('Falha ao atribuir bolsa: $error');
+                            debugPrint(stackTrace.toString());
+                            _mensagem(AuthService.mensagemErro(error));
+                          }
                         },
                   child: const Text('Atribuir'),
                 ),
@@ -522,7 +681,7 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
               child: const Text('Cancelar'),
             ),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 final erro = _validarDadosAluno(
                   nome: nome.text,
                   idade: idade.text,
@@ -534,20 +693,23 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
                   _mensagem(erro);
                   return;
                 }
-                _atualizarDados(() {
-                  alunos.add({
-                    'id': _novoIdAluno(),
-                    'nome': nome.text.trim(),
-                    'idade': int.tryParse(idade.text) ?? 0,
-                    'responsavel': responsavel.text.trim(),
-                    'telefone': telefone.text.trim(),
-                    'email': email.text.trim().toLowerCase(),
-                    'presenca': 100,
-                    'atividades': <String>[],
-                    'bolsas': <String>[],
-                  });
-                });
-                Navigator.pop(dialogContext);
+                try {
+                  await SqlConnectService.instance.criarAluno(
+                    nome: nome.text.trim(),
+                    idade: int.parse(idade.text),
+                    responsavel: responsavel.text.trim(),
+                    telefone: telefone.text.trim(),
+                    email: email.text.trim().toLowerCase(),
+                    presenca: 0,
+                  );
+                  await _carregarDados();
+                  if (dialogContext.mounted) Navigator.pop(dialogContext);
+                } catch (error, stackTrace) {
+                  debugPrint('Falha ao cadastrar aluno: $error');
+                  debugPrint(stackTrace.toString());
+                  _mensagem(AuthService.mensagemErro(error));
+                  return;
+                }
                 nome.dispose();
                 idade.dispose();
                 responsavel.dispose();
@@ -560,13 +722,6 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
         );
       },
     );
-  }
-
-  String _novoIdAluno() {
-    final maiorId = alunos
-        .map((aluno) => int.tryParse(aluno['id'].toString()) ?? 0)
-        .fold<int>(0, (maior, atual) => atual > maior ? atual : maior);
-    return (maiorId + 1).toString().padLeft(3, '0');
   }
 
   void _editarAluno(Map<String, dynamic> aluno) {
@@ -627,7 +782,7 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
               child: const Text('Cancelar'),
             ),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 final erro = _validarDadosAluno(
                   nome: nome.text,
                   idade: idade.text,
@@ -639,14 +794,24 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
                   _mensagem(erro);
                   return;
                 }
-                _atualizarDados(() {
-                  aluno['nome'] = nome.text.trim();
-                  aluno['idade'] = int.tryParse(idade.text) ?? 0;
-                  aluno['responsavel'] = responsavel.text.trim();
-                  aluno['telefone'] = telefone.text.trim();
-                  aluno['email'] = email.text.trim().toLowerCase();
-                });
-                Navigator.pop(dialogContext);
+                try {
+                  await SqlConnectService.instance.atualizarAluno(
+                    id: aluno['id'].toString(),
+                    nome: nome.text.trim(),
+                    idade: int.parse(idade.text),
+                    responsavel: responsavel.text.trim(),
+                    telefone: telefone.text.trim(),
+                    email: email.text.trim().toLowerCase(),
+                    presenca: aluno['presenca'] as int? ?? 0,
+                  );
+                  await _carregarDados();
+                  if (dialogContext.mounted) Navigator.pop(dialogContext);
+                } catch (error, stackTrace) {
+                  debugPrint('Falha ao atualizar aluno: $error');
+                  debugPrint(stackTrace.toString());
+                  _mensagem(AuthService.mensagemErro(error));
+                  return;
+                }
                 nome.dispose();
                 idade.dispose();
                 responsavel.dispose();
@@ -675,9 +840,20 @@ class _AdminAlunosPageState extends State<AdminAlunosPage> {
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-              onPressed: () {
-                _atualizarDados(() => alunos.remove(aluno));
-                Navigator.pop(dialogContext);
+              onPressed: () async {
+                try {
+                  await SqlConnectService.instance.alterarStatusAluno(
+                    id: aluno['id'].toString(),
+                    status: 'inativo',
+                  );
+                  await _carregarDados();
+                  if (dialogContext.mounted) Navigator.pop(dialogContext);
+                  _mensagem('Cadastro do aluno arquivado.');
+                } catch (error, stackTrace) {
+                  debugPrint('Falha ao arquivar aluno: $error');
+                  debugPrint(stackTrace.toString());
+                  _mensagem(AuthService.mensagemErro(error));
+                }
               },
               child: const Text(
                 'Remover',

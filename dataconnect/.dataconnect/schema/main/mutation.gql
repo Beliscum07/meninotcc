@@ -1,0 +1,1092 @@
+extend type Mutation {
+  """
+  ✨ Insert a single `Agenda` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  agenda_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: Agenda_Data!
+  ): Agenda_KeyOutput! @fdc_generated(from: "Agenda", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `Aluno` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  aluno_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: Aluno_Data!
+  ): Aluno_KeyOutput! @fdc_generated(from: "Aluno", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `AlunoBolsa` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  alunoBolsa_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: AlunoBolsa_Data!
+  ): AlunoBolsa_KeyOutput! @fdc_generated(from: "AlunoBolsa", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `Atividade` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  atividade_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: Atividade_Data!
+  ): Atividade_KeyOutput! @fdc_generated(from: "Atividade", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `Bolsa` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  bolsa_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: Bolsa_Data!
+  ): Bolsa_KeyOutput! @fdc_generated(from: "Bolsa", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `Doacao` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  doacao_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: Doacao_Data!
+  ): Doacao_KeyOutput! @fdc_generated(from: "Doacao", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `Doador` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  doador_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: Doador_Data!
+  ): Doador_KeyOutput! @fdc_generated(from: "Doador", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `Inscricao` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  inscricao_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: Inscricao_Data!
+  ): Inscricao_KeyOutput! @fdc_generated(from: "Inscricao", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `Notificacao` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  notificacao_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: Notificacao_Data!
+  ): Notificacao_KeyOutput! @fdc_generated(from: "Notificacao", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `Usuario` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  usuario_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: Usuario_Data!
+  ): Usuario_KeyOutput! @fdc_generated(from: "Usuario", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert `Agenda` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  agenda_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [Agenda_Data!]!
+  ): [Agenda_KeyOutput!]! @fdc_generated(from: "Agenda", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `Aluno` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  aluno_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [Aluno_Data!]!
+  ): [Aluno_KeyOutput!]! @fdc_generated(from: "Aluno", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `AlunoBolsa` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  alunoBolsa_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [AlunoBolsa_Data!]!
+  ): [AlunoBolsa_KeyOutput!]! @fdc_generated(from: "AlunoBolsa", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `Atividade` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  atividade_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [Atividade_Data!]!
+  ): [Atividade_KeyOutput!]! @fdc_generated(from: "Atividade", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `Bolsa` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  bolsa_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [Bolsa_Data!]!
+  ): [Bolsa_KeyOutput!]! @fdc_generated(from: "Bolsa", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `Doacao` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  doacao_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [Doacao_Data!]!
+  ): [Doacao_KeyOutput!]! @fdc_generated(from: "Doacao", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `Doador` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  doador_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [Doador_Data!]!
+  ): [Doador_KeyOutput!]! @fdc_generated(from: "Doador", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `Inscricao` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  inscricao_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [Inscricao_Data!]!
+  ): [Inscricao_KeyOutput!]! @fdc_generated(from: "Inscricao", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `Notificacao` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  notificacao_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [Notificacao_Data!]!
+  ): [Notificacao_KeyOutput!]! @fdc_generated(from: "Notificacao", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `Usuario` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  usuario_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [Usuario_Data!]!
+  ): [Usuario_KeyOutput!]! @fdc_generated(from: "Usuario", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert or update a single `Agenda` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Agenda`.
+  """
+  agenda_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: Agenda_Data!
+  ): Agenda_KeyOutput! @fdc_generated(from: "Agenda", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `Aluno` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Aluno`.
+  """
+  aluno_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: Aluno_Data!
+  ): Aluno_KeyOutput! @fdc_generated(from: "Aluno", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `AlunoBolsa` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `AlunoBolsa`.
+  """
+  alunoBolsa_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: AlunoBolsa_Data!
+  ): AlunoBolsa_KeyOutput! @fdc_generated(from: "AlunoBolsa", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `Atividade` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Atividade`.
+  """
+  atividade_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: Atividade_Data!
+  ): Atividade_KeyOutput! @fdc_generated(from: "Atividade", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `Bolsa` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Bolsa`.
+  """
+  bolsa_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: Bolsa_Data!
+  ): Bolsa_KeyOutput! @fdc_generated(from: "Bolsa", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `Doacao` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Doacao`.
+  """
+  doacao_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: Doacao_Data!
+  ): Doacao_KeyOutput! @fdc_generated(from: "Doacao", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `Doador` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Doador`.
+  """
+  doador_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: Doador_Data!
+  ): Doador_KeyOutput! @fdc_generated(from: "Doador", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `Inscricao` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Inscricao`.
+  """
+  inscricao_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: Inscricao_Data!
+  ): Inscricao_KeyOutput! @fdc_generated(from: "Inscricao", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `Notificacao` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Notificacao`.
+  """
+  notificacao_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: Notificacao_Data!
+  ): Notificacao_KeyOutput! @fdc_generated(from: "Notificacao", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `Usuario` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Usuario`.
+  """
+  usuario_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: Usuario_Data!
+  ): Usuario_KeyOutput! @fdc_generated(from: "Usuario", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update `Agenda` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Agenda`.
+  """
+  agenda_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [Agenda_Data!]!
+  ): [Agenda_KeyOutput!]! @fdc_generated(from: "Agenda", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `Aluno` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Aluno`.
+  """
+  aluno_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [Aluno_Data!]!
+  ): [Aluno_KeyOutput!]! @fdc_generated(from: "Aluno", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `AlunoBolsa` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `AlunoBolsa`.
+  """
+  alunoBolsa_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [AlunoBolsa_Data!]!
+  ): [AlunoBolsa_KeyOutput!]! @fdc_generated(from: "AlunoBolsa", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `Atividade` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Atividade`.
+  """
+  atividade_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [Atividade_Data!]!
+  ): [Atividade_KeyOutput!]! @fdc_generated(from: "Atividade", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `Bolsa` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Bolsa`.
+  """
+  bolsa_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [Bolsa_Data!]!
+  ): [Bolsa_KeyOutput!]! @fdc_generated(from: "Bolsa", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `Doacao` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Doacao`.
+  """
+  doacao_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [Doacao_Data!]!
+  ): [Doacao_KeyOutput!]! @fdc_generated(from: "Doacao", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `Doador` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Doador`.
+  """
+  doador_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [Doador_Data!]!
+  ): [Doador_KeyOutput!]! @fdc_generated(from: "Doador", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `Inscricao` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Inscricao`.
+  """
+  inscricao_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [Inscricao_Data!]!
+  ): [Inscricao_KeyOutput!]! @fdc_generated(from: "Inscricao", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `Notificacao` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Notificacao`.
+  """
+  notificacao_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [Notificacao_Data!]!
+  ): [Notificacao_KeyOutput!]! @fdc_generated(from: "Notificacao", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `Usuario` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Usuario`.
+  """
+  usuario_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [Usuario_Data!]!
+  ): [Usuario_KeyOutput!]! @fdc_generated(from: "Usuario", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Update a single `Agenda` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Agenda` or `null` if not found.
+  """
+  agenda_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Agenda_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Agenda_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: Agenda_Data!
+  ): Agenda_KeyOutput @fdc_generated(from: "Agenda", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `Aluno` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Aluno` or `null` if not found.
+  """
+  aluno_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Aluno_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Aluno_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: Aluno_Data!
+  ): Aluno_KeyOutput @fdc_generated(from: "Aluno", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `AlunoBolsa` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `AlunoBolsa` or `null` if not found.
+  """
+  alunoBolsa_update(
+    """
+    The key used to identify the object.
+    """
+    key: AlunoBolsa_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: AlunoBolsa_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: AlunoBolsa_Data!
+  ): AlunoBolsa_KeyOutput @fdc_generated(from: "AlunoBolsa", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `Atividade` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Atividade` or `null` if not found.
+  """
+  atividade_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Atividade_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Atividade_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: Atividade_Data!
+  ): Atividade_KeyOutput @fdc_generated(from: "Atividade", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `Bolsa` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Bolsa` or `null` if not found.
+  """
+  bolsa_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Bolsa_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Bolsa_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: Bolsa_Data!
+  ): Bolsa_KeyOutput @fdc_generated(from: "Bolsa", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `Doacao` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Doacao` or `null` if not found.
+  """
+  doacao_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Doacao_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Doacao_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: Doacao_Data!
+  ): Doacao_KeyOutput @fdc_generated(from: "Doacao", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `Doador` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Doador` or `null` if not found.
+  """
+  doador_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Doador_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Doador_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: Doador_Data!
+  ): Doador_KeyOutput @fdc_generated(from: "Doador", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `Inscricao` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Inscricao` or `null` if not found.
+  """
+  inscricao_update(
+    """
+    The key used to identify the object.
+    """
+    key: Inscricao_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Inscricao_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: Inscricao_Data!
+  ): Inscricao_KeyOutput @fdc_generated(from: "Inscricao", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `Notificacao` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Notificacao` or `null` if not found.
+  """
+  notificacao_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Notificacao_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Notificacao_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: Notificacao_Data!
+  ): Notificacao_KeyOutput @fdc_generated(from: "Notificacao", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `Usuario` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Usuario` or `null` if not found.
+  """
+  usuario_update(
+    """
+    The key used to identify the object.
+    """
+    key: Usuario_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Usuario_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: Usuario_Data!
+  ): Usuario_KeyOutput @fdc_generated(from: "Usuario", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update `Agenda` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  agenda_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: Agenda_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: Agenda_Data!
+  ): Int! @fdc_generated(from: "Agenda", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `Aluno` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  aluno_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: Aluno_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: Aluno_Data!
+  ): Int! @fdc_generated(from: "Aluno", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `AlunoBolsa` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  alunoBolsa_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: AlunoBolsa_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: AlunoBolsa_Data!
+  ): Int! @fdc_generated(from: "AlunoBolsa", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `Atividade` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  atividade_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: Atividade_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: Atividade_Data!
+  ): Int! @fdc_generated(from: "Atividade", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `Bolsa` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  bolsa_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: Bolsa_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: Bolsa_Data!
+  ): Int! @fdc_generated(from: "Bolsa", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `Doacao` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  doacao_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: Doacao_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: Doacao_Data!
+  ): Int! @fdc_generated(from: "Doacao", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `Doador` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  doador_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: Doador_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: Doador_Data!
+  ): Int! @fdc_generated(from: "Doador", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `Inscricao` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  inscricao_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: Inscricao_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: Inscricao_Data!
+  ): Int! @fdc_generated(from: "Inscricao", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `Notificacao` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  notificacao_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: Notificacao_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: Notificacao_Data!
+  ): Int! @fdc_generated(from: "Notificacao", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `Usuario` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  usuario_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: Usuario_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: Usuario_Data!
+  ): Int! @fdc_generated(from: "Usuario", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Delete a single `Agenda` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  agenda_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Agenda_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Agenda_FirstRow
+  ): Agenda_KeyOutput @fdc_generated(from: "Agenda", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `Aluno` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  aluno_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Aluno_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Aluno_FirstRow
+  ): Aluno_KeyOutput @fdc_generated(from: "Aluno", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `AlunoBolsa` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  alunoBolsa_delete(
+    """
+    The key used to identify the object.
+    """
+    key: AlunoBolsa_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: AlunoBolsa_FirstRow
+  ): AlunoBolsa_KeyOutput @fdc_generated(from: "AlunoBolsa", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `Atividade` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  atividade_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Atividade_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Atividade_FirstRow
+  ): Atividade_KeyOutput @fdc_generated(from: "Atividade", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `Bolsa` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  bolsa_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Bolsa_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Bolsa_FirstRow
+  ): Bolsa_KeyOutput @fdc_generated(from: "Bolsa", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `Doacao` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  doacao_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Doacao_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Doacao_FirstRow
+  ): Doacao_KeyOutput @fdc_generated(from: "Doacao", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `Doador` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  doador_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Doador_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Doador_FirstRow
+  ): Doador_KeyOutput @fdc_generated(from: "Doador", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `Inscricao` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  inscricao_delete(
+    """
+    The key used to identify the object.
+    """
+    key: Inscricao_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Inscricao_FirstRow
+  ): Inscricao_KeyOutput @fdc_generated(from: "Inscricao", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `Notificacao` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  notificacao_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Notificacao_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Notificacao_FirstRow
+  ): Notificacao_KeyOutput @fdc_generated(from: "Notificacao", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `Usuario` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  usuario_delete(
+    """
+    The key used to identify the object.
+    """
+    key: Usuario_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Usuario_FirstRow
+  ): Usuario_KeyOutput @fdc_generated(from: "Usuario", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete `Agenda` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  agenda_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: Agenda_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "Agenda", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `Aluno` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  aluno_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: Aluno_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "Aluno", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `AlunoBolsa` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  alunoBolsa_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: AlunoBolsa_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "AlunoBolsa", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `Atividade` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  atividade_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: Atividade_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "Atividade", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `Bolsa` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  bolsa_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: Bolsa_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "Bolsa", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `Doacao` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  doacao_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: Doacao_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "Doacao", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `Doador` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  doador_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: Doador_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "Doador", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `Inscricao` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  inscricao_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: Inscricao_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "Inscricao", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `Notificacao` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  notificacao_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: Notificacao_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "Notificacao", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `Usuario` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  usuario_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: Usuario_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "Usuario", purpose: DELETE_MULTIPLE)
+}

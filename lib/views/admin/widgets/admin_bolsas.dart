@@ -1,7 +1,13 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../../services/auth_service.dart';
+import '../../../services/sql_connect_service.dart';
+
 class Bolsa {
+  String id;
   String nome;
   String descricao;
   int beneficiarios;
@@ -9,6 +15,7 @@ class Bolsa {
   bool ativa;
 
   Bolsa({
+    this.id = '',
     required this.nome,
     required this.descricao,
     required this.beneficiarios,
@@ -25,47 +32,72 @@ class Bolsa {
 // BOLSAS INICIAIS
 // ============================================================
 
-final List<Bolsa> bolsasMock = [
-  Bolsa(
-    nome: 'Bolsa Educação Integral',
-    descricao: 'Apoio completo para educação e material escolar.',
-    beneficiarios: 25,
-    valorMensal: 300,
-    ativa: true,
-  ),
-
-  Bolsa(
-    nome: 'Bolsa Esporte e Cultura',
-    descricao: 'Auxílio para atividades esportivas e culturais.',
-    beneficiarios: 15,
-    valorMensal: 150,
-    ativa: true,
-  ),
-
-  Bolsa(
-    nome: 'Bolsa Alimentação',
-    descricao: 'Auxílio para alimentação dos beneficiários.',
-    beneficiarios: 40,
-    valorMensal: 200,
-    ativa: true,
-  ),
-];
+final List<Bolsa> bolsasMock = [];
 
 // ============================================================
 // PÁGINA
 // ============================================================
 
 class AdminBolsas extends StatefulWidget {
-  const AdminBolsas({super.key});
+  final List<Bolsa>? bolsas;
+
+  const AdminBolsas({super.key, this.bolsas});
 
   @override
   State<AdminBolsas> createState() => _AdminBolsasState();
 }
 
 class _AdminBolsasState extends State<AdminBolsas> {
-  final List<Bolsa> bolsas = List.from(bolsasMock);
+  final List<Bolsa> _bolsas = [];
+  bool _carregando = false;
+  Object? _erro;
+
+  List<Bolsa> get bolsas => widget.bolsas ?? _bolsas;
 
   String pesquisa = '';
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.bolsas == null) {
+      _carregando = true;
+      unawaited(_carregarBolsas());
+    }
+  }
+
+  Future<void> _carregarBolsas() async {
+    try {
+      final registros = await SqlConnectService.instance.listarBolsas();
+      if (!mounted) return;
+      setState(() {
+        _bolsas
+          ..clear()
+          ..addAll(
+            registros.map(
+              (registro) => Bolsa(
+                id: registro.id,
+                nome: registro.nome,
+                descricao: registro.descricao ?? '',
+                beneficiarios: registro.alunoBolsas_on_bolsa.length,
+                valorMensal: registro.valorMensal,
+                ativa: registro.ativa,
+              ),
+            ),
+          );
+        _erro = null;
+        _carregando = false;
+      });
+    } catch (error, stackTrace) {
+      debugPrint('Falha ao carregar bolsas SQL: $error');
+      debugPrint(stackTrace.toString());
+      if (mounted) {
+        setState(() {
+          _erro = error;
+          _carregando = false;
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -99,35 +131,52 @@ class _AdminBolsasState extends State<AdminBolsas> {
             _campoBusca(),
 
             Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(16),
-
-                child: Column(
-                  children: [
-                    _resumo(totalBeneficiarios, investimentoTotal),
-
-                    const SizedBox(height: 24),
-
-                    if (lista.isEmpty)
-                      const Padding(
-                        padding: EdgeInsets.all(40),
-
-                        child: Text(
-                          'Nenhuma bolsa encontrada.',
-                          style: TextStyle(fontSize: 18, color: Colors.grey),
-                        ),
-                      )
-                    else
-                      ...lista.map(
-                        (bolsa) => Padding(
-                          padding: const EdgeInsets.only(bottom: 16),
-
-                          child: _cardBolsa(bolsa),
-                        ),
+              child: _carregando
+                  ? const Center(child: CircularProgressIndicator())
+                  : _erro != null
+                  ? Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Text('Não foi possível carregar as bolsas.'),
+                          const SizedBox(height: 8),
+                          FilledButton(
+                            onPressed: () async {
+                              setState(() => _carregando = true);
+                              unawaited(_carregarBolsas());
+                            },
+                            child: const Text('Tentar novamente'),
+                          ),
+                        ],
                       ),
-                  ],
-                ),
-              ),
+                    )
+                  : SingleChildScrollView(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        children: [
+                          _resumo(totalBeneficiarios, investimentoTotal),
+                          const SizedBox(height: 24),
+                          if (lista.isEmpty)
+                            const Padding(
+                              padding: EdgeInsets.all(40),
+                              child: Text(
+                                'Nenhuma bolsa encontrada.',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            )
+                          else
+                            ...lista.map(
+                              (bolsa) => Padding(
+                                padding: const EdgeInsets.only(bottom: 16),
+                                child: _cardBolsa(bolsa),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
             ),
           ],
         ),
@@ -567,6 +616,7 @@ class _AdminBolsasState extends State<AdminBolsas> {
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
                         ],
+                        readOnly: true,
                       ),
 
                       _campo(
@@ -606,7 +656,7 @@ class _AdminBolsasState extends State<AdminBolsas> {
                 ),
 
                 FilledButton(
-                  onPressed: () {
+                  onPressed: () async {
                     final nome = nomeController.text.trim();
 
                     final descricao = descricaoController.text.trim();
@@ -663,27 +713,53 @@ class _AdminBolsasState extends State<AdminBolsas> {
                       return;
                     }
 
-                    setState(() {
-                      if (bolsa == null) {
-                        bolsas.add(
-                          Bolsa(
+                    if (widget.bolsas == null) {
+                      try {
+                        if (bolsa == null) {
+                          await SqlConnectService.instance.criarBolsa(
                             nome: nome,
                             descricao: descricao,
-                            beneficiarios: beneficiarios,
+                            valorMensal: valor,
+                          );
+                        } else {
+                          await SqlConnectService.instance.atualizarBolsa(
+                            id: bolsa.id,
+                            nome: nome,
+                            descricao: descricao,
                             valorMensal: valor,
                             ativa: ativa,
-                          ),
-                        );
-                      } else {
-                        bolsa.nome = nome;
-                        bolsa.descricao = descricao;
-                        bolsa.beneficiarios = beneficiarios;
-                        bolsa.valorMensal = valor;
-                        bolsa.ativa = ativa;
+                          );
+                        }
+                        await _carregarBolsas();
+                      } catch (error, stackTrace) {
+                        debugPrint('Falha ao salvar bolsa SQL: $error');
+                        debugPrint(stackTrace.toString());
+                        _mensagem(AuthService.mensagemErro(error));
+                        return;
                       }
-                    });
+                    } else {
+                      setState(() {
+                        if (bolsa == null) {
+                          bolsas.add(
+                            Bolsa(
+                              nome: nome,
+                              descricao: descricao,
+                              beneficiarios: beneficiarios,
+                              valorMensal: valor,
+                              ativa: ativa,
+                            ),
+                          );
+                        } else {
+                          bolsa.nome = nome;
+                          bolsa.descricao = descricao;
+                          bolsa.beneficiarios = beneficiarios;
+                          bolsa.valorMensal = valor;
+                          bolsa.ativa = ativa;
+                        }
+                      });
+                    }
 
-                    Navigator.pop(context);
+                    if (context.mounted) Navigator.pop(context);
 
                     _mensagem(
                       bolsa == null ? 'Bolsa adicionada!' : 'Bolsa atualizada!',
@@ -710,9 +786,9 @@ class _AdminBolsasState extends State<AdminBolsas> {
 
       builder: (context) {
         return AlertDialog(
-          title: const Text('Remover bolsa?'),
+          title: const Text('Arquivar bolsa?'),
 
-          content: Text('Deseja realmente remover "${bolsa.nome}"?'),
+          content: Text('Deseja arquivar "${bolsa.nome}" sem apagar os dados?'),
 
           actions: [
             TextButton(
@@ -726,17 +802,32 @@ class _AdminBolsasState extends State<AdminBolsas> {
             FilledButton(
               style: FilledButton.styleFrom(backgroundColor: Colors.red),
 
-              onPressed: () {
-                setState(() {
-                  bolsas.remove(bolsa);
-                });
+              onPressed: () async {
+                if (widget.bolsas == null) {
+                  try {
+                    await SqlConnectService.instance.atualizarBolsa(
+                      id: bolsa.id,
+                      nome: bolsa.nome,
+                      descricao: bolsa.descricao,
+                      valorMensal: bolsa.valorMensal,
+                      ativa: false,
+                    );
+                    await _carregarBolsas();
+                  } catch (error, stackTrace) {
+                    debugPrint('Falha ao arquivar bolsa SQL: $error');
+                    debugPrint(stackTrace.toString());
+                    _mensagem(AuthService.mensagemErro(error));
+                    return;
+                  }
+                } else {
+                  setState(() => bolsa.ativa = false);
+                }
 
-                Navigator.pop(context);
-
-                _mensagem('Bolsa removida!');
+                if (context.mounted) Navigator.pop(context);
+                _mensagem('Bolsa arquivada.');
               },
 
-              child: const Text('Remover'),
+              child: const Text('Arquivar'),
             ),
           ],
         );
@@ -756,6 +847,7 @@ class _AdminBolsasState extends State<AdminBolsas> {
     int maxLines = 1,
     int? maxLength,
     List<TextInputFormatter>? inputFormatters,
+    bool readOnly = false,
   }) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
@@ -766,6 +858,7 @@ class _AdminBolsasState extends State<AdminBolsas> {
         maxLines: maxLines,
         maxLength: maxLength,
         inputFormatters: inputFormatters,
+        readOnly: readOnly,
 
         decoration: InputDecoration(
           labelText: label,

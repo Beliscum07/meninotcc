@@ -1,37 +1,70 @@
-# app_ong
+# Menino Barsanulfo
 
-A new Flutter project.
+Aplicativo Flutter de apoio à ONG Menino Barsanulfo.
 
-## Getting Started
+## Firebase configurado
 
-This project is a starting point for a Flutter application.
+O repositório já contém as opções FlutterFire para o projeto `mb-tcc`, além da
+configuração Android em `android/app/google-services.json`. A inicialização do
+Firebase usa `DefaultFirebaseOptions.currentPlatform` em
+`lib/firebase_options.dart`. Não substitua esses arquivos por configurações de
+outro projeto.
 
-A few resources to get you started if this is your first Flutter project:
+O aplicativo usa Firebase Authentication com e-mail e senha para a identidade
+e Firebase SQL Connect para os perfis e dados relacionais. O serviço e o
+conector SQL Connect configurados são `mb-tcc-3-service`, na região
+`southamerica-east1`, com o conector `example`.
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+Antes de executar os fluxos autenticados, confirme no Firebase Console:
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+1. O provedor de autenticação por e-mail e senha está habilitado.
+2. O serviço SQL Connect e a instância Cloud SQL PostgreSQL estão provisionados
+   e disponíveis para o projeto.
+3. As contas de administrador têm a custom claim `admin: true`, emitida por um
+   ambiente confiável com Firebase Admin SDK. O aplicativo não concede essa
+   permissão.
+4. Cada aluno que fará login já tem uma conta Authentication. Na tela
+   administrativa de alunos, vincule o UID dessa conta ao cadastro existente.
+   O e-mail da conta deve corresponder ao e-mail cadastrado para o aluno.
 
-## Configuração do Firebase
+O cadastro de doador cria a conta Authentication e registra o perfil relacional
+de doador. Doações são gravadas inicialmente como `pendente`; o aplicativo não
+confirma pagamento PIX automaticamente. O painel administrativo lista as
+doações do SQL Connect e permite registrar manualmente o estado após a
+verificação externa; somente doações `recebida` entram nos totais do mês.
 
-Este repositório não inclui `lib/firebase_options.dart` nem os arquivos nativos
-de configuração do Firebase. Antes de executar a aplicação, use o FlutterFire
-CLI autenticado com acesso ao projeto Firebase existente:
+## Desenvolvimento
+
+Instale as dependências e execute os testes/análise:
 
 ```sh
-flutterfire configure --project=<ID_REAL_DO_PROJETO> --platforms=<PLATAFORMAS_UTILIZADAS>
+flutter pub get
+flutter analyze
+flutter test
 ```
 
-Selecione somente as plataformas efetivamente utilizadas e já registradas no
-projeto. No Firebase Console, habilite o provedor de autenticação por e-mail e
-senha. O cadastro disponível na aplicação cria somente uma conta no Firebase
-Authentication; não cria documentos nem usuários de outros perfis.
+Para compilar as operações e gerar o SDK Dart em `lib/generated/`:
 
-Depois de gerar as opções, a inicialização em `FirebaseService` deve usar
-`Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform)`.
-Sem as opções reais, a inicialização web falha e as operações Firebase não
-podem ser testadas.
+```sh
+firebase dataconnect:compile
+firebase dataconnect:sdk:generate
+```
+
+A configuração local em `firebase.json` inclui somente o emulador SQL Connect.
+Para iniciar:
+
+```sh
+firebase emulators:start --only dataconnect
+```
+
+As operações protegidas continuam exigindo autenticação e a custom claim
+administrativa adequadas. A disponibilidade do emulador não substitui o
+provisionamento de Authentication, SQL Connect e Cloud SQL no projeto remoto.
+
+## Publicação e migrações
+
+Não faça deploy nem aplique migrações até revisar o diff do esquema contra o
+banco remoto e confirmar a preservação dos dados existentes. Esta integração
+não executa deploy, provisionamento de recursos ou migração automática. A
+configuração FlutterFire atualmente cobre Android, iOS, macOS, web e Windows;
+Linux não está configurado.

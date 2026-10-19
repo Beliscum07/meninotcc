@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 
 class FirestoreOperationException implements Exception {
   const FirestoreOperationException({
@@ -28,7 +29,13 @@ class FirebaseService {
       return;
     }
 
-    await Firebase.initializeApp();
+    try {
+      await Firebase.initializeApp();
+    } catch (error, stackTrace) {
+      debugPrint('FirebaseService.initialize falhou: $error');
+      debugPrint(stackTrace.toString());
+      rethrow;
+    }
   }
 
   Future<void> salvarUsuario({

@@ -8,8 +8,22 @@ import 'views/auth/login_estudante.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await LocalStorage.limparSessao();
-  await FirebaseService.instance.initialize();
+  try {
+    await LocalStorage.limparSessao();
+    await FirebaseService.instance.initialize();
+  } catch (error, stackTrace) {
+    FlutterError.reportError(
+      FlutterErrorDetails(
+        exception: error,
+        stack: stackTrace,
+        library: 'main',
+        context: ErrorDescription(
+          'Erro ao inicializar Firebase ou armazenamento local antes de abrir a interface.',
+        ),
+      ),
+    );
+    debugPrint('Erro durante inicialização da aplicação: $error');
+  }
 
   runApp(const OngApp());
 }
@@ -63,7 +77,6 @@ class TelaInicial extends StatelessWidget {
                   // ==================================================
                   // LOGO
                   // ==================================================
-
                   const SizedBox(height: 18),
 
                   SizedBox(

@@ -218,7 +218,7 @@ class ExampleConnector {
   static ConnectorConfig connectorConfig = ConnectorConfig(
     'southamerica-east1',
     'example',
-    'mb-tcc-3-service',
+    'mb-tcc-2-service',
   );
 
   ExampleConnector({required this.dataConnect});

@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+// These names preserve generated GraphQL field aliases.
 part of 'example.dart';
 
 class ListActivitiesVariablesBuilder {

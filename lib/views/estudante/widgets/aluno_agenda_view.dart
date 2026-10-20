@@ -174,8 +174,7 @@ class _AlunoAgendaViewState extends State<AlunoAgendaView> {
     return ListView.builder(
       padding: const EdgeInsets.all(10),
       itemCount: atividadesDoDia.length,
-      itemBuilder: (context, index) =>
-          _buildAtividade(atividadesDoDia[index]),
+      itemBuilder: (context, index) => _buildAtividade(atividadesDoDia[index]),
     );
   }
 

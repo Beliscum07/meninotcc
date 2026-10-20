@@ -11,7 +11,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:app_ong/main.dart';
 
 void main() {
-  testWidgets('app displays the organization name', (WidgetTester tester) async {
+  testWidgets('app displays the organization name', (
+    WidgetTester tester,
+  ) async {
     await tester.pumpWidget(const ProviderScope(child: OngApp()));
 
     expect(find.text('ONG Menino Barsanulfo'), findsOneWidget);

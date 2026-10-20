@@ -55,9 +55,7 @@ class _AdminHomeViewState extends State<AdminHomeView> {
 
           const AdminBolsas(),
 
-          ConfiguracoesPage(
-            adminController: adminController,
-          ),
+          ConfiguracoesPage(adminController: adminController),
         ],
       ),
 

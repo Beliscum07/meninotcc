@@ -36,7 +36,9 @@ class AdminController extends ChangeNotifier {
           }),
         );
     } catch (error, stackTrace) {
-      debugPrint('Falha ao carregar notificações administrativas: $error\n$stackTrace');
+      debugPrint(
+        'Falha ao carregar notificações administrativas: $error\n$stackTrace',
+      );
       erro = error;
     } finally {
       carregando = false;
@@ -55,7 +57,9 @@ class AdminController extends ChangeNotifier {
       _notificacoes[index].marcarComoLida();
       notifyListeners();
     } catch (error, stackTrace) {
-      debugPrint('Falha ao marcar notificação administrativa como lida: $error\n$stackTrace');
+      debugPrint(
+        'Falha ao marcar notificação administrativa como lida: $error\n$stackTrace',
+      );
       erro = error;
       notifyListeners();
     }
@@ -76,7 +80,9 @@ class AdminController extends ChangeNotifier {
       }
       erro = null;
     } catch (error, stackTrace) {
-      debugPrint('Falha ao marcar notificações administrativas como lidas: $error\n$stackTrace');
+      debugPrint(
+        'Falha ao marcar notificações administrativas como lidas: $error\n$stackTrace',
+      );
       erro = error;
     }
     notifyListeners();

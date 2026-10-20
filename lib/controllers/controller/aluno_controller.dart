@@ -36,7 +36,9 @@ class AlunoController extends ChangeNotifier {
           }),
         );
     } catch (error, stackTrace) {
-      debugPrint('Falha ao carregar notificações do aluno: $error\n$stackTrace');
+      debugPrint(
+        'Falha ao carregar notificações do aluno: $error\n$stackTrace',
+      );
       erro = error;
     } finally {
       carregando = false;
@@ -55,7 +57,9 @@ class AlunoController extends ChangeNotifier {
       _notificacoes[index].marcarComoLida();
       notifyListeners();
     } catch (error, stackTrace) {
-      debugPrint('Falha ao marcar notificação do aluno como lida: $error\n$stackTrace');
+      debugPrint(
+        'Falha ao marcar notificação do aluno como lida: $error\n$stackTrace',
+      );
       erro = error;
       notifyListeners();
     }
@@ -76,7 +80,9 @@ class AlunoController extends ChangeNotifier {
       }
       erro = null;
     } catch (error, stackTrace) {
-      debugPrint('Falha ao marcar notificações do aluno como lidas: $error\n$stackTrace');
+      debugPrint(
+        'Falha ao marcar notificações do aluno como lidas: $error\n$stackTrace',
+      );
       erro = error;
     }
     notifyListeners();

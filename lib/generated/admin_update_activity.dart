@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+// These names preserve generated GraphQL field aliases.
 part of 'example.dart';
 
 class AdminUpdateActivityVariablesBuilder {
@@ -246,6 +248,8 @@ class AdminUpdateActivityVariables {
     return json;
   }
 
+  // Optional wrappers are initialized by fromJson, so this constructor cannot be const.
+  // ignore: prefer_const_constructors_in_immutables
   AdminUpdateActivityVariables({
     required this.id,
     required this.nome,

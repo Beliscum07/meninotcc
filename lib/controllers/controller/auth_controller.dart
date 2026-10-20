@@ -175,10 +175,7 @@ class AuthController extends ChangeNotifier {
     }
   }
 
-  Future<void> _carregarPerfil(
-    User? user, {
-    TipoUsuario? tipoEsperado,
-  }) async {
+  Future<void> _carregarPerfil(User? user, {TipoUsuario? tipoEsperado}) async {
     if (user == null) {
       throw const AuthProfileException(
         'O Firebase não retornou uma sessão autenticada.',

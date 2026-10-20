@@ -11,9 +11,31 @@ Firebase usa `DefaultFirebaseOptions.currentPlatform` em
 outro projeto.
 
 O aplicativo usa Firebase Authentication com e-mail e senha para a identidade
-e Firebase SQL Connect para os perfis e dados relacionais. O serviço e o
-conector SQL Connect configurados são `mb-tcc-3-service`, na região
-`southamerica-east1`, com o conector `example`.
+e Firebase SQL Connect para os perfis e dados relacionais. A configuração local
+em `dataconnect/dataconnect.yaml` aponta para o serviço
+`mb-tcc-2-service`, na região `southamerica-east1`, e para o conector
+`example`. Ela declara o banco `mb-tcc-2-database` e a instância
+`mb-tcc-2-instance`; esses nomes são referências configuradas no repositório,
+não uma confirmação de que os recursos existem ou correspondem ao PostgreSQL
+que contém os dados.
+
+Antes de publicar, confirme no Firebase Console e no Cloud SQL que o serviço,
+a região, o ID da instância e o nome do banco correspondem aos recursos
+existentes. A mensagem de deploy informando que o período gratuito do Cloud SQL
+já foi usado indica que uma etapa de provisionamento foi bloqueada por
+faturamento; por si só, ela não comprova que é necessário criar outra instância
+nem que os dados existentes estão ausentes. Não habilite faturamento, crie
+instâncias ou aplique migrações sem confirmar esses recursos e revisar o
+impacto sobre o banco atual.
+
+A compilação local do SQL Connect valida o esquema GraphQL e as operações, mas
+não confirma o catálogo físico do PostgreSQL remoto. Ainda é necessário
+comparar as colunas, tipos, chaves primárias, chaves estrangeiras e restrições
+de unicidade das tabelas existentes (especialmente `Usuario`, `Aluno`,
+`Doador`, `Atividade`, `Inscricao` e `Doacao`) com
+`dataconnect/schema/schema.gql`. Não há introspecção do banco remoto neste
+repositório; portanto, não aplique migrações até obter essa estrutura e revisar
+um plano de migração não destrutivo.
 
 Antes de executar os fluxos autenticados, confirme no Firebase Console:
 
@@ -32,6 +54,11 @@ de doador. Doações são gravadas inicialmente como `pendente`; o aplicativo n�
 confirma pagamento PIX automaticamente. O painel administrativo lista as
 doações do SQL Connect e permite registrar manualmente o estado após a
 verificação externa; somente doações `recebida` entram nos totais do mês.
+
+Os fluxos atuais de perfil usam SQL Connect. O `FirebaseService` legado ainda é
+inicializado, mas seus métodos de leitura e gravação no Firestore não têm outros
+chamadores no código Dart. Nenhum dado ou coleção do Firestore foi consultado
+ou migrado; mantenha esses dados intactos até uma auditoria do projeto remoto.
 
 ## Desenvolvimento
 

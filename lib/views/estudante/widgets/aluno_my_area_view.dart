@@ -24,9 +24,9 @@ class StudentMyArea extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               'Você tem $atividadesNaSemana atividades na semana.',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                color: const Color(0xFF4B5563),
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(color: const Color(0xFF4B5563)),
             ),
             const SizedBox(height: 24),
             Container(

@@ -6,9 +6,7 @@ import 'package:flutter/foundation.dart';
 
 class GmailService {
   final GoogleSignIn _googleSignIn = GoogleSignIn(
-    scopes: [
-      gmail.GmailApi.gmailSendScope,
-    ],
+    scopes: [gmail.GmailApi.gmailSendScope],
   );
 
   Future<bool> enviarEmail({
@@ -29,7 +27,8 @@ class GmailService {
 
       final gmailApi = gmail.GmailApi(httpClient);
 
-      final rawEmail = 'To: $destinatario\r\n'
+      final rawEmail =
+          'To: $destinatario\r\n'
           'Subject: $assunto\r\n'
           'MIME-Version: 1.0\r\n'
           'Content-Type: text/plain; charset=utf-8\r\n\r\n'
@@ -58,7 +57,8 @@ class GmailService {
     required String tipo,
   }) async {
     final assunto = 'Bem-vindo(a) à ONG Menino Barsanulfo';
-    final corpo = 'Olá, $nome!\n\n'
+    final corpo =
+        'Olá, $nome!\n\n'
         'Seu cadastro como $tipo foi realizado com sucesso.\n'
         'Agradecemos muito por fazer parte da nossa comunidade.\n\n'
         'Atenciosamente,\n'

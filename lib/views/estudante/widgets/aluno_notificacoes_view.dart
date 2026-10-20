@@ -6,10 +6,7 @@ import '../../../models/notificacao_model.dart';
 class AlunoNotificacoesView extends StatelessWidget {
   final AlunoController alunoController;
 
-  const AlunoNotificacoesView({
-    super.key,
-    required this.alunoController,
-  });
+  const AlunoNotificacoesView({super.key, required this.alunoController});
 
   @override
   Widget build(BuildContext context) {
@@ -23,10 +20,7 @@ class AlunoNotificacoesView extends StatelessWidget {
 
         title: const Text(
           'Notificações',
-          style: TextStyle(
-            fontSize: 28,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
         ),
 
         actions: [
@@ -46,9 +40,7 @@ class AlunoNotificacoesView extends StatelessWidget {
                   'Marcar tudo como lido',
 
                   style: TextStyle(
-                    color: existemNaoLidas
-                        ? Colors.white
-                        : Colors.white54,
+                    color: existemNaoLidas ? Colors.white : Colors.white54,
 
                     fontSize: 15,
                     fontWeight: FontWeight.bold,
@@ -90,28 +82,20 @@ class AlunoNotificacoesView extends StatelessWidget {
             return const Center(
               child: Text(
                 'Nenhuma notificação.',
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.black54,
-                ),
+                style: TextStyle(fontSize: 18, color: Colors.black54),
               ),
             );
           }
 
           return ListView.builder(
-            padding: const EdgeInsets.only(
-              top: 10,
-              bottom: 20,
-            ),
+            padding: const EdgeInsets.only(top: 10, bottom: 20),
 
             itemCount: notificacoes.length,
 
             itemBuilder: (context, index) {
               final notificacao = notificacoes[index];
 
-              return _notificacao(
-                notificacao,
-              );
+              return _notificacao(notificacao);
             },
           );
         },
@@ -119,36 +103,22 @@ class AlunoNotificacoesView extends StatelessWidget {
     );
   }
 
-  Widget _notificacao(
-    Notificacao notificacao,
-  ) {
+  Widget _notificacao(Notificacao notificacao) {
     final icone = _iconePorTipo(notificacao.tipo);
     final cor = _corIcone(notificacao.tipo);
 
     return InkWell(
       onTap: () {
-        alunoController.marcarNotificacaoComoLida(
-          notificacao.id,
-        );
+        alunoController.marcarNotificacaoComoLida(notificacao.id);
       },
 
       child: Container(
-        margin: const EdgeInsets.fromLTRB(
-          12,
-          0,
-          12,
-          18,
-        ),
+        margin: const EdgeInsets.fromLTRB(12, 0, 12, 18),
 
-        padding: const EdgeInsets.symmetric(
-          horizontal: 24,
-          vertical: 22,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 22),
 
         decoration: BoxDecoration(
-          color: notificacao.lida
-              ? const Color(0xFFF8F6F3)
-              : Colors.white,
+          color: notificacao.lida ? const Color(0xFFF8F6F3) : Colors.white,
 
           borderRadius: BorderRadius.circular(22),
 
@@ -182,24 +152,18 @@ class AlunoNotificacoesView extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
 
-              child: Icon(
-                icone,
-                color: cor,
-                size: 28,
-              ),
+              child: Icon(icone, color: cor, size: 28),
             ),
 
             const SizedBox(width: 20),
 
             Expanded(
               child: Column(
-                crossAxisAlignment:
-                    CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
 
                 children: [
                   Row(
-                    crossAxisAlignment:
-                        CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
 
                     children: [
                       Expanded(
@@ -220,10 +184,7 @@ class AlunoNotificacoesView extends StatelessWidget {
                           width: 9,
                           height: 9,
 
-                          margin: const EdgeInsets.only(
-                            left: 8,
-                            top: 5,
-                          ),
+                          margin: const EdgeInsets.only(left: 8, top: 5),
 
                           decoration: const BoxDecoration(
                             color: Color(0xFFE17BEA),
@@ -250,10 +211,7 @@ class AlunoNotificacoesView extends StatelessWidget {
                   Text(
                     notificacao.tempo,
 
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: Colors.black54,
-                    ),
+                    style: const TextStyle(fontSize: 12, color: Colors.black54),
                   ),
                 ],
               ),

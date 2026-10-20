@@ -19,10 +19,7 @@ class CardAluno extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final inicial =
-        aluno.nome.isNotEmpty
-            ? aluno.nome[0].toUpperCase()
-            : '?';
+    final inicial = aluno.nome.isNotEmpty ? aluno.nome[0].toUpperCase() : '?';
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
@@ -30,9 +27,7 @@ class CardAluno extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(17),
-        border: Border.all(
-          color: const Color(0xFFD9D9E5),
-        ),
+        border: Border.all(color: const Color(0xFFD9D9E5)),
       ),
 
       child: Padding(
@@ -41,8 +36,7 @@ class CardAluno extends StatelessWidget {
         child: Column(
           children: [
             Row(
-              crossAxisAlignment:
-                  CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
 
               children: [
                 Container(
@@ -53,10 +47,7 @@ class CardAluno extends StatelessWidget {
                     shape: BoxShape.circle,
 
                     gradient: LinearGradient(
-                      colors: [
-                        Color(0xFFD778E8),
-                        Color(0xFF5551AA),
-                      ],
+                      colors: [Color(0xFFD778E8), Color(0xFF5551AA)],
                     ),
                   ),
 
@@ -64,10 +55,7 @@ class CardAluno extends StatelessWidget {
 
                   child: Text(
                     inicial,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 25,
-                    ),
+                    style: const TextStyle(color: Colors.white, fontSize: 25),
                   ),
                 ),
 
@@ -75,8 +63,7 @@ class CardAluno extends StatelessWidget {
 
                 Expanded(
                   child: Column(
-                    crossAxisAlignment:
-                        CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
 
                     children: [
                       Text(
@@ -84,8 +71,7 @@ class CardAluno extends StatelessWidget {
 
                         maxLines: 2,
 
-                        overflow:
-                            TextOverflow.ellipsis,
+                        overflow: TextOverflow.ellipsis,
 
                         style: const TextStyle(
                           fontSize: 18,
@@ -110,9 +96,7 @@ class CardAluno extends StatelessWidget {
                         '${aluno.atividades} atividades · '
                         '${aluno.presenca}% presença',
 
-                        style: const TextStyle(
-                          fontSize: 13,
-                        ),
+                        style: const TextStyle(fontSize: 13),
                       ),
                     ],
                   ),
@@ -129,9 +113,7 @@ class CardAluno extends StatelessWidget {
                 'Responsável: ${aluno.responsavel}\n'
                 '${aluno.telefone}',
 
-                style: const TextStyle(
-                  fontSize: 13,
-                ),
+                style: const TextStyle(fontSize: 13),
               ),
             ),
 
@@ -145,9 +127,7 @@ class CardAluno extends StatelessWidget {
 
                     child: const Text(
                       'Detalhes',
-                      style: TextStyle(
-                        color: Color(0xFF4D50B0),
-                      ),
+                      style: TextStyle(color: Color(0xFF4D50B0)),
                     ),
                   ),
                 ),
@@ -168,10 +148,7 @@ class CardAluno extends StatelessWidget {
                   tooltip: 'Excluir',
                   onPressed: onExcluir,
 
-                  icon: const Icon(
-                    Icons.delete_outline,
-                    color: Colors.red,
-                  ),
+                  icon: const Icon(Icons.delete_outline, color: Colors.red),
                 ),
               ],
             ),

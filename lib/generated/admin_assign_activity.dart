@@ -1,5 +1,5 @@
 // ignore_for_file: non_constant_identifier_names
-// These names preserve generated GraphQL field aliases.
+
 part of 'example.dart';
 
 class AdminAssignActivityVariablesBuilder {
@@ -33,6 +33,37 @@ class AdminAssignActivityVariablesBuilder {
       vars,
     );
   }
+}
+
+@immutable
+class AdminAssignActivityAtividadeUpdate {
+  final String id;
+  AdminAssignActivityAtividadeUpdate.fromJson(dynamic json)
+    : id = nativeFromJson<String>(json['id']);
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other.runtimeType != runtimeType) {
+      return false;
+    }
+
+    final AdminAssignActivityAtividadeUpdate otherTyped =
+        other as AdminAssignActivityAtividadeUpdate;
+    return id == otherTyped.id;
+  }
+
+  @override
+  int get hashCode => id.hashCode;
+
+  Map<String, dynamic> toJson() {
+    Map<String, dynamic> json = {};
+    json['id'] = nativeToJson<String>(id);
+    return json;
+  }
+
+  const AdminAssignActivityAtividadeUpdate({required this.id});
 }
 
 @immutable
@@ -75,9 +106,15 @@ class AdminAssignActivityInscricaoInsert {
 
 @immutable
 class AdminAssignActivityData {
+  final AdminAssignActivityAtividadeUpdate? atividade_update;
   final AdminAssignActivityInscricaoInsert inscricao_insert;
   AdminAssignActivityData.fromJson(dynamic json)
-    : inscricao_insert = AdminAssignActivityInscricaoInsert.fromJson(
+    : atividade_update = json['atividade_update'] == null
+          ? null
+          : AdminAssignActivityAtividadeUpdate.fromJson(
+              json['atividade_update'],
+            ),
+      inscricao_insert = AdminAssignActivityInscricaoInsert.fromJson(
         json['inscricao_insert'],
       );
   @override
@@ -90,19 +127,27 @@ class AdminAssignActivityData {
     }
 
     final AdminAssignActivityData otherTyped = other as AdminAssignActivityData;
-    return inscricao_insert == otherTyped.inscricao_insert;
+    return atividade_update == otherTyped.atividade_update &&
+        inscricao_insert == otherTyped.inscricao_insert;
   }
 
   @override
-  int get hashCode => inscricao_insert.hashCode;
+  int get hashCode =>
+      Object.hashAll([atividade_update.hashCode, inscricao_insert.hashCode]);
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> json = {};
+    if (atividade_update != null) {
+      json['atividade_update'] = atividade_update!.toJson();
+    }
     json['inscricao_insert'] = inscricao_insert.toJson();
     return json;
   }
 
-  const AdminAssignActivityData({required this.inscricao_insert});
+  const AdminAssignActivityData({
+    this.atividade_update,
+    required this.inscricao_insert,
+  });
 }
 
 @immutable

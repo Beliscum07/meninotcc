@@ -64,7 +64,8 @@ class AuthController extends ChangeNotifier {
 
     final emailNormalizado = email.trim().toLowerCase();
     final sessaoAtual = _authService.currentUser;
-    final User user;
+    late User user;
+    var sessaoRecuperada = false;
     if (sessaoAtual != null) {
       if (sessaoAtual.email?.toLowerCase() != emailNormalizado) {
         throw const AuthProfileException(
@@ -73,18 +74,34 @@ class AuthController extends ChangeNotifier {
       }
       user = sessaoAtual;
     } else {
-      final credential = await _authService.createAccount(
-        name: nome,
-        email: emailNormalizado,
-        password: senha,
-      );
-      final novoUsuario = credential.user;
-      if (novoUsuario == null) {
-        throw const AuthProfileException(
-          'O Firebase não retornou a conta recém-criada.',
+      try {
+        final credential = await _authService.createAccount(
+          name: nome,
+          email: emailNormalizado,
+          password: senha,
         );
+        final novoUsuario = credential.user;
+        if (novoUsuario == null) {
+          throw const AuthProfileException(
+            'O Firebase não retornou a conta recém-criada.',
+          );
+        }
+        user = novoUsuario;
+      } on FirebaseAuthException catch (error) {
+        if (error.code != 'email-already-in-use') rethrow;
+        final credential = await _authService.signIn(
+          email: emailNormalizado,
+          password: senha,
+        );
+        final usuarioExistente = credential.user;
+        if (usuarioExistente == null) {
+          throw const AuthProfileException(
+            'O Firebase não retornou a conta existente.',
+          );
+        }
+        user = usuarioExistente;
+        sessaoRecuperada = true;
       }
-      user = novoUsuario;
     }
 
     final perfilExistente = await _sqlConnectService.buscarMeuPerfil();
@@ -93,13 +110,33 @@ class AuthController extends ChangeNotifier {
         nome: nome,
         telefone: telefone,
       );
-    } else if (_tipoDoPerfil(perfilExistente.papel) != TipoUsuario.doador) {
-      throw const AuthProfileException(
-        'Esta conta já está vinculada a outro perfil da ONG.',
-      );
+    } else {
+      final TipoUsuario tipo;
+      try {
+        tipo = _tipoDoPerfil(perfilExistente.papel);
+      } on AuthProfileException {
+        if (sessaoRecuperada) await _encerrarSessaoRecuperada();
+        rethrow;
+      }
+      if (tipo != TipoUsuario.doador) {
+        if (sessaoRecuperada) await _encerrarSessaoRecuperada();
+        throw const AuthProfileException(
+          'Esta conta já está vinculada a outro perfil da ONG.',
+        );
+      }
     }
 
-    await _carregarPerfil(user, tipoEsperado: TipoUsuario.doador);
+    try {
+      await _carregarPerfil(user, tipoEsperado: TipoUsuario.doador);
+    } on AuthProfileException {
+      if (sessaoRecuperada) await _encerrarSessaoRecuperada();
+      rethrow;
+    }
+  }
+
+  Future<void> _encerrarSessaoRecuperada() async {
+    await _authService.signOut();
+    _limparSessao();
   }
 
   Future<bool> atualizarDoadorPerfil({

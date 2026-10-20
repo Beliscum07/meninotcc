@@ -133,33 +133,35 @@ class AuthService {
     if (error is FormatException) {
       return error.message;
     }
-    if (error is! FirebaseAuthException) {
-      return 'Não foi possível concluir a operação. Tente novamente.';
+    if (error is FirebaseAuthException) {
+      switch (error.code) {
+        case 'invalid-email':
+          return 'O e-mail informado é inválido.';
+        case 'user-not-found':
+        case 'wrong-password':
+        case 'invalid-credential':
+          return 'E-mail ou senha incorretos.';
+        case 'user-disabled':
+          return 'Esta conta foi desativada.';
+        case 'email-already-in-use':
+          return 'Este e-mail já está cadastrado.';
+        case 'weak-password':
+          return 'A senha precisa ter pelo menos 6 caracteres.';
+        case 'operation-not-allowed':
+          return 'O login por e-mail e senha não está habilitado no Firebase.';
+        case 'too-many-requests':
+          return 'Muitas tentativas. Aguarde um pouco e tente novamente.';
+        case 'network-request-failed':
+          return 'Falha de conexão. Verifique sua internet e tente novamente.';
+        case 'requires-recent-login':
+          return 'Entre novamente para alterar os dados de acesso.';
+        default:
+          return 'Não foi possível concluir a operação. Tente novamente.';
+      }
     }
-
-    switch (error.code) {
-      case 'invalid-email':
-        return 'O e-mail informado é inválido.';
-      case 'user-not-found':
-      case 'wrong-password':
-      case 'invalid-credential':
-        return 'E-mail ou senha incorretos.';
-      case 'user-disabled':
-        return 'Esta conta foi desativada.';
-      case 'email-already-in-use':
-        return 'Este e-mail já está cadastrado.';
-      case 'weak-password':
-        return 'A senha precisa ter pelo menos 6 caracteres.';
-      case 'operation-not-allowed':
-        return 'O login por e-mail e senha não está habilitado no Firebase.';
-      case 'too-many-requests':
-        return 'Muitas tentativas. Aguarde um pouco e tente novamente.';
-      case 'network-request-failed':
-        return 'Falha de conexão. Verifique sua internet e tente novamente.';
-      case 'requires-recent-login':
-        return 'Entre novamente para alterar os dados de acesso.';
-      default:
-        return 'Não foi possível concluir a operação. Tente novamente.';
+    if (error is Exception) {
+      return error.toString();
     }
+    return 'Não foi possível concluir a operação. Tente novamente.';
   }
 }

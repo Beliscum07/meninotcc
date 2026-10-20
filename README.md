@@ -15,9 +15,8 @@ e Firebase SQL Connect para os perfis e dados relacionais. A configuração loca
 em `dataconnect/dataconnect.yaml` aponta para o serviço
 `mb-tcc-2-service`, na região `southamerica-east1`, e para o conector
 `example`. Ela declara o banco `mb-tcc-2-database` e a instância
-`mb-tcc-2-instance`; esses nomes são referências configuradas no repositório,
-não uma confirmação de que os recursos existem ou correspondem ao PostgreSQL
-que contém os dados.
+`mb-tcc-instance`. A listagem remota do serviço `mb-tcc-2-service` confirmou
+que ele está vinculado a essa instância e ao banco `mb-tcc-2-database`.
 
 Antes de publicar, confirme no Firebase Console e no Cloud SQL que o serviço,
 a região, o ID da instância e o nome do banco correspondem aos recursos
@@ -28,14 +27,16 @@ nem que os dados existentes estão ausentes. Não habilite faturamento, crie
 instâncias ou aplique migrações sem confirmar esses recursos e revisar o
 impacto sobre o banco atual.
 
-A compilação local do SQL Connect valida o esquema GraphQL e as operações, mas
-não confirma o catálogo físico do PostgreSQL remoto. Ainda é necessário
-comparar as colunas, tipos, chaves primárias, chaves estrangeiras e restrições
-de unicidade das tabelas existentes (especialmente `Usuario`, `Aluno`,
-`Doador`, `Atividade`, `Inscricao` e `Doacao`) com
-`dataconnect/schema/schema.gql`. Não há introspecção do banco remoto neste
-repositório; portanto, não aplique migrações até obter essa estrutura e revisar
-um plano de migração não destrutivo.
+A compilação local valida o esquema GraphQL e as operações. A comparação remota
+somente de leitura (`firebase dataconnect:sql:diff`) confirmou que o PostgreSQL
+existente tem estrutura legada incompatível com o esquema atual. O modo
+`COMPATIBLE` foi selecionado para preservar colunas e tabelas extras, mas ainda
+propõe alterações e novas colunas obrigatórias que podem exigir backfill. O
+modo exato propõe remover colunas legadas como `usuario.id`, `usuario.perfil`,
+`aluno.usuario_id`, `doador.usuario_id` e `notificacao.destinatario_id`, além
+das tabelas `aluno_atividade` e `movimentacao`. Nenhuma migração ou deploy foi
+executado. Antes de migrar, confirme os tipos, chaves, valores e vínculos dos
+registros existentes e revise um plano de backfill não destrutivo.
 
 Antes de executar os fluxos autenticados, confirme no Firebase Console:
 
@@ -49,11 +50,19 @@ Antes de executar os fluxos autenticados, confirme no Firebase Console:
    administrativa de alunos, vincule o UID dessa conta ao cadastro existente.
    O e-mail da conta deve corresponder ao e-mail cadastrado para o aluno.
 
+O vínculo administrativo valida o e-mail informado contra o cadastro, mas o
+cliente não consegue confirmar por conta própria que o UID informado pertence
+àquele e-mail. Antes de usar esse fluxo em produção, valide a associação em um
+ambiente confiável com Firebase Admin SDK; a interface e o e-mail digitado não
+substituem essa verificação.
+
 O cadastro de doador cria a conta Authentication e registra o perfil relacional
 de doador. Doações são gravadas inicialmente como `pendente`; o aplicativo não
 confirma pagamento PIX automaticamente. O painel administrativo lista as
 doações do SQL Connect e permite registrar manualmente o estado após a
 verificação externa; somente doações `recebida` entram nos totais do mês.
+Inscrições em atividades serializam a verificação de vagas por atividade dentro
+da transação; valide concorrência no emulador antes de publicar essa operação.
 
 Os fluxos atuais de perfil usam SQL Connect. O `FirebaseService` legado ainda é
 inicializado, mas seus métodos de leitura e gravação no Firestore não têm outros

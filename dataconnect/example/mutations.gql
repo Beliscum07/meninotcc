@@ -161,6 +161,8 @@ mutation AdminUpdateActivity(
 mutation AdminAssignActivity($alunoId: UUID!, $atividadeId: UUID!)
   @auth(expr: "auth.token.admin == true")
   @transaction {
+  # Acquire the activity row lock before checking capacity.
+  atividade_update(id: $atividadeId, data: { vagas_update: [{ inc: 0 }] })
   query @redact {
     aluno(id: $alunoId) @check(expr: "this != null", message: "Aluno não encontrado.") {
       status @check(expr: "this == 'ativo'", message: "O cadastro do aluno está inativo.")

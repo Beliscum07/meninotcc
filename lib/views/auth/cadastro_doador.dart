@@ -92,9 +92,7 @@ class _DoadorCadastroPageState extends State<DoadorCadastroPage> {
         context,
       ).showSnackBar(SnackBar(content: Text(AuthService.mensagemErro(error))));
       return;
-    } catch (error, stackTrace) {
-      debugPrint('Falha no cadastro do perfil de doador: $error');
-      debugPrint(stackTrace.toString());
+    } on Exception catch (error) {
       if (!mounted) return;
       ScaffoldMessenger.of(
         context,

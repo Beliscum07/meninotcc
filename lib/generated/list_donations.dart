@@ -1,18 +1,22 @@
 part of 'example.dart';
 
 class ListDonationsVariablesBuilder {
-  
   final FirebaseDataConnect _dataConnect;
-  ListDonationsVariablesBuilder(this._dataConnect, );
-  Deserializer<ListDonationsData> dataDeserializer = (dynamic json)  => ListDonationsData.fromJson(jsonDecode(json));
-  
+  ListDonationsVariablesBuilder(this._dataConnect);
+  Deserializer<ListDonationsData> dataDeserializer = (dynamic json) =>
+      ListDonationsData.fromJson(jsonDecode(json));
+
   Future<QueryResult<ListDonationsData, void>> execute() {
     return ref().execute();
   }
 
   QueryRef<ListDonationsData, void> ref() {
-    
-    return _dataConnect.query("ListDonations", dataDeserializer, emptySerializer, null);
+    return _dataConnect.query(
+      "ListDonations",
+      dataDeserializer,
+      emptySerializer,
+      null,
+    );
   }
 }
 
@@ -24,35 +28,42 @@ class ListDonationsDoacoes {
   final String? metodo;
   final String status;
   final ListDonationsDoacoesDoador doador;
-  ListDonationsDoacoes.fromJson(dynamic json):
-  
-  id = nativeFromJson<String>(json['id']),
-  valor = nativeFromJson<double>(json['valor']),
-  data = Timestamp.fromJson(json['data']),
-  metodo = json['metodo'] == null ? null : nativeFromJson<String>(json['metodo']),
-  status = nativeFromJson<String>(json['status']),
-  doador = ListDonationsDoacoesDoador.fromJson(json['doador']);
+  ListDonationsDoacoes.fromJson(dynamic json)
+    : id = nativeFromJson<String>(json['id']),
+      valor = nativeFromJson<double>(json['valor']),
+      data = Timestamp.fromJson(json['data']),
+      metodo = json['metodo'] == null
+          ? null
+          : nativeFromJson<String>(json['metodo']),
+      status = nativeFromJson<String>(json['status']),
+      doador = ListDonationsDoacoesDoador.fromJson(json['doador']);
   @override
   bool operator ==(Object other) {
-    if(identical(this, other)) {
+    if (identical(this, other)) {
       return true;
     }
-    if(other.runtimeType != runtimeType) {
+    if (other.runtimeType != runtimeType) {
       return false;
     }
 
     final ListDonationsDoacoes otherTyped = other as ListDonationsDoacoes;
-    return id == otherTyped.id && 
-    valor == otherTyped.valor && 
-    data == otherTyped.data && 
-    metodo == otherTyped.metodo && 
-    status == otherTyped.status && 
-    doador == otherTyped.doador;
-    
+    return id == otherTyped.id &&
+        valor == otherTyped.valor &&
+        data == otherTyped.data &&
+        metodo == otherTyped.metodo &&
+        status == otherTyped.status &&
+        doador == otherTyped.doador;
   }
+
   @override
-  int get hashCode => Object.hashAll([id.hashCode, valor.hashCode, data.hashCode, metodo.hashCode, status.hashCode, doador.hashCode]);
-  
+  int get hashCode => Object.hashAll([
+    id.hashCode,
+    valor.hashCode,
+    data.hashCode,
+    metodo.hashCode,
+    status.hashCode,
+    doador.hashCode,
+  ]);
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> json = {};
@@ -67,7 +78,7 @@ class ListDonationsDoacoes {
     return json;
   }
 
-  ListDonationsDoacoes({
+  const ListDonationsDoacoes({
     required this.id,
     required this.valor,
     required this.data,
@@ -80,25 +91,24 @@ class ListDonationsDoacoes {
 @immutable
 class ListDonationsDoacoesDoador {
   final ListDonationsDoacoesDoadorUsuario usuario;
-  ListDonationsDoacoesDoador.fromJson(dynamic json):
-  
-  usuario = ListDonationsDoacoesDoadorUsuario.fromJson(json['usuario']);
+  ListDonationsDoacoesDoador.fromJson(dynamic json)
+    : usuario = ListDonationsDoacoesDoadorUsuario.fromJson(json['usuario']);
   @override
   bool operator ==(Object other) {
-    if(identical(this, other)) {
+    if (identical(this, other)) {
       return true;
     }
-    if(other.runtimeType != runtimeType) {
+    if (other.runtimeType != runtimeType) {
       return false;
     }
 
-    final ListDonationsDoacoesDoador otherTyped = other as ListDonationsDoacoesDoador;
+    final ListDonationsDoacoesDoador otherTyped =
+        other as ListDonationsDoacoesDoador;
     return usuario == otherTyped.usuario;
-    
   }
+
   @override
   int get hashCode => usuario.hashCode;
-  
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> json = {};
@@ -106,36 +116,32 @@ class ListDonationsDoacoesDoador {
     return json;
   }
 
-  ListDonationsDoacoesDoador({
-    required this.usuario,
-  });
+  const ListDonationsDoacoesDoador({required this.usuario});
 }
 
 @immutable
 class ListDonationsDoacoesDoadorUsuario {
   final String nome;
   final String email;
-  ListDonationsDoacoesDoadorUsuario.fromJson(dynamic json):
-  
-  nome = nativeFromJson<String>(json['nome']),
-  email = nativeFromJson<String>(json['email']);
+  ListDonationsDoacoesDoadorUsuario.fromJson(dynamic json)
+    : nome = nativeFromJson<String>(json['nome']),
+      email = nativeFromJson<String>(json['email']);
   @override
   bool operator ==(Object other) {
-    if(identical(this, other)) {
+    if (identical(this, other)) {
       return true;
     }
-    if(other.runtimeType != runtimeType) {
+    if (other.runtimeType != runtimeType) {
       return false;
     }
 
-    final ListDonationsDoacoesDoadorUsuario otherTyped = other as ListDonationsDoacoesDoadorUsuario;
-    return nome == otherTyped.nome && 
-    email == otherTyped.email;
-    
+    final ListDonationsDoacoesDoadorUsuario otherTyped =
+        other as ListDonationsDoacoesDoadorUsuario;
+    return nome == otherTyped.nome && email == otherTyped.email;
   }
+
   @override
   int get hashCode => Object.hashAll([nome.hashCode, email.hashCode]);
-  
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> json = {};
@@ -144,7 +150,7 @@ class ListDonationsDoacoesDoadorUsuario {
     return json;
   }
 
-  ListDonationsDoacoesDoadorUsuario({
+  const ListDonationsDoacoesDoadorUsuario({
     required this.nome,
     required this.email,
   });
@@ -153,27 +159,25 @@ class ListDonationsDoacoesDoadorUsuario {
 @immutable
 class ListDonationsData {
   final List<ListDonationsDoacoes> doacoes;
-  ListDonationsData.fromJson(dynamic json):
-  
-  doacoes = (json['doacoes'] as List<dynamic>)
-        .map((e) => ListDonationsDoacoes.fromJson(e))
-        .toList();
+  ListDonationsData.fromJson(dynamic json)
+    : doacoes = (json['doacoes'] as List<dynamic>)
+          .map((e) => ListDonationsDoacoes.fromJson(e))
+          .toList();
   @override
   bool operator ==(Object other) {
-    if(identical(this, other)) {
+    if (identical(this, other)) {
       return true;
     }
-    if(other.runtimeType != runtimeType) {
+    if (other.runtimeType != runtimeType) {
       return false;
     }
 
     final ListDonationsData otherTyped = other as ListDonationsData;
     return doacoes == otherTyped.doacoes;
-    
   }
+
   @override
   int get hashCode => doacoes.hashCode;
-  
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> json = {};
@@ -181,8 +185,5 @@ class ListDonationsData {
     return json;
   }
 
-  ListDonationsData({
-    required this.doacoes,
-  });
+  const ListDonationsData({required this.doacoes});
 }
-

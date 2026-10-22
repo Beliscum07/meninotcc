@@ -35,6 +35,15 @@ class FirebaseService {
       await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform,
       );
+    } on UnsupportedError catch (error, stackTrace) {
+      debugPrint('FirebaseService.initialize: plataforma não suportada pelo Firebase.');
+      debugPrint('$error');
+      debugPrint(stackTrace.toString());
+      return;
+    } on FirebaseException catch (error, stackTrace) {
+      debugPrint('FirebaseService.initialize falhou: $error');
+      debugPrint(stackTrace.toString());
+      rethrow;
     } catch (error, stackTrace) {
       debugPrint('FirebaseService.initialize falhou: $error');
       debugPrint(stackTrace.toString());

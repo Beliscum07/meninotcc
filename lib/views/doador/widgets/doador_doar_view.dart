@@ -255,7 +255,7 @@ class _DoadorDoarState extends State<DoadorDoar> {
                             border: Border.all(color: Colors.black12),
                           ),
                           child: const Text(
-                            'ong.criancas@example.com',
+                            '30.287.014/0001-07',
                             style: TextStyle(fontSize: 12),
                           ),
                         ),

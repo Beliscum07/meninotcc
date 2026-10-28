@@ -1,48 +1,43 @@
 part of 'example.dart';
 
 class ListMyActivitiesVariablesBuilder {
+  
   final FirebaseDataConnect _dataConnect;
-  ListMyActivitiesVariablesBuilder(this._dataConnect);
-  Deserializer<ListMyActivitiesData> dataDeserializer = (dynamic json) =>
-      ListMyActivitiesData.fromJson(jsonDecode(json));
-
+  ListMyActivitiesVariablesBuilder(this._dataConnect, );
+  Deserializer<ListMyActivitiesData> dataDeserializer = (dynamic json)  => ListMyActivitiesData.fromJson(jsonDecode(json));
+  
   Future<QueryResult<ListMyActivitiesData, void>> execute() {
     return ref().execute();
   }
 
   QueryRef<ListMyActivitiesData, void> ref() {
-    return _dataConnect.query(
-      "ListMyActivities",
-      dataDeserializer,
-      emptySerializer,
-      null,
-    );
+    
+    return _dataConnect.query("ListMyActivities", dataDeserializer, emptySerializer, null);
   }
 }
 
 @immutable
 class ListMyActivitiesInscricoes {
   final ListMyActivitiesInscricoesAtividade atividade;
-  ListMyActivitiesInscricoes.fromJson(dynamic json)
-    : atividade = ListMyActivitiesInscricoesAtividade.fromJson(
-        json['atividade'],
-      );
+  ListMyActivitiesInscricoes.fromJson(dynamic json):
+  
+  atividade = ListMyActivitiesInscricoesAtividade.fromJson(json['atividade']);
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) {
+    if(identical(this, other)) {
       return true;
     }
-    if (other.runtimeType != runtimeType) {
+    if(other.runtimeType != runtimeType) {
       return false;
     }
 
-    final ListMyActivitiesInscricoes otherTyped =
-        other as ListMyActivitiesInscricoes;
+    final ListMyActivitiesInscricoes otherTyped = other as ListMyActivitiesInscricoes;
     return atividade == otherTyped.atividade;
+    
   }
-
   @override
   int get hashCode => atividade.hashCode;
+  
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> json = {};
@@ -50,7 +45,9 @@ class ListMyActivitiesInscricoes {
     return json;
   }
 
-  const ListMyActivitiesInscricoes({required this.atividade});
+  ListMyActivitiesInscricoes({
+    required this.atividade,
+  });
 }
 
 @immutable
@@ -62,48 +59,37 @@ class ListMyActivitiesInscricoesAtividade {
   final String? horario;
   final String? dias;
   final int vagas;
-  ListMyActivitiesInscricoesAtividade.fromJson(dynamic json)
-    : id = nativeFromJson<String>(json['id']),
-      nome = nativeFromJson<String>(json['nome']),
-      professor = nativeFromJson<String>(json['professor']),
-      descricao = json['descricao'] == null
-          ? null
-          : nativeFromJson<String>(json['descricao']),
-      horario = json['horario'] == null
-          ? null
-          : nativeFromJson<String>(json['horario']),
-      dias = json['dias'] == null ? null : nativeFromJson<String>(json['dias']),
-      vagas = nativeFromJson<int>(json['vagas']);
+  ListMyActivitiesInscricoesAtividade.fromJson(dynamic json):
+  
+  id = nativeFromJson<String>(json['id']),
+  nome = nativeFromJson<String>(json['nome']),
+  professor = nativeFromJson<String>(json['professor']),
+  descricao = json['descricao'] == null ? null : nativeFromJson<String>(json['descricao']),
+  horario = json['horario'] == null ? null : nativeFromJson<String>(json['horario']),
+  dias = json['dias'] == null ? null : nativeFromJson<String>(json['dias']),
+  vagas = nativeFromJson<int>(json['vagas']);
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) {
+    if(identical(this, other)) {
       return true;
     }
-    if (other.runtimeType != runtimeType) {
+    if(other.runtimeType != runtimeType) {
       return false;
     }
 
-    final ListMyActivitiesInscricoesAtividade otherTyped =
-        other as ListMyActivitiesInscricoesAtividade;
-    return id == otherTyped.id &&
-        nome == otherTyped.nome &&
-        professor == otherTyped.professor &&
-        descricao == otherTyped.descricao &&
-        horario == otherTyped.horario &&
-        dias == otherTyped.dias &&
-        vagas == otherTyped.vagas;
+    final ListMyActivitiesInscricoesAtividade otherTyped = other as ListMyActivitiesInscricoesAtividade;
+    return id == otherTyped.id && 
+    nome == otherTyped.nome && 
+    professor == otherTyped.professor && 
+    descricao == otherTyped.descricao && 
+    horario == otherTyped.horario && 
+    dias == otherTyped.dias && 
+    vagas == otherTyped.vagas;
+    
   }
-
   @override
-  int get hashCode => Object.hashAll([
-    id.hashCode,
-    nome.hashCode,
-    professor.hashCode,
-    descricao.hashCode,
-    horario.hashCode,
-    dias.hashCode,
-    vagas.hashCode,
-  ]);
+  int get hashCode => Object.hashAll([id.hashCode, nome.hashCode, professor.hashCode, descricao.hashCode, horario.hashCode, dias.hashCode, vagas.hashCode]);
+  
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> json = {};
@@ -123,7 +109,7 @@ class ListMyActivitiesInscricoesAtividade {
     return json;
   }
 
-  const ListMyActivitiesInscricoesAtividade({
+  ListMyActivitiesInscricoesAtividade({
     required this.id,
     required this.nome,
     required this.professor,
@@ -137,25 +123,27 @@ class ListMyActivitiesInscricoesAtividade {
 @immutable
 class ListMyActivitiesData {
   final List<ListMyActivitiesInscricoes> inscricoes;
-  ListMyActivitiesData.fromJson(dynamic json)
-    : inscricoes = (json['inscricoes'] as List<dynamic>)
-          .map((e) => ListMyActivitiesInscricoes.fromJson(e))
-          .toList();
+  ListMyActivitiesData.fromJson(dynamic json):
+  
+  inscricoes = (json['inscricoes'] as List<dynamic>)
+        .map((e) => ListMyActivitiesInscricoes.fromJson(e))
+        .toList();
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) {
+    if(identical(this, other)) {
       return true;
     }
-    if (other.runtimeType != runtimeType) {
+    if(other.runtimeType != runtimeType) {
       return false;
     }
 
     final ListMyActivitiesData otherTyped = other as ListMyActivitiesData;
     return inscricoes == otherTyped.inscricoes;
+    
   }
-
   @override
   int get hashCode => inscricoes.hashCode;
+  
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> json = {};
@@ -163,5 +151,8 @@ class ListMyActivitiesData {
     return json;
   }
 
-  const ListMyActivitiesData({required this.inscricoes});
+  ListMyActivitiesData({
+    required this.inscricoes,
+  });
 }
+

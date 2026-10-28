@@ -1,5 +1,3 @@
-// ignore_for_file: non_constant_identifier_names
-
 part of 'example.dart';
 
 class AdminAssignActivityVariablesBuilder {
@@ -7,55 +5,41 @@ class AdminAssignActivityVariablesBuilder {
   String atividadeId;
 
   final FirebaseDataConnect _dataConnect;
-  AdminAssignActivityVariablesBuilder(
-    this._dataConnect, {
-    required this.alunoId,
-    required this.atividadeId,
-  });
-  Deserializer<AdminAssignActivityData> dataDeserializer = (dynamic json) =>
-      AdminAssignActivityData.fromJson(jsonDecode(json));
-  Serializer<AdminAssignActivityVariables> varsSerializer =
-      (AdminAssignActivityVariables vars) => jsonEncode(vars.toJson());
-  Future<OperationResult<AdminAssignActivityData, AdminAssignActivityVariables>>
-  execute() {
+  AdminAssignActivityVariablesBuilder(this._dataConnect, {required  this.alunoId,required  this.atividadeId,});
+  Deserializer<AdminAssignActivityData> dataDeserializer = (dynamic json)  => AdminAssignActivityData.fromJson(jsonDecode(json));
+  Serializer<AdminAssignActivityVariables> varsSerializer = (AdminAssignActivityVariables vars) => jsonEncode(vars.toJson());
+  Future<OperationResult<AdminAssignActivityData, AdminAssignActivityVariables>> execute() {
     return ref().execute();
   }
 
   MutationRef<AdminAssignActivityData, AdminAssignActivityVariables> ref() {
-    AdminAssignActivityVariables vars = AdminAssignActivityVariables(
-      alunoId: alunoId,
-      atividadeId: atividadeId,
-    );
-    return _dataConnect.mutation(
-      "AdminAssignActivity",
-      dataDeserializer,
-      varsSerializer,
-      vars,
-    );
+    AdminAssignActivityVariables vars= AdminAssignActivityVariables(alunoId: alunoId,atividadeId: atividadeId,);
+    return _dataConnect.mutation("AdminAssignActivity", dataDeserializer, varsSerializer, vars);
   }
 }
 
 @immutable
 class AdminAssignActivityAtividadeUpdate {
   final String id;
-  AdminAssignActivityAtividadeUpdate.fromJson(dynamic json)
-    : id = nativeFromJson<String>(json['id']);
+  AdminAssignActivityAtividadeUpdate.fromJson(dynamic json):
+  
+  id = nativeFromJson<String>(json['id']);
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) {
+    if(identical(this, other)) {
       return true;
     }
-    if (other.runtimeType != runtimeType) {
+    if(other.runtimeType != runtimeType) {
       return false;
     }
 
-    final AdminAssignActivityAtividadeUpdate otherTyped =
-        other as AdminAssignActivityAtividadeUpdate;
+    final AdminAssignActivityAtividadeUpdate otherTyped = other as AdminAssignActivityAtividadeUpdate;
     return id == otherTyped.id;
+    
   }
-
   @override
   int get hashCode => id.hashCode;
+  
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> json = {};
@@ -63,33 +47,36 @@ class AdminAssignActivityAtividadeUpdate {
     return json;
   }
 
-  const AdminAssignActivityAtividadeUpdate({required this.id});
+  AdminAssignActivityAtividadeUpdate({
+    required this.id,
+  });
 }
 
 @immutable
 class AdminAssignActivityInscricaoInsert {
   final String alunoId;
   final String atividadeId;
-  AdminAssignActivityInscricaoInsert.fromJson(dynamic json)
-    : alunoId = nativeFromJson<String>(json['alunoId']),
-      atividadeId = nativeFromJson<String>(json['atividadeId']);
+  AdminAssignActivityInscricaoInsert.fromJson(dynamic json):
+  
+  alunoId = nativeFromJson<String>(json['alunoId']),
+  atividadeId = nativeFromJson<String>(json['atividadeId']);
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) {
+    if(identical(this, other)) {
       return true;
     }
-    if (other.runtimeType != runtimeType) {
+    if(other.runtimeType != runtimeType) {
       return false;
     }
 
-    final AdminAssignActivityInscricaoInsert otherTyped =
-        other as AdminAssignActivityInscricaoInsert;
-    return alunoId == otherTyped.alunoId &&
-        atividadeId == otherTyped.atividadeId;
+    final AdminAssignActivityInscricaoInsert otherTyped = other as AdminAssignActivityInscricaoInsert;
+    return alunoId == otherTyped.alunoId && 
+    atividadeId == otherTyped.atividadeId;
+    
   }
-
   @override
   int get hashCode => Object.hashAll([alunoId.hashCode, atividadeId.hashCode]);
+  
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> json = {};
@@ -98,7 +85,7 @@ class AdminAssignActivityInscricaoInsert {
     return json;
   }
 
-  const AdminAssignActivityInscricaoInsert({
+  AdminAssignActivityInscricaoInsert({
     required this.alunoId,
     required this.atividadeId,
   });
@@ -108,32 +95,27 @@ class AdminAssignActivityInscricaoInsert {
 class AdminAssignActivityData {
   final AdminAssignActivityAtividadeUpdate? atividade_update;
   final AdminAssignActivityInscricaoInsert inscricao_insert;
-  AdminAssignActivityData.fromJson(dynamic json)
-    : atividade_update = json['atividade_update'] == null
-          ? null
-          : AdminAssignActivityAtividadeUpdate.fromJson(
-              json['atividade_update'],
-            ),
-      inscricao_insert = AdminAssignActivityInscricaoInsert.fromJson(
-        json['inscricao_insert'],
-      );
+  AdminAssignActivityData.fromJson(dynamic json):
+  
+  atividade_update = json['atividade_update'] == null ? null : AdminAssignActivityAtividadeUpdate.fromJson(json['atividade_update']),
+  inscricao_insert = AdminAssignActivityInscricaoInsert.fromJson(json['inscricao_insert']);
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) {
+    if(identical(this, other)) {
       return true;
     }
-    if (other.runtimeType != runtimeType) {
+    if(other.runtimeType != runtimeType) {
       return false;
     }
 
     final AdminAssignActivityData otherTyped = other as AdminAssignActivityData;
-    return atividade_update == otherTyped.atividade_update &&
-        inscricao_insert == otherTyped.inscricao_insert;
+    return atividade_update == otherTyped.atividade_update && 
+    inscricao_insert == otherTyped.inscricao_insert;
+    
   }
-
   @override
-  int get hashCode =>
-      Object.hashAll([atividade_update.hashCode, inscricao_insert.hashCode]);
+  int get hashCode => Object.hashAll([atividade_update.hashCode, inscricao_insert.hashCode]);
+  
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> json = {};
@@ -144,7 +126,7 @@ class AdminAssignActivityData {
     return json;
   }
 
-  const AdminAssignActivityData({
+  AdminAssignActivityData({
     this.atividade_update,
     required this.inscricao_insert,
   });
@@ -154,29 +136,28 @@ class AdminAssignActivityData {
 class AdminAssignActivityVariables {
   final String alunoId;
   final String atividadeId;
-  @Deprecated(
-    'fromJson is deprecated for Variable classes as they are no longer required for deserialization.',
-  )
-  AdminAssignActivityVariables.fromJson(Map<String, dynamic> json)
-    : alunoId = nativeFromJson<String>(json['alunoId']),
-      atividadeId = nativeFromJson<String>(json['atividadeId']);
+  @Deprecated('fromJson is deprecated for Variable classes as they are no longer required for deserialization.')
+  AdminAssignActivityVariables.fromJson(Map<String, dynamic> json):
+  
+  alunoId = nativeFromJson<String>(json['alunoId']),
+  atividadeId = nativeFromJson<String>(json['atividadeId']);
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) {
+    if(identical(this, other)) {
       return true;
     }
-    if (other.runtimeType != runtimeType) {
+    if(other.runtimeType != runtimeType) {
       return false;
     }
 
-    final AdminAssignActivityVariables otherTyped =
-        other as AdminAssignActivityVariables;
-    return alunoId == otherTyped.alunoId &&
-        atividadeId == otherTyped.atividadeId;
+    final AdminAssignActivityVariables otherTyped = other as AdminAssignActivityVariables;
+    return alunoId == otherTyped.alunoId && 
+    atividadeId == otherTyped.atividadeId;
+    
   }
-
   @override
   int get hashCode => Object.hashAll([alunoId.hashCode, atividadeId.hashCode]);
+  
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> json = {};
@@ -185,8 +166,9 @@ class AdminAssignActivityVariables {
     return json;
   }
 
-  const AdminAssignActivityVariables({
+  AdminAssignActivityVariables({
     required this.alunoId,
     required this.atividadeId,
   });
 }
+
